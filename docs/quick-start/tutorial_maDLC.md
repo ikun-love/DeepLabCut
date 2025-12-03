@@ -1,17 +1,17 @@
-# Multi-animal pose estimation with DeepLabCut: A 5-minute tutorial
+# 使用 DeepLabCut 进行多动物姿态估计：5 分钟教程
 
-## GUI:
+## GUI（图形用户界面）：
 
-Full graphical user interface: just follow the tabs in the GUI! `python -m deeplabcut` launches the GUI.
+使用完整的图形用户界面：只需按照 GUI 中的选项卡操作即可！运行 `python -m deeplabcut` 命令可以启动 GUI。
 
-## Terminal:
+## 终端（Terminal）：
 
-**Import deeplabcut**
+**导入 deeplabcut 库**
 ```python
 import deeplabcut
 ```
 
-**(1) Create a project**
+**(1) 创建一个项目**
 ```python
 project_name = "cutemice"
 experimenter = "teamdlc"
@@ -24,17 +24,17 @@ config_path = deeplabcut.create_new_project(
     copy_videos=True,
 )
 ```
-> **_NOTE:_**  Make sure to specify the absolute path to the video file(s).
-> It is quickly obtained on Windows with <kbd>⇧ Shift</kbd>+<kbd>Right click</kbd> and `Copy as path`,
-> and on Mac with <kbd>⌥ Option</kbd>+<kbd>Right click</kbd> and `Copy as Pathname`.
-> Ubuntu users only need to copy the file and its path gets added to the clipboard.
+> **_注意：_** 请确保指定视频文件的**绝对路径**。
+> 在 Windows 上，可以通过按住 <kbd>⇧ Shift</kbd> 键 + <kbd>鼠标右键</kbd>，然后选择 `Copy as path`（复制为路径）快速获取；
+> 在 Mac 上，可以通过按住 <kbd>⌥ Option</kbd> 键 + <kbd>鼠标右键</kbd>，然后选择 `Copy as Pathname`（复制为路径名）快速获取。
+> Ubuntu 用户只需复制文件，其路径就会被添加到剪贴板。
 
-> Next, you can set a variable for the config_path: 'Full path of the project configuration file*'
+> 接下来，您可以为 `config_path`：'项目配置文件完整路径*' 设置一个变量。
 
-**(2) Edit the config.ymal file to set up your project**
-> **_NOTE:_** Here is were you will define your key point names and animal IDs. Also you can change the default # of frames to extract for the next step.
+**(2) 编辑 config.yaml 文件以设置您的项目**
+> **_注意：_** 在这里，您将定义关键点名称和动物 ID。您也可以更改下一步要提取的默认帧数（# of frames）。
 
-**(3) Extract video frames to annotate**
+**(3) 提取视频帧以进行标注**
 ```python
 deeplabcut.extract_frames(
     config_path,
@@ -43,15 +43,15 @@ deeplabcut.extract_frames(
     userfeedback=False,
 )
 ```
-> **_NOTE:_** try to extract a few frames from many videos vs. a lot of frames from one video!
+> **_注意：_** 尝试从**许多视频**中提取**少量帧**，而不是从**一个视频**中提取**大量帧**！
 
-**(4) Annotate Frames**
+**(4) 标注帧**
 ```python
 deeplabcut.label_frames(config_path)
 ```
 
 
-**(5) Visually check annotated frames**
+**(5) 目视检查已标注的帧**
 ```python
 deeplabcut.check_labels(
     config_path,
@@ -59,7 +59,7 @@ deeplabcut.check_labels(
 )
 ```
 
-**(6) Create the training dataset**
+**(6) 创建训练数据集**
 ```python
 deeplabcut.create_multianimaltraining_dataset(
     config_path,
@@ -68,10 +68,10 @@ deeplabcut.create_multianimaltraining_dataset(
 )
 ```
 
-**(7) Train the network**
+**(7) 训练网络**
 
 ```python
-# PyTorch Engine
+# PyTorch 引擎
 deeplabcut.train_network(
     config_path,
     device="cuda",
@@ -79,7 +79,7 @@ deeplabcut.train_network(
     epochs=200,
 )
 
-# TensorFlow Engine
+# TensorFlow 引擎
 deeplabcut.train_network(
     config_path,
     saveiters=10000,
@@ -88,7 +88,7 @@ deeplabcut.train_network(
 )
 ```
 
-**(8) Evaluate the network**
+**(8) 评估网络**
 ```python
 deeplabcut.evaluate_network(
     config_path,
@@ -96,7 +96,7 @@ deeplabcut.evaluate_network(
 )
 ```
 
-**(9) Analyze a video (extracts detections and association costs)**
+**(9) 分析视频（提取检测结果和关联成本）**
 ```python
 deeplabcut.analyze_videos(
     config_path,
@@ -104,10 +104,10 @@ deeplabcut.analyze_videos(
     auto_track=True,
 )
 ```
-> **_NOTE:_** `auto_track=True` will complete steps 10-11 for you automatically so you get the "final" H5 file. Use the below steps if you need to change the parameters of tracking based on your dataset.
+> **_注意：_** 设置 `auto_track=True` 会自动为您完成第 10-11 步，因此您将直接获得最终的 H5 文件。如果您需要根据数据集更改跟踪的参数，请使用下面的步骤。
 
 
-**(10) Spatial and (locally) temporal grouping: Track body part assemblies frame-by-frame**
+**(10) 空间和（局部）时间分组：逐帧跟踪身体部位集合**
 ```python
 deeplabcut.convert_detections2tracklets(
     config_path,
@@ -117,7 +117,7 @@ deeplabcut.convert_detections2tracklets(
 ```
 
 
-**(11) Reconstruct full animal trajectories (tracks from tracklets)**
+**(11) 重建完整的动物轨迹（从轨迹片段中合并）**
 ```python
 deeplabcut.stitch_tracklets(
     config_path,
@@ -128,7 +128,7 @@ deeplabcut.stitch_tracklets(
 ```
 
 
-**(12) Create a pretty video output**
+**(12) 创建漂亮的视频输出**
 ```python
 deeplabcut.create_labeled_video(
     config_path,

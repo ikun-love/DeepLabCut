@@ -1,69 +1,57 @@
+```yaml
 (dlc3-pytorch-config)=
-# The PyTorch Configuration file
+# PyTorch 配置文件
 
-The `pytorch_config.yaml` file specifies the configuration for your PyTorch pose models,
-from the model architecture to which optimizer will be used for training, how training 
-runs will be logged, the data augmentation that will be applied and which metric should
-be used to save the "best" model snapshot. 
+`pytorch_config.yaml` 文件定义了 PyTorch 姿态模型的配置，范围涵盖模型架构、训练使用的优化器、训练运行的日志记录方式、应用的数据增强，以及用于保存“最佳”模型快照所依据的评估指标。
 
-You can create default configurations for a shuffle using 
-`deeplabcut.create_training_set` or `deeplabcut.create_training_model_comparison`. This 
-will create a `pytorch_config.yaml` file for your selected net type. The basic structure
-of the file is as follows:
+您可以使用 `deeplabcut.create_training_set` 或 `deeplabcut.create_training_model_comparison` 为 Shuffle 创建默认配置。这将为您选择的网络类型生成一个 `pytorch_config.yaml` 文件。该文件的基本结构如下：
 
 ```yaml
-data:  # which data augmentations will be used
+data:  # 将使用哪些数据增强
   ...
-device: auto # the default device to use for training and evaluation
-inference:  # configures inference-related parameters (multithreading, different torch options)
-metadata:  # metadata regarding the project (bodyparts, individuals, paths, ...) - filled automatically
+device: auto # 训练和评估使用的默认设备
+inference:  # 配置与推理相关的参数（多线程、不同的 torch 选项）
+metadata:  # 项目的元数据（身体部位、个体、路径等）- 自动填充
   ...
-method: bu # indicates how pose predictions are made (bottom-up (`bu`) or top-down (`td`))
-model:  # configures the model architecture (which backbone, heads, ...)
+method: bu # 指示姿态预测的制作方式（自底向上 (`bu`) 或自顶向下 (`td`)）
+model:  # 配置模型架构（使用哪个骨干网络、头部网络等）
   ...
-net_type: resnet_50 # the type of neural net configured in the file
-runner:  # configuring the runner used for training
+net_type: resnet_50 # 文件中配置的神经网类型
+runner:  # 配置用于训练的运行器 (runner)
   ...
-train_settings:  # generic training settings, such as batch size and maximum number of epochs
+train_settings:  # 通用训练设置，例如批次大小和最大训练周期数
   ...
-logger:  # optional: the configuration for a logger if you want one
-resume_training_from:  # optional: restart the training at the specific checkpoint
+logger:  # 可选：如果您需要日志记录器，这里是其配置
+resume_training_from:  # 可选：从特定检查点重启训练
 ```
 
-## Sections
+## 章节 (Sections)
 
-### Singleton Parameters
+### 单例参数 (Singleton Parameters)
 
-There are a few singleton parameters defined in the PyTorch configuration file:
+PyTorch 配置文件中定义了几个单例参数：
 
-- `device`: The device to use for training/inference. The default is `auto`, which sets 
-the device to `cuda` if an NVIDIA GPU is available, and `cpu` otherwise. For users 
-running models on macOS with an M1/M2/M3 chip, this is set to `mps` for certain models
-(not all operations are currently supported on Apple GPUs - so some models like HRNets 
-need to be trained on CPU, while others like ResNets can take advantage of the GPU).
-- `method`: Either `bu` for bottom-up models, or `td` for top-down models.
-- `net_type`: The type of pose model configured by the file (e.g. `resnet_50`).
+- `device`: 用于训练/推理的设备。默认值为 `auto`，如果存在 NVIDIA GPU，则设置为 `cuda`，否则设置为 `cpu`。对于在配备 M1/M2/M3 芯片的 macOS 上运行模型的用户，特定模型的此值设置为 `mps`（并非所有操作都支持 Apple GPU，因此像 HRNets 这样的模型需要在 CPU 上训练，而 ResNets 等模型可以利用 GPU）。
+- `method`: `bu`（用于自底向上模型）或 `td`（用于自顶向下模型）。
+- `net_type`: 配置文件中配置的姿态模型类型（例如 `resnet_50`）。
 
-### Data
+### 数据 (Data)
 
-The data section configures:
+`data` 部分配置以下内容：
 
-- `bbox_margin`: The margin (in pixels) to add around ground truth pose when generating
-bounding boxes. For more information, see [generating bounding boxes from pose](
-#bbox-from-pose).
-- `colormode`: in which format images are given to the model (e.g., `RGB`, `BGR`)
-- `inference`: which transformations should be applied to images when running evaluation
-or inference
-- `train`: which transformations should be applied to images when training
+- `bbox_margin`: 在生成边界框时，围绕真实姿态增加的边距（以像素为单位）。有关更多信息，请参阅 [从姿态生成边界框]( #bbox-from-pose)。
+- `colormode`: 图像提供给模型的格式（例如，`RGB`，`BGR`）。
+- `inference`: 在运行评估或推理时应用于图像的转换。
+- `train`: 在训练时应用于图像的转换。
 
-The default configuration for a pose model is:
+姿态模型的默认配置如下：
 
 ```yaml
 data:
   bbox_margin: 20
-  colormode: RGB  # should never be changed
-  inference:  # the augmentations to apply to images during inference 
-    normalize_images: true  # this should always be set to true
+  colormode: RGB  # 永远不应更改
+  inference:  # 在推理期间应用于图像的增强
+    normalize_images: true  # 此项应始终设置为 true
   train:
     affine:
       p: 0.5
@@ -72,312 +60,243 @@ data:
       translation: 0
     covering: true
     crop_sampling:
-      width: 448   # if your images are very small or very large, you may need to edit!
-      height: 448  # see below for more information about crop_sampling! 
+      width: 448   # 如果您的图像非常小或非常大，您可能需要编辑！
+      height: 448  # 有关 crop_sampling 的更多信息，请参阅下文！
       max_shift: 0.1
       method: hybrid
     gaussian_noise: 12.75
     motion_blur: true
-    normalize_images: true  # this should always be set to true
+    normalize_images: true  # 此项应始终设置为 true
 ```
 
-The following transformations are available for the `train` and `inference` keys.
+以下转换可用于 `train` 和 `inference` 键。
 
-**Affine**: Applies an affine (rotation, translation, scaling) transformation to the
-images. 
+**Affine**: 对图像应用仿射（旋转、平移、缩放）变换。
 
 ```yaml
 affine:
-  p: 0.9  # float: the probability that an affine transform is applied
-  rotation: 30  # int: the maximum angle of rotation applied to the image (in degrees)
-  scaling: [ 0.5, 1.25 ]  # [float, float]: the (min, max) scale to use to resize images
-  translation: 40  # int: the maximum translation to apply to images (in pixels)
+  p: 0.9  # float: 应用仿射变换的概率
+  rotation: 30  # int: 应用于图像的最大旋转角度（以度为单位）
+  scaling: [ 0.5, 1.25 ]  # [float, float]: 用于调整图像大小的（最小, 最大）缩放比例
+  translation: 40  # int: 应用于图像的最大平移量（以像素为单位）
 ```
 
-**Auto-Padding**: Pads the image to some desired shape (e.g., a minimum height/width or 
-such that the height/width are divisible by a given number). Some backbones (such as
-HRNets) require the height and width of images to be multiples of 32. Setting up
-auto-padding with `pad_height_divisor: 32` and `pad_width_divisor: 32` ensures that is
-the case. Note that **not all keys need to be set**! The values shown are the default
-values. Only one of 'min_height' and 'pad_height_divisor' parameters must be set, and 
-only one of 'min_width' and 'pad_width_divisor' parameters must be set.
+**Auto-Padding**: 将图像填充到所需的形状（例如，最小高度/宽度，或使高度/宽度可被给定数字整除）。某些骨干网络（如 HRNets）要求图像的高度和宽度是 32 的倍数。通过将 `pad_height_divisor: 32` 和 `pad_width_divisor: 32` 设置自动填充，可以确保这种情况。请注意，**并非所有键都需要设置**！显示的值是默认值。'min_height' 和 'pad_height_divisor' 参数中**只能设置一个**，'min_width' 和 'pad_width_divisor' 参数中**只能设置一个**。
 
 ```yaml
 auto_padding:
-  min_height: null  # int: if not None, the minimum height of the image
-  min_width: null  # int: if not None, the minimum width of the image
-  pad_height_divisor: null  # int: if not None, ensures image height is dividable by value of this argument.
-  pad_width_divisor: null  # int: if not None, ensures image width is dividable by value of this argument.
-  position: random  # str: position of the image, one of 'A.PadIfNeeded.Position'
-  border_mode: reflect_101  # str: 'constant' or 'reflect_101' (see cv2.BORDER modes)
-  border_value: null  # str: padding value if border_mode is 'constant'
-  border_mask_value: null  # str: padding value for mask if border_mode is 'constant'
+  min_height: null  # int: 如果不为 None，则为图像的最小高度
+  min_width: null  # int: 如果不为 None，则为图像的最小宽度
+  pad_height_divisor: null  # int: 如果不为 None，则确保图像高度可被此参数值整除。
+  pad_width_divisor: null  # int: 如果不为 None，则确保图像宽度可被此参数值整除。
+  position: random  # str: 图像位置，'A.PadIfNeeded.Position' 中的一个
+  border_mode: reflect_101  # str: 'constant' 或 'reflect_101' (参见 cv2.BORDER 模式)
+  border_value: null  # str: 如果 border_mode 是 'constant' 时的填充值
+  border_mask_value: null  # str: 如果 border_mode 是 'constant' 时的蒙版填充值
 ```
 
-**Covering**: Based on Albumentations's [CoarseDropout](
-https://albumentations.ai/docs/api_reference/augmentations/dropout/coarse_dropout/#albumentations.augmentations.dropout.coarse_dropout)
-augmentation, this "cuts" holes out of the image. As defined in 
-[Improved Regularization of Convolutional Neural Networks with Cutout](
-https://arxiv.org/abs/1708.04552).
+**Covering**: 基于 Albumentations 的 [CoarseDropout](
+https://albumentations.ai/docs/api_reference/augmentations/dropout/coarse_dropout/#albumentations.augmentations.dropout.coarse_dropout) 增强，此项会从图像中“剪切”掉区域。如 [Improved Regularization of Convolutional Neural Networks with Cutout](
+https://arxiv.org/abs/1708.04552) 中定义。
 
 ```yaml
-covering: true  # bool: if true, applies a coarse dropout with probability 50%
+covering: true  # bool: 如果为 true，则以 50% 的概率应用粗略的 dropout
 ```
 
-**Gaussian Noise**: Applies gaussian noise to the input image. Can either be a float 
-(the standard deviation of the noise) or simply a boolean (the standard deviation of 
-the noise will be set as 12.75).
+**Gaussian Noise**: 对输入图像应用高斯噪声。可以是浮点数（噪声的标准差）或简单布尔值（噪声的标准差将设置为 12.75）。
 
 ```yaml
-gaussian_noise: 12.75  # bool, float: add gaussian noise
+gaussian_noise: 12.75  # bool, float: 添加高斯噪声
 ```
 
-**Horizontal Flips**: This flips the image horizontally around the y-axis. As the 
-resulting image is mirrored, it does not preserve labels (the left hand would become the
-right hand, and vice versa). This augmentation should not be used for pose models if you
-have symmetric keypoints! However, it is safe to use it to train detectors. If you want
-to use horizontal flips with symmetric keypoints, you need to specify them through the 
-`symmetries` parameter!
+**Horizontal Flips**（水平翻转）：此操作会围绕 y 轴水平翻转图像。由于产生的图像被镜像，因此它不保留标签（左手会变成右手，反之亦然）。如果您的姿态模型具有对称关键点，则**不应**将此增强用于姿态模型！但是，它可安全地用于训练检测器。如果您想在具有对称关键点时使用水平翻转，则需要通过 `symmetries` 参数明确指定它们！
 
 ```yaml
-# augmentation for object detectors or when no symmetric (left/right) keypoints exist: 
+# 用于目标检测器或没有对称（左右）关键点的情况的增强：
 hflip: true
 
-# augmentation if your bodyparts are [snout, eye_L, eye_R, ear_L, ear_R]
+# 如果您的身体部位是 [snout, eye_L, eye_R, ear_L, ear_R] 时的增强
 hflip:
-  p: 0.5  # apply a horizontal flip with 50% probability
-  symmetries: [[1, 2], [3, 4]]  # the indices of symmetric keypoints
+  p: 0.5  # 以 50% 的概率应用水平翻转
+  symmetries: [[1, 2], [3, 4]]  # 对称关键点的索引
 ```
 
-**Histogram Equalization**: Applies histogram equalization with probability 50%.
+**Histogram Equalization**（直方图均衡化）：以 50% 的概率应用直方图均衡化。
 
 ```yaml
-hist_eq: true  # bool: whether to apply histogram equalization
+hist_eq: true  # bool: 是否应用直方图均衡化
 ```
 
-**Motion Blur**: Applies motion blur to the image with probability 50%.
+**Motion Blur**（运动模糊）：以 50% 的概率对图像应用运动模糊。
 
 ```yaml
-motion_blur: true  # bool: whether to apply motion blur
+motion_blur: true  # bool: 是否应用运动模糊
 ```
 
-**Normalization**: This should always be set to `true`.
+**Normalization**（归一化）：此项应始终设置为 `true`。
 
 ```yaml
-normalize_images: true  # normalizes images
+normalize_images: true  # 归一化图像
 ```
 
-### Dealing with Variable Image Sizes
+### 处理可变图像尺寸
 
 ```{NOTE}
-When training with batch size 1 (or if all images in your dataset have the same size), 
-you don't need to worry about any of this! However, you can still use `crop_sampling`
-which may help your model generalize.
+当使用批次大小 1 进行训练时（或者如果数据集中所有图像的大小都相同），您无需担心这些！但是，您仍然可以使用 `crop_sampling`，这可能会帮助您的模型泛化。
 ```
 
-When training with a batch size greater than 1, all images in a batch **must** have the
-same size. PyTorch **collates** all images into one tensor of shape `[b, c, h, w]`, 
-where `b` is the batch size, `c` the number of channels in the image, `h` and `w` the 
-height and width of images in the batches. There are a few different ways to ensure that
-all images in a batch have the same size:
+当使用大于 1 的批次大小进行训练时，批次中的所有图像**必须**具有相同的大小。PyTorch 会将所有图像整合到一个形状为 `[b, c, h, w]` 的张量中，其中 `b` 是批次大小，`c` 是图像的通道数，`h` 和 `w` 是批次中图像的高度和宽度。有几种不同的方法可以确保批次中的所有图像大小相同：
 
-1. **Crop sampling**. This is the default behavior for the PyTorch engine in DeepLabCut.
-A part of each image (of a fixed size) is cropped and given to the model to train. See 
-below for more information.
-2. **A custom collate function**. Collate functions define a way that images of different
-sizes can be combined into one tensor. This involves resizing and padding images to the
-same size and aspect ratio. Available collate functions are defined in
-`deeplabcut/pose_estimation_pytorch/data/collate.py`. 
-3. **Resizing all images**. All images can simply be resized to the same size. This
-usually doesn't lead to the best performance.
+1. **裁剪采样 (Crop sampling)**。这是 DeepLabCut 中 PyTorch 引擎的默认行为。裁剪每个图像的一部分（固定大小）并将其提供给模型进行训练。有关更多信息，请参阅下文。
+2. **自定义 collate 函数**。Collate 函数定义了如何将不同大小的图像组合成一个张量。这涉及到将图像调整大小和填充到相同的大小和纵横比。可用的 collate 函数定义在 `deeplabcut/pose_estimation_pytorch/data/collate.py` 中。
+3. **调整所有图像的大小**。所有图像可以简单地调整到相同的大小。这通常不会带来最佳性能。
 
-**Resizing - Crop Sampling**: An alternative way to ensure all images have the same size
-is through cropping. The `crop_sampling` crops images down to a maximum width and 
-height, with options to sample the center of the crop according to the positions of the
-keypoints. The methods to sample the center of the crop are as follows:
+**调整大小 - 裁剪采样 (Resizing - Crop Sampling)**：确保批次中所有图像大小相同的另一种方法是通过裁剪。`crop_sampling` 将图像裁剪到最大宽度和高度，并提供选项，根据关键点的位置对裁剪的中心进行采样。采样裁剪中心的以下方法：
 
-- `uniform`: randomly over the image
-- `keypoints`: randomly over the annotated keypoints
-- `density`: weighing preferentially dense regions of keypoints
-- `hybrid`: alternating randomly between `uniform` and `density`
+- `uniform`: 在图像上随机
+- `keypoints`: 在标注的关键点上随机
+- `density`: 优先考虑关键点密集区域的权重
+- `hybrid`: 在 `uniform` 和 `density` 之间随机交替
 
 ```yaml
 crop_sampling:
-  height: 400  # int: the height of the crop 
-  width: 400  # int: the height of the crop 
-  max_shift: 0.4  # float: maximum allowed shift of the cropping center position as a fraction of the crop size.
-  method: hybrid # str: the center sampling method (one of 'uniform', 'keypoints', 'density', 'hybrid') 
+  height: 400  # int: 裁剪的高度
+  width: 400  # int: 裁剪的宽度（此处原文有笔误，应为 width）
+  max_shift: 0.4  # float: 允许的裁剪中心位置的最大偏移量，以裁剪尺寸的分数表示。
+  method: hybrid # str: 中心采样方法（'uniform', 'keypoints', 'density', 'hybrid' 之一）
 ```
 
-**Collate**: Defines how images are collated into batches. The default way collate
-function to use is `ResizeFromDataSizeCollate` (other collate functions are defined in
-`deeplabcut/pose_estimation_pytorch/data/collate.py`). For each batch to collate, this
-implementation:
-1. Selects the target width & height all images will be resized to by getting the size 
-of the first image in the batch, and multiplying it by a scale sampled uniformly at 
-random from `(min_scale, max_scale)`.
-2. Resizes all images in the batch (while preserving their aspect ratio) such that they 
-are the smallest size such that the target size fits entirely in the image.
-3. Crops each resulting image into the target size with a random crop.
+**Collate**：定义如何将图像整合成批次。默认使用的 collate 函数是 `ResizeFromDataSizeCollate`（其他 collate 函数定义在 `deeplabcut/pose_estimation_pytorch/data/collate.py`）。对于要整合的每个批次，此实现执行以下操作：
+1. 通过获取批次中第一张图像的大小，并将其乘以从 `(min_scale, max_scale)` 中均匀随机采样的比例，来选择所有图像将调整到的大小。
+2. 调整批次中所有图像的大小（同时保持其纵横比），使它们达到最小尺寸，使得目标尺寸完全包含在图像中。
+3. 对每张结果图像进行随机裁剪以达到目标尺寸。
 
 ```yaml
-collate:  # rescales the images when putting them in a batch
-  type: ResizeFromDataSizeCollate  # You can also use `ResizeFromListCollate`
-  max_shift: 10  # the maximum shift, in pixels, to add to the random crop (this means
-    # there can be a slight border around the image)
-  max_size: 1024  #  the maximum size of the long edge of the image when resized. If the
-    # longest side will be greater than this value, resizes such that the longest side 
-    # is this size, and the shortest side is smaller than the desired size. This is 
-    # useful to keep some information from images with extreme aspect ratios.
-  min_scale: 0.4  # the minimum scale to resize the image with
-  max_scale: 1.0  # the maximum scale to resize the image with
-  min_short_side: 128  # the minimum size of the target short side
-  max_short_side: 1152  # the maximum size of the target short side
-  multiple_of: 32  # pads the target height, width such that they are multiples of 32
-  to_square: false  # instead of using the aspect ratio of the first image, only the 
-    # short side of the first image will be used to sample a "side", and the images will
-    # be cropped in squares
+collate:  # 在将图像放入批次时重新缩放它们
+  type: ResizeFromDataSizeCollate  # 您也可以使用 `ResizeFromListCollate`
+  max_shift: 10  # 添加到随机裁剪的最大偏移量（以像素为单位）（这意味着图像周围可能存在轻微边框）
+  max_size: 1024  #  调整大小后图像长边的最大尺寸。如果最长边大于此值，则调整大小使最长边为此尺寸，而较短边小于目标尺寸。这对于保留具有极端纵横比的图像的一些信息很有用。
+  min_scale: 0.4  # 调整图像大小时的最小缩放比例
+  max_scale: 1.0  # 调整图像大小时的最大缩放比例
+  min_short_side: 128  # 目标短边的最小值
+  max_short_side: 1152  # 目标短边的最大值
+  multiple_of: 32  # 填充目标高度、宽度，使它们是 32 的倍数
+  to_square: false  # 不使用第一张图像的纵横比，而是仅使用第一张图像的短边来采样一个“边”，并将图像裁剪成正方形
 ```
 
-**Resizing**: Resizes the images while preserving the aspect ratio (first resizes to the
-maximum possible size, then adds padding for the missing pixels).
+**Resizing**（调整大小）：在保持纵横比的同时调整图像大小（首先调整到最大可能尺寸，然后为缺失的像素添加填充）。
 
 ```yaml
 resize:
-  height: 640 # int: the height to which all images will be resized
-  width: 480 # int: the width to which all images will be resized
-  keep_ratio: true  # bool: whether the aspect ratio should be preserved when resizing
+  height: 640 # int: 所有图像将调整到的目标高度
+  width: 480 # int: 所有图像将调整到的目标宽度
+  keep_ratio: true  # bool: 调整大小时是否应保持纵横比
 ```
 
-### Model
+### 模型 (Model)
 
-The model configuration is further split into a `backbone`, optionally a `neck` and a 
-number of heads.
+模型配置进一步细分为 `backbone`（骨干网络），可选的 `neck`（颈部网络）和多个 `heads`（头部网络）。
 
-Changing the `model` configuration should only be done by expert users, and in rare 
-occasions. When updating a model configuration (e.g. adding more deconvolution layers 
-to a `HeatmapHead`) must be done in a way where the model configuration still makes 
-sense for the project (e.g. the number of heatmaps output needs to match the number of 
-bodyparts in the project).
+更改 `model` 配置应仅由资深用户在极少数情况下进行。当更新模型配置（例如向 `HeatmapHead` 添加更多反卷积层）时，必须以一种方式完成，使模型配置对项目仍然有意义（例如，输出的热图数量需要与项目中的身体部位数量相匹配）。
 
-An example model configuration for a single-animal HRNet would look something like:
+单动物 HRNet 的模型配置示例可能如下所示：
 
 ```yaml
 model:
-  backbone:  # the BaseBackbone used by the pose model
+  backbone:  # 姿态模型使用的 BaseBackbone
     type: HRNet
-    model_name: hrnet_w18  # creates an HRNet W18 backbone
+    model_name: hrnet_w18  # 创建一个 HRNet W18 骨干网络
   backbone_output_channels: 18
-  heads:  # configures how the different heads will make predictions
-    bodypart:  # configures how pose will be predicted for bodyparts
+  heads:  # 配置不同头部网络如何做出预测
+    bodypart:  # 配置如何为身体部位预测姿态
       type: HeatmapHead
-      predictor:  # the BasePredictor used to make predictions from the head's outputs
+      predictor:  # 用于从头部网络输出制作预测的 BasePredictor
         type: HeatmapPredictor
           ...
-      target_generator:  # the BaseTargetGenerator used to create targets for the head
+      target_generator:  # 用于为头部网络创建目标的 BaseTargetGenerator
         type: HeatmapPlateauGenerator
           ...
-      criterion:  # the loss criterion used for the head
+      criterion:  # 为头部网络使用的损失判据
         ...
-      ...  # head-specific options, such as `heatmap_config` or `locref_config` for a "HeatmapHead"
+      ...  # 特定于头部的选项，例如 "HeatmapHead" 的 `heatmap_config` 或 `locref_config`
 ```
 
-The `backbone`, `neck` and `head` configurations are loaded using the
-`deeplabcut.pose_estimation_pytorch.models.backbones.base.BACKBONES`,
-`deeplabcut.pose_estimation_pytorch.models.necks.base.NECKS` and 
-`deeplabcut.pose_estimation_pytorch.models.heads.base.HEADS` registries. You specify 
-which type to load with the `type` parameter. Any argument for the head can then be used
-in the configuration.
+`backbone`、`neck` 和 `head` 配置是使用 `deeplabcut.pose_estimation_pytorch.models.backbones.base.BACKBONES`、`deeplabcut.pose_estimation_pytorch.models.necks.base.NECKS` 和 `deeplabcut.pose_estimation_pytorch.models.heads.base.HEADS` 注册表加载的。您通过 `type` 参数指定要加载哪种类型。此后，头部的**任何参数**都可以在配置中使用。
 
-So to use an `HRNet` backbone for your model (as defined in 
-`deeplabcut.pose_estimation_pytorch.models.backbones.hrnet.HRNet`), you could set:
+因此，要为模型使用 `HRNet` 骨干网络（如在 `deeplabcut.pose_estimation_pytorch.models.backbones.hrnet.HRNet` 中定义），您可以设置：
 
 ```yaml
 model:
   backbone:
     type: HRNet
-    model_name: hrnet_w32  # creates an HRNet W32
-    pretrained: true  # the backbone weights for training will be loaded from TIMM (pre-trained on ImageNet)
-    interpolate_branches: false  # don't interpolate & concatenate channels from all branches 
-    increased_channel_count: true  # use the incre_modules defined in the TIMM HRNet
-  backbone_output_channels: 128  # number of channels output by the backbone
+    model_name: hrnet_w32  # 创建一个 HRNet W32
+    pretrained: true  # 将从 TIMM（在 ImageNet 上预训练）加载用于训练的骨干网络权重
+    interpolate_branches: false  # 不插值和连接所有分支的通道
+    increased_channel_count: true  # 使用 TIMM HRNet 中定义的 incre_modules
+  backbone_output_channels: 128  # 骨干网络输出的通道数
 ```
 
-### Runner
+### 运行器 (Runner)
 
-The runner contains elements relating to the training runner to use (including the optimizer and
-learning rate schedulers). Unless you're experienced with machine learning and training 
-models **it is not recommended to change the optimizer or scheduler**.
+`runner` 包含与所使用的训练运行器相关的元素（包括优化器和学习率调度器）。除非您精通机器学习和模型训练，**否则不建议更改优化器或调度器**。
 
 ```yaml
 runner:
-  type: PoseTrainingRunner  # should not need to modify this
-  key_metric: "test.mAP"  # the metric to use to select the "best snapshot"
-  key_metric_asc: true  # whether "larger=better" for the key_metric
-  eval_interval: 1  # the interval between each passes through the evaluation dataset
-  optimizer:  # the optimizer to use to train the model
+  type: PoseTrainingRunner  # 不应需要修改此项
+  key_metric: "test.mAP"  # 用于选择“最佳快照”的指标
+  key_metric_asc: true  # 对于 key_metric，是否“越大越好”
+  eval_interval: 1  # 每次遍历评估数据集的间隔
+  optimizer:  # 用于训练模型的优化器
     ...
-  scheduler:  # optional: a learning rate scheduler
+  scheduler:  # 可选：学习率调度器
     ...
-  load_scheduler_state_dict: true/false # whether to load scheduler state when resuming training from a snapshot,
-  snapshots:  # parameters for the TorchSnapshotManager
-    max_snapshots: 5  # the maximum number of snapshots to save (the "best" model does not count as one of them)
-    save_epochs: 25  # the interval between each snapshot save  
-    save_optimizer_state: false  # whether the optimizer state should be saved with the model snapshots (very little reason to set to true)
-  gpus: # GPUs to use to train the network
+  load_scheduler_state_dict: true/false # 在从快照恢复训练时是否加载调度器状态，
+  snapshots:  # TorchSnapshotManager 的参数
+    max_snapshots: 5  # 要保存的最大快照数（“最佳”模型不计入其中）
+    save_epochs: 25  # 每次保存快照的间隔
+    save_optimizer_state: false  # 是否将优化器状态与模型快照一起保存（很少有理由设置为 true）
+  gpus: # 用于训练网络的 GPU
   - 0
   - 1
 ```
 
-**Key metric**: Every time the model is evaluated on the test set, metrics are computed 
-to see how the model is performing. The key metric is used to determine whether the 
-current model is the "best" so far. If it is, the snapshot is saved as `...-best.pt`. 
-For pose models, metrics to choose from would be `test.mAP` (with `key_metric_asc: true`
-) or `test.rmse` (with `key_metric_asc: false`). 
+**关键指标 (Key metric)**：每次在测试集上评估模型时，都会计算指标以查看模型的性能如何。关键指标用于确定当前模型是否是迄今为止“最佳”模型。如果是，则快照将保存为 `...-best.pt`。对于姿态模型，可选择的指标包括 `test.mAP`（使用 `key_metric_asc: true`）或 `test.rmse`（使用 `key_metric_asc: false`）。
 
-**Evaluation interval**: Evaluation slows down training (it takes time to go through all
-the evaluation images, make predictions and log results!). So instead of evaluating 
-after every epoch, you could decide to evaluate every 5 epochs (by setting
-`eval_interval: 5`). While this means you get coarser information about how your model 
-is training, it can speed up training on large datasets.
+**评估间隔 (Evaluation interval)**：评估会减慢训练速度（需要时间遍历所有评估图像、进行预测和记录结果！）。因此，您可以决定每 5 个周期评估一次（通过设置 `eval_interval: 5`），而不是在每个周期后评估。虽然这意味着您获得的关于模型训练情况的信息较为粗略，但它可以加快大型数据集上的训练速度。
 
-**Optimizer**: Any optimizer inheriting `torch.optim.Optimizer`. More information about 
-optimizers can be found in [PyTorch's documentation](
-https://pytorch.org/docs/stable/optim.html). Examples:
+**优化器 (Optimizer)**：任何继承 `torch.optim.Optimizer` 的优化器。有关优化器的更多信息，请参阅 [PyTorch 文档](
+https://pytorch.org/docs/stable/optim.html)。示例：
 
 ```yaml
-  # SGD with initial learning rate 1e-3 and momentum 0.9
-  #  see https://pytorch.org/docs/stable/generated/torch.optim.SGD.html
+  # SGD，初始学习率 1e-3，动量 0.9
+  #  参见 https://pytorch.org/docs/stable/generated/torch.optim.SGD.html
   optimizer:
     type: SGD
     params:
       lr: 1e-3
       momentum: 0.9
 
-  # AdamW optimizer with initial learning rate 1e-4
-  #  see https://pytorch.org/docs/stable/generated/torch.optim.AdamW.html
+  # AdamW 优化器，初始学习率 1e-4
+  #  参见 https://pytorch.org/docs/stable/generated/torch.optim.AdamW.html
   optimizer:
     type: AdamW
     params:
       lr: 1e-4
 ```
 
-**Scheduler**: You can use [any scheduler](
-https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate) defined in
-`torch.optim.lr_scheduler`, where the arguments given are arguments of the scheduler. 
-The default scheduler is an LRListScheduler, which changes the learning rates at each 
-milestone to the corresponding values in `lr_list`. Examples:
+**调度器 (Scheduler)**：您可以使用定义在 `torch.optim.lr_scheduler` 中的[任何调度器](
+https://pytorch.org/docs/stable/optim.html#how-to-adjust-learning-rate)，其中给定的参数是调度器的参数。默认调度器是 `LRListScheduler`，它在每个里程碑将学习率更改为 `lr_list` 中的相应值。示例：
 
 ```yaml
-  # reduce to 1e-5 at epoch 160 and 1e-6 at epoch 190
+  # 在 epoch 160 减小到 1e-5，在 epoch 190 减小到 1e-6
   scheduler:
     type: LRListScheduler
     params:
       lr_list: [ [ 1e-5 ], [ 1e-6 ] ]
       milestones: [ 160, 190 ]
 
-  # Decays the learning rate of each parameter group by gamma every step_size epochs
-  #   see https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.StepLR.html
+  # 每隔 step_size 个周期，将每个参数组的学习率按 gamma 衰减
+  #   参见 https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.StepLR.html
   scheduler:
     type: StepLR
     params:
@@ -385,28 +304,26 @@ milestone to the corresponding values in `lr_list`. Examples:
       gamma: 0.1
 ```
 
-You can also use schedulers that use other schedulers as parameters, such as a 
-[`ChainedScheduler`](
+您还可以使用将其他调度器作为参数的调度器，例如 [`ChainedScheduler`](
 https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.ChainedScheduler.html)
-or a [`SequentialLR`](
-https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.SequentialLR.html).
+或 [`SequentialLR`](
+https://pytorch.org/docs/stable/generated/torch.optim.lr_scheduler.SequentialLR.html)。
 
-The `SequentialLR` can be particularly useful, such as to use a first scheduler for some
-warmup epochs, and a second scheduler later. An example usage would be:
+`SequentialLR` 特别有用，例如，在一些预热周期中使用第一个调度器，然后在后期使用第二个调度器。一个使用示例是：
 
 ```yaml
-  # Multiply the learning rate by `factor` for the first `total_iters` epochs
-  # After 5 epochs, start decaying the learning rate by `gamma` every `step_size` epochs
-  # If the initial learning rate is set to 1, the learning rates will be:
-  #   epoch 0: 0.01  - using ConstantLR
-  #   epoch 1: 0.01  - using ConstantLR
-  #   epoch 2: 1.0   - using ConstantLR
-  #   epoch 3: 1.0   - using ConstantLR
-  #   epoch 4: 1.0   - using ConstantLR
-  #   epoch 5: 1.0   - using StepLR
-  #   epoch 6: 1.0   - using StepLR
-  #   epoch 7: 0.1   - using StepLR
-  #   epoch 8: 0.1   - using StepLR
+  # 在前 `total_iters` 个周期内，将学习率乘以 `factor`
+  # 在 5 个周期后，每隔 `step_size` 个周期开始按 `gamma` 衰减学习率
+  # 如果初始学习率设置为 1，则学习率如下：
+  #   epoch 0: 0.01  - 使用 ConstantLR
+  #   epoch 1: 0.01  - 使用 ConstantLR
+  #   epoch 2: 1.0   - 使用 ConstantLR
+  #   epoch 3: 1.0   - 使用 ConstantLR
+  #   epoch 4: 1.0   - 使用 ConstantLR
+  #   epoch 5: 1.0   - 使用 StepLR
+  #   epoch 6: 1.0   - 使用 StepLR
+  #   epoch 7: 0.1   - 使用 StepLR
+  #   epoch 8: 0.1   - 使用 StepLR
   scheduler:
     type: SequentialLR
     params:
@@ -423,82 +340,61 @@ warmup epochs, and a second scheduler later. An example usage would be:
       - 5
 ```
 
-### Train Settings
+### 训练设置 (Train Settings)
 
-The `train_settings` key contains parameters that are specific to training. For more 
-information about the `dataloader_workers` and `dataloader_pin_memory` settings, see
-[Single- and Multi-process Data Loading](
-https://pytorch.org/docs/stable/data.html#single-and-multi-process-data-loading)
-and [memory pinning](https://pytorch.org/docs/stable/data.html#memory-pinning). Setting
-`dataloader_workers: 0` uses single-process data loading, while setting it to 1 or more
-will use multi-process data loading. You should always keep 
-`dataloader_pin_memory: true` when training on an NVIDIA GPU. 
+`train_settings` 键包含特定于训练的参数。有关 `dataloader_workers` 和 `dataloader_pin_memory` 设置的更多信息，请参阅 [单进程和多进程数据加载](
+https://pytorch.org/docs/stable/data.html#single-and-multi-process-data-loading) 和 [内存固定 (memory pinning)](
+https://pytorch.org/docs/stable/data.html#memory-pinning)。设置 `dataloader_workers: 0` 使用单进程数据加载，而设置为 1 或更多则使用多进程数据加载。在 NVIDIA GPU 上训练时，应始终将 `dataloader_pin_memory: true`。
 
 ```yaml
 train_settings:
-  batch_size: 1  # the batch size used for training
-  dataloader_workers: 0  # the number of workers for the PyTorch Dataloader 
-  dataloader_pin_memory: true  # pin DataLoader memory
-  display_iters: 500  # the number of iterations (steps) between each log print
-  epochs: 200  # the maximum number of epochs for which to train the model
-  seed: 42  # the random seed to set for reproducibility
+  batch_size: 1  # 用于训练的批次大小
+  dataloader_workers: 0  # PyTorch Dataloader 的工作线程数
+  dataloader_pin_memory: true  # 固定 DataLoader 内存
+  display_iters: 500  # 每次日志打印之间的迭代（步数）数
+  epochs: 200  # 模型训练的最大周期数
+  seed: 42  # 用于可重现性的随机种子
 ```
 
-### Logger
+### 日志记录器 (Logger)
 
-Training runs are logged to the model folder (where the snapshots are stored) by 
-default.
+默认情况下，训练运行会记录到模型文件夹（存储快照的位置）。
 
-Additionally, you can log results to [Weights and Biases](https://wandb.ai/site), by adding a
-`WandbLogger`. Just make sure you're logged in to your `wandb` account before starting 
-your training run (with `wandb login` from your shell). For more information, see their
-[tutorials](https://docs.wandb.ai/tutorials) and their documentation for [`wandb.init`](https://docs.wandb.ai/ref/python/init).
+此外，您可以通过添加 `WandbLogger` 将结果记录到 [Weights and Biases](https://wandb.ai/site)。在开始训练运行之前（通过在 shell 中使用 `wandb login`），请确保您已登录到您的 `wandb` 账户。有关更多信息，请参阅他们的[教程](
+https://docs.wandb.ai/tutorials)以及 [`wandb.init`](https://docs.wandb.ai/ref/python/init) 的文档。
 
-Logging to `wandb` is a good way to keep track of what you've run, including performance
-and metrics.
+记录到 `wandb` 是跟踪您执行的操作（包括性能和指标）的好方法。
 
 ```yaml
 logger:
  type: WandbLogger
- project_name: my-dlc3-project  # the name of the project where the run should be logged
- run_name: dekr-w32-shuffle0  # the name of the run to log
- ...  # any other argument you can pass to `wandb.init`, such as `tags: ["dekr", "split=0"]`
+ project_name: my-dlc3-project  # 应记录运行所属的项目名称
+ run_name: dekr-w32-shuffle0  # 要记录的运行名称
+ ...  # 您可以传递给 `wandb.init` 的任何其他参数，例如 `tags: ["dekr", "split=0"]`
 ```
 
-If you set up a `WandbLogger`, the corresponding run info (`entity`, `project`, `run_id`) 
-will be saved in a `wandb_info.yaml` file in the model train directory, so that the WandB run 
-can be easily be recovered at a later stage.
+如果您设置了 `WandbLogger`，相应的运行信息（`entity`, `project`, `run_id`）将保存在模型训练目录中的 `wandb_info.yaml` 文件中，以便以后可以轻松恢复 WandB 运行。
 
-You can also log images as they are seen by the model to `wandb` 
-with the `image_log_interval`. This logs a random train and test image, as well as the 
-targets and heatmaps for that image.
+您还可以使用 `image_log_interval` 将模型看到的图像记录到 `wandb`。这会记录一个随机的训练图像和一个测试图像，以及该图像的目标和热图。
 
-### Restarting Training at a Specific Checkpoint
+### 在特定检查点重启训练
 
-If you wish to restart the training at a specific checkpoint, you can specify the
-full path of the checkpoint to the `resume_training_from` variable, as shown below. In this 
-example, `snapshot-010.pt` will be loaded before training starts, and the model will 
-continue to train from the 10th epoch on.
+如果您希望在特定检查点重启训练，您可以将检查点的完整路径指定给 `resume_training_from` 变量，如下所示。在此示例中，`snapshot-010.pt` 将在训练开始前加载，模型将从第 10 个周期继续训练。
 
 ```yaml
-# model configuration
+# 模型配置
 ...
-# weights from which to resume training
+# 从中恢复训练的权重
 resume_training_from: /Users/john/dlc-project-2021-06-22/dlc-models-pytorch/iteration-0/dlcJun22-trainset95shuffle0/train/snapshot-010.pt
 ```
 
-When continuing to train a model, you may want to modify the learning rate scheduling 
-that was being used (by editing the configuration under the `scheduler` key). When doing
-so, you *must set `load_scheduler_state_dict: false`* in your `runner` config! 
-Otherwise, the parameters for the scheduler your started training with will be loaded 
-from the state dictionary, and your edits might not be kept!
+在继续训练模型时，您可能希望修改之前使用的学习率调度（通过编辑 `scheduler` 键下的配置）。执行此操作时，您**必须**在 `runner` 配置中将 `load_scheduler_state_dict: false` 设置为 `false`！否则，将从状态字典加载您开始训练时使用的调度器的参数，并且您所做的编辑可能不会被保留！
 
-### Inference
-The `inference:` block in `pytorch_config.yaml` allows configuring **inference-specific
-behavior** for your model. It is independent of training settings and can include multiple
-sub-configs, currently supporting **multithreading**, **compile**, **autocast**, and **conditions**.
+### 推理 (Inference)
 
-**Example**
+`pytorch_config.yaml` 中的 `inference:` 块允许配置模型的**特定于推理的行为**。它独立于训练设置，可以包含多个子配置，目前支持**多线程 (multithreading)**、**编译 (compile)**、**自动转换 (autocast)** 和**条件 (conditions)**。
+
+**示例**
 ```yaml
 inference:
   multithreading:
@@ -515,49 +411,43 @@ inference:
     snapshot_path: /path/to/model-dir/snapshot-best-150.pth
 ```
 
-**Sub-configs**
+**子配置 (Sub-configs)**
 - `multithreading`
-  Controls producer-consumer threading during inference for preprocessing and batching.
-  - `enabled` (`bool`): Enable/disable multithreading.
-  - `queue_length` (`int`): Maximum number of batches to queue between preprocessing and model prediction.
-  - `timeout` (`float`): Timeout in seconds for the preprocessing queue.
+  控制推理期间用于预处理和批处理的生产者-消费者线程。
+  - `enabled` (`bool`): 启用/禁用多线程。
+  - `queue_length` (`int`): 预处理和模型预测之间允许排队的批次的最大数量。
+  - `timeout` (`float`): 预处理队列的超时时间（秒）。
 - `compile`
-  Controls optional `torch.compile` usage during inference.
-  **Note:** Using `torch.compile` may speed up inference but introduces some initialization overhead.
-  It is also known to fail in certain setups, environments, or architectures (e.g., `ctd_coam_*` models).
-  Use at your own risk.
-  - `enabled` (`bool`): Enable/disable compilation. Default: `false`.
-  - `backend` (`str`): Backend to use when compiling (`"inductor"`, `"aot_eager"`, etc.).
+  控制推理期间可选的 `torch.compile` 用法。
+  **注意：** 使用 `torch.compile` 可能会加快推理速度，但会引入一些初始化开销。
+  它也已知在某些设置、环境或架构中会失败（例如 `ctd_coam_*` 模型）。
+  风险自负。
+  - `enabled` (`bool`): 启用/禁用编译。默认值：`false`。
+  - `backend` (`str`): 编译时使用的后端（`"inductor"`、`"aot_eager"` 等）。
 - `autocast`
-  Controls optional mixed precision during inference.
-  - `enabled` (`bool`): Enable/disable `torch.autocast`. Default: `false`.
-  Note: Enabling autocast may reduce inference accuracy. It is disabled by default.
+  控制推理期间可选的混合精度。
+  - `enabled` (`bool`): 启用/禁用 `torch.autocast`。默认值：`false`。
+  注意：启用 autocast 可能会降低推理精度。默认禁用。
 - `conditions`
-  Only used for **Conditional Top-Down (CTD)** models to specify which conditions should be used during inference.
+  仅用于**条件自顶向下 (CTD)** 模型，用于指定推理期间应使用哪些条件。
 
-## Training Top-Down Models
+## 训练自顶向下模型
 
-Top-down models are split into two main elements: a detector (localizing individuals in
-the images) and a pose model predicting each individual's pose (once localization is 
-done, obtaining pose is just like getting pose in a single-animal model!).
+自顶向下模型分为两个主要部分：一个检测器（在图像中定位个体）和一个姿态模型（预测每个个体的姿态；一旦定位完成，获得姿态就像在单动物模型中获得姿态一样！）。
 
-The "pose" part of the model configuration is exactly the same as for single-animal or
-bottom-up models (configured through the `data`, `model`, `runner` and `train_settings`
-). The detector is configured through a detector key, at the top-level of the
-configuration.
+模型的“姿态”部分配置与单动物或自底向上模型完全相同（通过 `data`、`model`、`runner` 和 `train_settings` 配置）。检测器则通过配置该文件顶层的 `detector` 键来配置。
 
-### Detector Configuration
+### 检测器配置 (Detector Configuration)
 
-When training top-down models, you also need to configure how the detector will be 
-trained. All information relating to the detector is placed under the `detector` key.
+训练自顶向下模型时，您还需要配置检测器将如何训练。所有与检测器相关的信息都放在 `detector` 键下。
 
 ```yaml
 detector:
-  data:  # which data augmentations will be used, same options as for the pose model
+  data:  # 使用哪些数据增强，选项与姿态模型相同
     colormode: RGB
-    inference:  # default inference configuration for detectors
+    inference:  # 检测器的默认推理配置
       normalize_images: true
-    train:  # default train configuration for detectors
+    train:  # 检测器的默认训练配置
       affine:
         p: 0.9
         rotation: 30
@@ -565,65 +455,49 @@ detector:
         translation: 40
       hflip: true
       normalize_images: true
-  model:  # the detector to train
+  model:  # 要训练的检测器
     type: FasterRCNN
     variant: fasterrcnn_mobilenet_v3_large_fpn
     pretrained: true
-  runner:  #  detector train runner configuration (same keys as for the pose model)
+  runner:  # 检测器训练运行器配置（与姿态模型相同的键）
     type: DetectorTrainingRunner
     ...
-  train_settings: # detector train settings (same keys as for the pose model)
+  train_settings: # 检测器训练设置（与姿态模型相同的键）
     ...
-  resume_training_from: # optional: restart the training at the specific checkpoint
+  resume_training_from: # 可选：从特定检查点重启训练
 ```
 
-Currently, the only detectors available are `FasterRCNN` and `SSDLite`. However, multiple variants of
-`FasterRCNN` are available (you can view the different variants on 
-[torchvision's object detection page](https://pytorch.org/vision/stable/models.html#object-detection)). It's recommended to use the fastest 
-detector that brings enough performance. The recommended variants are the following 
-(from fastest to most powerful, taken from torchvision's documentation):
+目前，可用的检测器只有 `FasterRCNN` 和 `SSDLite`。但是，`FasterRCNN` 有多种变体（您可以在 [torchvision 的目标检测页面](
+https://pytorch.org/vision/stable/models.html#object-detection) 上查看不同的变体）。建议使用能带来足够性能的最快的检测器。推荐的变体如下（从最快到最强大，摘自 torchvision 文档）：
 
-| name                              | Box MAP (larger = more powerful) | Params (larger = more powerful) | GFLOPS (larger = slower) |
-|-----------------------------------|---------------------------------:|--------------------------------:|-------------------------:|
-| SSDLite                           |                             21.3 |                            3.4M |                     0.58 |
-| fasterrcnn_mobilenet_v3_large_fpn |                             32.8 |                           19.4M |                     4.49 |
-| fasterrcnn_resnet50_fpn           |                               37 |                           41.8M |                   134.38 |
-| fasterrcnn_resnet50_fpn_v2        |                             46.7 |                           43.7M |                   280.37 |
+| 名称 | 框 mAP（越大 = 越强大） | 参数（越大 = 越强大） | GFLOPS（越大 = 越慢） |
+|---|---|---|---|
+| SSDLite | 21.3 | 3.4M | 0.58 |
+| fasterrcnn_mobilenet_v3_large_fpn | 32.8 | 19.4M | 4.49 |
+| fasterrcnn_resnet50_fpn | 37 | 41.8M | 134.38 |
+| fasterrcnn_resnet50_fpn_v2 | 46.7 | 43.7M | 280.37 |
 
 
-### Restarting Training of an Object Detector at a Specific Checkpoint
+### 在特定检查点重启目标检测器训练
 
-If you wish to restart the training of a detector at a specific checkpoint, you can
-specify the full path of the checkpoint to the detector's `resume_training_from` variable, as
-shown below. In this example, `snapshot-detector-020.pt` will be loaded before training
-starts, and the model will continue to train from the 20th epoch on.
+如果您希望在特定检查点重启检测器的训练，可以将检查点的完整路径指定给检测器的 `resume_training_from` 变量，如下所示。在此示例中，`snapshot-detector-020.pt` 将在训练开始前加载，模型将从第 20 个周期继续训练。
 
 ```yaml
 detector:
-  # detector configuration
+  # 检测器配置
   ...
-  # weights from which to resume training
+  # 从中恢复训练的权重
   resume_training_from: /Users/john/dlc-project-2021-06-22/dlc-models-pytorch/iteration-0/dlcJun22-trainset95shuffle0/train/snapshot-detector-020.pt
 ```
 
-When continuing to train a detector, you may want to modify the learning rate scheduling 
-that was being used (by editing the configuration under the `scheduler` key). When doing
-so, you *must set `load_scheduler_state_dict: false`* in your `detector`: `runner`
-config! Otherwise, the parameters for the scheduler your started training with will be
-loaded from the state dictionary, and your edits might not be kept!
+在继续训练检测器时，您可能希望修改之前使用的学习率调度（通过编辑 `scheduler` 键下的配置）。执行此操作时，您**必须**在 `detector`: `runner` 配置中将 `load_scheduler_state_dict: false` 设置为 `false`！否则，将从状态字典加载您开始训练时使用的调度器的参数，并且您所做的编辑可能不会被保留！
 
 (bbox-from-pose)=
-### Generating Bounding Boxes from Pose
+### 从姿态生成边界框 (Generating Bounding Boxes from Pose)
 
-To train object detection models (for top-down pose estimation), ground truth bounding
-boxes are needed. As they are not annotated in DeepLabCut, they are generated from the
-ground truth pose: simply take the minimum and maximum for the x and y axes, add a small
-margin and you have your bounding box! The default setting adds a margin of 20 pixels
-around the pose. This works well in most cases, but in some cases you should update this 
-value (e.g. when you have very small or large images).
+要训练目标检测模型（用于自顶向下姿态估计），需要真实边界框。由于它们在 DeepLabCut 中没有被标注，因此它们是从真实姿态生成的：只需获取 x 和 y 轴的最小值和最大值，加上一个小的边距，您就得到了边界框！默认设置在姿态周围增加 20 像素的边距。这在大多数情况下都有效，但在某些情况下（例如，图像非常小或非常大时），您应该更新此值。
 
-You can edit that value in the `pytorch_config.yaml` for your model through the 
-`data: bbox_margin` parameter for the detector:
+您可以通过模型 `data: bbox_margin` 参数在 `pytorch_config.yaml` 中为检测器编辑该值：
 
 ```yaml
 detector:
@@ -633,3 +507,4 @@ detector:
 ```
 
 ![Bounding boxes generated from pose with different margins](assets/bboxes_from_kpts.png)
+```

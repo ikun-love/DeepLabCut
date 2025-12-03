@@ -1,144 +1,108 @@
 (dlc3-architectures)=
-# DeepLabCut 3.0 - PyTorch Model Architectures
+# DeepLabCut 3.0 - PyTorch 模型架构
 
-## Introduction
+## 引言 (Introduction)
 
-You can see a list of supported architectures/variants by using:
+您可以通过以下方式查看受支持的架构/变体列表：
 
 ```python
 from deeplabcut.pose_estimation_pytorch import available_models
 print(available_models())
 ```
 
-You can see a list of supported object detection architectures/variants by using:
+您可以通过以下方式查看受支持的目标检测架构/变体列表：
 
 ```python
 from deeplabcut.pose_estimation_pytorch import available_detectors
 print(available_detectors())
 ```
 
-## Neural Networks Architectures
+## 神经网络架构 (Neural Networks Architectures)
 
-Several architectures are currently implemented in DeepLabCut PyTorch (more will come,
-and you can add more easily in our new model registry). Also check out the explanations of bottom-up/top-down below. 
+DeepLabCut PyTorch 目前实现了多种架构（更多架构即将推出，并且您可以轻松地在我们的新模型注册表中添加更多）。另请参阅下面对自底向上/自顶向下方法的解释。
 
 **ResNets**
-- Adapted from [He, Kaiming, et al. "Deep residual learning for image recognition." Proceedings of the IEEE conference on Computer Vision and Pattern Recognition. 2016.](https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html) and [Insafutdinov, Eldar et al. "DeeperCut: A Deeper, Stronger, and Faster Multi-Person Pose Estimation Model". European Conference on Computer Vision (ECCV) 2016.]
-- Current bottom-up variants are `resnet_50`, `resnet_101`
-- Current top-down variants are `top_down_resnet_101`, `top_down_resnet_50`
+- 改编自 [He, Kaiming, et al. "Deep residual learning for image recognition." Proceedings of the IEEE conference on Computer Vision and Pattern Recognition. 2016.](https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html) 和 [Insafutdinov, Eldar et al. "DeeperCut: A Deeper, Stronger, and Faster Multi-Person Pose Estimation Model". European Conference on Computer Vision (ECCV) 2016.]
+- 当前的自底向上（bottom-up）变体有：`resnet_50`, `resnet_101`
+- 当前的自顶向下（top-down）变体有：`top_down_resnet_101`, `top_down_resnet_50`
 
 **HRNet**
-- Adapted from [Wang, Jingdong, et al. "Deep high-resolution representation learning for visual recognition." IEEE transactions on pattern analysis and machine intelligence 43.10 (2020): 3349-3364.](https://arxiv.org/abs/1908.07919)
-- Current variants are `hrnet_w18`, `hrnet_w32`, `hrnet_w48`, 
-- Current top-down variants are `top_down_hrnet_w18`, `top_down_hrnet_w32`, `top_down_hrnet_w48`
-- Slower but typically more powerful than ResNets
+- 改编自 [Wang, Jingdong, et al. "Deep high-resolution representation learning for visual recognition." IEEE transactions on pattern analysis and machine intelligence 43.10 (2020): 3349-3364.](https://arxiv.org/abs/1908.07919)
+- 当前变体有：`hrnet_w18`, `hrnet_w32`, `hrnet_w48`
+- 当前自顶向下变体有：`top_down_hrnet_w18`, `top_down_hrnet_w32`, `top_down_hrnet_w48`
+- 比 ResNets 慢，但通常性能更强 (more powerful)
 
 **DEKR**
-- Adapted from [Geng, Zigang et al. "Bottom-Up Human Pose Estimation Via Disentangled Keypoint Regression." Proceedings of the IEEE conference on Computer Vision and Pattern Recognition. 2021.](https://openaccess.thecvf.com/content/CVPR2021/papers/Geng_Bottom-Up_Human_Pose_Estimation_via_Disentangled_Keypoint_Regression_CVPR_2021_paper.pdf)
-- This model is a bottom-up model using HRNet as a backbone. It learns to predict the center of each animal, and predicts the offset between each animal center and their keypoints
-- Current variants that are implemented (from smallest to largest): `dekr_w18`, `dekr_w32`, `dekr_w48`
-- Note, this is a powerful multi-animal model but very heavy (slow)
+- 改编自 [Geng, Zigang et al. "Bottom-Up Human Pose Estimation Via Disentangled Keypoint Regression." Proceedings of the IEEE conference on Computer Vision and Pattern Recognition. 2021.](https://openaccess.thecvf.com/content/CVPR2021/papers/Geng_Bottom-Up_Human_Pose_Estimation_via_Disentangled_Keypoint_Regression_CVPR_2021_paper.pdf)
+- 这是一个使用 HRNet 作为骨干网络（backbone）的自底向上模型。它学习预测每个动物的中心点，并预测每个动物中心点与其关键点之间的偏移量 (offset)。
+- 当前已实现的变体（从小到大）：`dekr_w18`, `dekr_w32`, `dekr_w48`
+- 注意：这是一个功能强大的多动物模型，但非常庞大且速度较慢 (very heavy/slow)
 
 **BUCTD**
-- Adapted from [Zhou\*, Stoffl\*, Mathis, Mathis. "Rethinking Pose Estimation in Crowds: Overcoming the Detection Information Bottleneck and Ambiguity." Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV). 2023](https://openaccess.thecvf.com/content/ICCV2023/papers/Zhou_Rethinking_Pose_Estimation_in_Crowds_Overcoming_the_Detection_Information_Bottleneck_ICCV_2023_paper.pdf)
+- 改编自 [Zhou\*, Stoffl\*, Mathis, Mathis. "Rethinking Pose Estimation in Crowds: Overcoming the Detection Information Bottleneck and Ambiguity." Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV). 2023](https://openaccess.thecvf.com/content/ICCV2023/papers/Zhou_Rethinking_Pose_Estimation_in_Crowds_Overcoming_the_Detection_Information_Bottleneck_ICCV_2023_paper.pdf)
 - [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/rethinking-pose-estimation-in-crowds/pose-estimation-on-crowdpose)](https://paperswithcode.com/sota/pose-estimation-on-crowdpose?p=rethinking-pose-estimation-in-crowds)
-- This is a top-performing multi-animal method that combines the strengths of bottom-up and top-down approaches, and delivers exceptional performance on humans too (which are also animals)
-- It can be used with a diverse set of architectures. Current variants are: `ctd_coam_w32`, `ctd_coam_w48`/`ctd_coam_w48_human`, `ctd_prenet_hrnet_w32`, `ctd_prenet_hrnet_w48`, `ctd_prenet_rtmpose_s`, `ctd_prenet_rtmpose_m`, `ctd_prenet_rtmpose_x`/`ctd_prenet_rtmpose_x_human`
+- 这是一种性能领先的多动物方法，它结合了自底向上和自顶向下方法的优点，并且在人类（人类也是动物）上也表现出卓越的性能。
+- 它可以与多种不同的架构结合使用。当前变体包括：`ctd_coam_w32`, `ctd_coam_w48`/`ctd_coam_w48_human`, `ctd_prenet_hrnet_w32`, `ctd_prenet_hrnet_w48`, `ctd_prenet_rtmpose_s`, `ctd_prenet_rtmpose_m`, `ctd_prenet_rtmpose_x`/`ctd_prenet_rtmpose_x_human`
 
 **DLCRNet**
-- From [Lauer, Zhou, et al. "Multi-animal pose estimation, identification and tracking with DeepLabCut." Nature Methods 19.4 (2022): 496-504.](https://www.nature.com/articles/s41592-022-01443-0)
-- This model uses a multi-scale variant of a ResNet as a backbone, and part-affinity fields to assemble individuals
-- Variants: `dlcrnet_stride16_ms5`, `dlcrnet_stride32_ms5`
+- 来自 [Lauer, Zhou, et al. "Multi-animal pose estimation, identification and tracking with DeepLabCut." Nature Methods 19.4 (2022): 496-504.](https://www.nature.com/articles/s41592-022-01443-0)
+- 该模型使用 ResNet 的多尺度变体作为骨干网络，并使用部件亲和力场 (part-affinity fields) 来组装个体。
+- 变体：`dlcrnet_stride16_ms5`, `dlcrnet_stride32_ms5`
 
 **RTMPose**
-- From [Jiang, Tao et al. "RTMPose: Real-Time Multi-Person Pose Estimation based on MMPose"](https://arxiv.org/abs/2303.07399)
-- Top-down pose estimation model using a fast CSPNeXt backbone with a SimCC-style head
-- Variants: `rtmpose_s`, `rtmpose_m`, `rtmpose_x`
+- 来自 [Jiang, Tao et al. "RTMPose: Real-Time Multi-Person Pose Estimation based on MMPose"](https://arxiv.org/abs/2303.07399)
+- 一种自顶向下姿态估计模型，使用快速的 CSPNeXt 骨干网络和 SimCC 样式的头部网络 (head)。
+- 变体：`rtmpose_s`, `rtmpose_m`, `rtmpose_x`
 
 **AnimalTokenPose**
--  Adapted from [Li, Yanjie, et al. "Tokenpose: Learning keypoint tokens for human pose estimation." Proceedings of the IEEE/CVF International conference on computer vision. 2021.](https://arxiv.org/abs/2104.03516) as in Ye et al. "SuperAnimal pretrained pose estimation models for behavioral analysis." Nature Communications. 2024](https://arxiv.org/abs/2203.07436)
-  - One variant is implemented as: `animal_tokenpose_base` for video inference only (we don't support directly training this within deeplabcut)
+- 改编自 [Li, Yanjie, et al. "Tokenpose: Learning keypoint tokens for human pose estimation." Proceedings of the IEEE/CVF International conference on computer vision. 2021.](https://arxiv.org/abs/2104.03516)，如 Ye 等人在 "SuperAnimal pretrained pose estimation models for behavioral analysis." Nature Communications. 2024 中所述](https://arxiv.org/abs/2203.07436)
+  - 实现的一个变体是：`animal_tokenpose_base`，仅用于视频推理（我们不支持在 deeplabcut 中直接训练此模型）
 
 
-## Information on Single Animal Models
+## 关于单动物模型的信息 (Information on Single Animal Models)
 
-Single-animal models are composed of a backbone (encoder) and a head (decoder) 
-predicting the position of keypoints. The default head contains a single deconvolutional
-layer. To create the single animal model composed of a backbone and head, you can call
-`deeplabcut.create_training_dataset` with `net_type` set to the backbone name (e.g. 
-`resnet_50` or `hrnet_w32`).
+单动物模型由一个骨干网络（编码器）和一个预测关键点位置的头部网络（解码器）组成。默认的头部网络包含一个反卷积层 (deconvolutional layer)。要创建由骨干网络和头部网络组成的单动物模型，您可以调用 `deeplabcut.create_training_dataset` 并将 `net_type` 设置为骨干网络名称（例如 `resnet_50` 或 `hrnet_w32`）。
 
-If you want to add a second deconvolutional layer (which will make your model slower, 
-but it might improve performance), you can simply edit your `pytorch_config.yaml` file.
+如果您想添加第二个反卷积层（这会使您的模型变慢，但可能会提高性能），您可以简单地编辑 `pytorch_config.yaml` 文件。
 
-Of course, any multi-animal model can also be used for single-animal projects!
+当然，任何多动物模型也可以用于单动物项目！
 
-## Approaches to Multi-Animal pose estimation
+## 多动物姿态估计的方法 (Approaches to Multi-Animal pose estimation)
 
-Single-animal pose estimation is quite straightforward: the model takes an image as 
-input, and it outputs the predicted coordinate of each bodypart.
+单动物姿态估计相当直接：模型接收一张图像作为输入，并输出每个身体部位的预测坐标。
 
-Multi-animal pose estimation is more complex. Not only do you need to localize bodyparts
-in the image, but you also need to group bodyparts per individual. There are two main
-approaches to multi-animal pose estimation.
+多动物姿态估计要复杂得多。您不仅需要在图像中定位身体部位，还需要按个体对这些身体部位进行分组。多动物姿态估计有两种主要方法。
 
-### Bottom-up estimation
+### 自底向上估计 (Bottom-up estimation)
 
-The first approach, **bottom-up** pose estimation, starts by detecting bodyparts in the
-image before figuring out how they belong together (i.e., which keypoints belong to the
-same animal).
+第一种方法，**自底向上 (bottom-up)** 姿态估计，首先在图像中检测身体部位，然后再找出它们是如何组合在一起的（即哪些关键点属于同一个动物）。
 
 ![Schema representing the bottom-up approach to pose estimation](
 assets/bottom-up-approach.png)
 
-### Backbones with Part-Affinity Fields 
+### 带有部件亲和力场的骨干网络 (Backbones with Part-Affinity Fields)
 
-As in DeepLabCut 2.X, the base multi-animal model is composed of a backbone (encoder) 
-and a head predicting keypoints and part-affinity fields (PAFs). These PAFs are used to 
-assemble keypoints for individuals.
+如同 DeepLabCut 2.X 中一样，基础的多动物模型由一个骨干网络（编码器）和一个预测关键点和部件亲和力场 (PAFs) 的头部网络组成。这些 PAFs 用于将关键点组装成个体。
 
-Passing a backbone as a net type (e.g., `resnet_50`, `hrnet_w32`) for a multi-animal 
-project will create a model consisting of a backbone and a heatmap + PAF head.
+对于多动物项目，将骨干网络（例如 `resnet_50`、`hrnet_w32`）作为 `net_type` 传入，将创建一个由骨干网络以及热图 + PAFs 头部网络组成的新模型。
 
-### Top-down estimation
+### 自顶向下估计 (Top-down estimation)
 
-The second approach, **top-down** pose estimation, uses a two-step approach. A first 
-model (an object detector) is used to localize every animal present in the image through
-its bounding box. Then, the pose for each animal is determined by predicting bodyparts
-in each bounding box. The pose estimation 
+第二种方法，**自顶向下 (top-down)** 姿态估计，采用两步法。首先，使用一个模型（目标检测器）通过其边界框来定位图像中存在的所有动物。然后，通过在每个边界框内预测身体部位来确定每只动物的姿态。
 
 ![Schema representing the top-down approach to pose estimation](
 assets/top-down-approach.png)
 
-The top-down approach tends to be more accurate in less crowded scenes, as the pose 
-model only needs to process the pixels related to a single animal. However, in more 
-crowded scenes, the pose estimation task becomes ambiguous. Multiple overlapping 
-individuals will have very similar bounding boxes, and the pose model has no way of 
-knowing which animal it is supposed to predict keypoints for.
+在较少拥挤的场景中，自顶向下方法往往更准确，因为姿态模型只需要处理与单只动物相关的像素。然而，在更拥挤的场景中，姿态估计任务会变得模糊。多个重叠的个体将具有非常相似的边界框，并且姿态模型无法知道它应该为哪只动物预测关键点。
 
-The bottom-up approach does not have this ambiguïty, and also has the advantage of
-only needing to run a pose estimation model, instead of needing to run an object 
-detector first. However, grouping keypoints is a difficult problem.
+自底向上方法没有这种模糊性，并且还具有仅需要运行一个姿态估计模型的优势，而不是首先需要运行目标检测器。然而，分组关键点是一个难题。
 
+因此，任何单动物模型都可以转换为自顶向下、多动物模型。要做到这一点，只需在单动物模型名称前加上 `top_down` 前缀。目前，可用的检测器有：`ssdlite`、`fasterrcnn_mobilenet_v3_large_fpn`、`fasterrcnn_resnet50_fpn_v2`。
 
-Hence any single-animal model can be transformed into a top-down, multi-animal model. To
-do so, simply prefix `top_down` to your single-animal model name. Currently, the 
-following detectors are available: `ssdlite`, `fasterrcnn_mobilenet_v3_large_fpn`,
-`fasterrcnn_resnet50_fpn_v2`.
+### 混合方法：自底向上 (BU) 加上一个“条件化”的自顶向下 (CTD)
 
-
-### Hybrid, Bottom-up (BU) plus a ``conditioned" Top-down (CTD)
-
-A new approach to pose estimation, named bottom-up conditioned top-down (or **BUCTD**), was
-introduced in [Zhou, Stoffl, Mathis, Mathis. "Rethinking Pose Estimation in Crowds: 
-Overcoming the Detection Information Bottleneck and Ambiguity." Proceedings of the 
-IEEE/CVF International Conference on Computer Vision (ICCV). 2023](
-https://openaccess.thecvf.com/content/ICCV2023/papers/Zhou_Rethinking_Pose_Estimation_in_Crowds_Overcoming_the_Detection_Information_Bottleneck_ICCV_2023_paper.pdf)
-. It's a hybrid two-stage approach leveraging the strengths of the bottom-up and
-top-down approaches to overcome the ambiguïty introduced through bounding boxes. Instead
-of using an object detection model to localize individuals, it uses a bottom-up pose 
-estimation model. The predictions made by the bottom-up model are given as proposals (or
-_conditions_) to the pose estimation model. This is illustrated in the figure below. In modern language, one could state that CTD models are "pose-promptable". 
+一种新的姿态估计方法，称为自底向上条件化自顶向下（或 **BUCTD**），在 [Zhou, Stoffl, Mathis, Mathis. "Rethinking Pose Estimation in Crowds: Overcoming the Detection Information Bottleneck and Ambiguity." Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV). 2023](
+https://openaccess.thecvf.com/content/ICCV2023/papers/Zhou_Rethinking_Pose_Estimation_in_Crowds_Overcoming_the_Detection_Information_Bottleneck_ICCV_2023_paper.pdf) 中介绍。这是一种混合两阶段方法，利用了自底向上和自顶向下方法的优点，以克服边界框引入的模糊性。它不使用目标检测模型来定位个体，而是使用自底向上姿态估计模型。自底向上模型做出的预测作为提议（或**条件**）提供给姿态估计模型。下图说明了这一点。用现代术语来说，可以说 CTD 模型是“可姿态提示 (pose-promptable)”的。
 
 
 ![BUCTD](https://github.com/amathislab/BUCTD/raw/main/media/BUCTD_fig1.png)

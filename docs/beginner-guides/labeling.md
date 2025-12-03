@@ -1,70 +1,66 @@
 (labeling)=
-# Labeling GUI
+# 标记 GUI
 
-## Selecting Frames to Label
+## 选择要标记的帧 (Frames)
 
-In DeepLabCut, choosing the right frames for labeling is a key step. The trick is always to select the MOST DIVERSE data you can that your model will see. That means good lighting, bad lighting, anything you want to throw at it. So, first, pick a range of diverse videos! Then, we will help you pick frames. You've got two easy ways to do this:
+在 DeepLabCut 中，选择正确的标记帧是一个关键步骤。诀窍在于始终选择模型将能看到的**最多样化**的数据。这意味着要包含光线良好、光线不好的场景，以及任何你打算输入模型进行训练的场景。因此，首先，请挑选一系列多样化的视频！然后，我们将帮助你选择帧。你有两种简单的方法可以做到这一点：
 
-1. **Let DeepLabCut Choose:** DeepLabCut can extract frames automatically for you. It's got two neat ways to do that:
-   - **Uniform:** This is like taking a snapshot at regular time intervals.
-   - **K-means clustering:** This one applies k-means and picks images from different clusters. This is typically better, as it gives you a variety of actions and poses. Note, as it is a clustering tool, it will miss rare events, so ideally run this step, then perhaps consider running the manual GUI to get some rare frames! You can do both within DLC.
+1. **让 DeepLabCut 自动选择：** DeepLabCut 可以为你自动提取帧。它有两种很棒的方法可以实现这一点：
+   - **均匀 (Uniform)：** 这就像在固定的时间间隔上进行快照。
+   - **K-均值聚类 (K-means clustering)：** 这种方法会应用 K-均值算法，并从不同的聚类中挑选图像。这通常效果更好，因为它能提供各种动作和姿势。请注意，由于它是一个聚类工具，它可能会遗漏罕见事件，因此理想情况下，应先运行此步骤，然后再考虑运行手动 GUI 来获取一些罕见帧！你可以在 DLC 中同时完成这两项操作。
 
-2. **Pick Frames Yourself:** Just like flipping through a photo album, you can go through your video and pick the frames that catch your eye - this is great for finding rare frames. Choose the **`manual`** extraction method.
+2. **自己挑选帧：** 就像翻阅相册一样，你可以浏览视频并挑选那些引人注目的帧——这对于寻找罕见帧非常有用。选择 **`manual`**（手动）提取方法。
 
-### Here's how to get started:
+### 以下是入门步骤：
 
-- **Step 1:** Click on **`automatic`** in the frame selection area.
-- **Step 2:** Choose **`k-means`** for some variety.
-- **Step 3:** Hit the **`Extract Frames`** button, usually found at the bottom right corner.
+- **步骤 1：** 在帧选择区域点击 **`automatic`**（自动）。
+- **步骤 2：** 选择 **`k-means`** 以获得一定多样性。
+- **步骤 3：** 点击 **`Extract Frames`**（提取帧）按钮，该按钮通常位于右下角。
 
-By default, DeepLabCut will grab 20 frames from each of your videos and put them into sub-folders, per video, under **labeled-data** in your project. Now, you're all set to start labeling!
+默认情况下，DeepLabCut 将从你的每个视频中抓取 20 帧，并将它们放置在项目 **`labeled-data`** 目录中，每个视频一个子文件夹。现在，你就可以开始标记了！
 
-## Labeling Your First Set of Frames in DeepLabCut
+## 在 DeepLabCut 中标记第一组帧
 
-Alright, you've got your extracted frames ready. Now comes the labeling!
+好了，你已经准备好了提取的帧。现在就开始标记吧！
 
-### Entering the Label Frames Area
+### 进入标记帧区域
 
-- **Click on `Label Frames`:** This takes you straight to where your frames are, sorted in the **labeled-data** folder, each video in its own sub-folder.
-- **Open a Folder:** Click on the first one to start, and then click **`open`**.
+- **点击 `Label Frames`：** 这会直接带你进入帧所在的位置，这些帧已在 **`labeled-data`** 文件夹中排序，每个视频占据一个单独的子文件夹。
+- **打开一个文件夹：** 点击第一个文件夹开始，然后点击 **`open`**（打开）。
 
-### The napari DeepLabCut Labeler
+### napari DeepLabCut 标记器
 
-- **Plugin Window Opens:** As soon as you click **`open`**, the napari DeepLabCut plugin window appears, your main stage for labeling.
-- **Tutorial Popup:** A quick tutorial window shows up. It's a brief guide, so give it a look to understand the basics.
+- **插件窗口打开：** 一旦你点击 **`open`**，napari DeepLabCut 插件窗口就会出现，这是你的主要标记界面。
+- **教程弹出：** 会弹出一个快速教程窗口。这是一个简短的指南，建议查看一下以了解基本知识。
 
 ![Labeling Frames in DeepLabCut using Napari Interface](https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1717779602092-LVR2TI6OADSHEYRCGS6F/labeling-napari.png?format=500w))
 
-### Labeling Setup
+### 标记设置
 
-- **Frames on Display:** Your frames are lined up in the middle, with a slider below to shuffle through them.
-- **Tools and Keypoints:** To the bottom right, you find a list of bodyparts from your configuration. On the top left, all your labeling tools are ready.
+- **显示的帧：** 你的帧排列在中间，下方有一个滑块可以让你在它们之间切换。
+- **工具和关键点：** 在右下角，你可以找到配置中定义的身体部位 (bodyparts) 列表。在左上角，所有标记工具都已准备就绪。
 
-### The Labeling Process
+### 标记过程
 
-- **Start with `Add points`:** Click this to begin placing keypoints on your first frame. If you can't see a bodypart, just move to the next one.
-- **Navigate Through Frames:** Use the slider to go from one frame to the next after you're done labeling.
-- **Save Progress:** Remember to save your work as you go with **`Command and S`** (or **`Ctrl and S`** on Windows).
+- **从 `Add points`（添加点）开始：** 点击此项，开始在第一帧上放置关键点。如果你看不到某个身体部位，只需移动到下一个即可。
+- **逐帧导航：** 完成标记后，使用滑块从一帧移动到下一帧。
+- **保存进度：** 记得在使用过程中随时保存工作，按 **`Command and S`**（或 Windows 上的 **`Ctrl and S`**）。
 
-> 💡 **Note:** For a detailed walkthrough on using the Napari labeling GUI, have a look at the
-[DeepLabCut Napari Guide](napari-gui). Additionally, you can watch our instructional
-[YouTube video](https://www.youtube.com/watch?v=hsA9IB5r73E) for more insights and tips.
+> 💡 **注意：** 有关使用 Napari 标记 GUI 的详细演练，请查阅 [DeepLabCut Napari 指南](napari-gui)。此外，你还可以观看我们的教学 [YouTube 视频](https://www.youtube.com/watch?v=hsA9IB5r73E) 以获取更多见解和技巧。
 
+### 完成该数据集的标记
 
-### Completing the Set
+处理完第一个文件夹中的所有帧。然后，继续处理下一个，以此类推，直到 **`labeled-data`** 目录中的每个文件夹都处理完毕。
 
-Work through all the frames in the first folder. Then, proceed to the next, continuing this way until each folder in your **labeled-data** directory is done. 
+## 检查你的标签
 
-## Checking Your Labels
+标记完所有帧后，确保其准确性非常重要。
 
-After you've labeled all your frames, it's important to ensure they're accurate. 
+### 如何检查你的标签
 
-### How to Check Your Labels
-
-- **Return to the Main Window:** Once you're done with labeling, head back to DeepLabCut's main window, and click on **`Check Labels`**. 
-- **Review the Labeled Folders:** The system will have created new folders for each labeled set inside your labeled-data folder. These folders contain your original frames overlaid with the keypoints you've added.
+- **返回主窗口：** 完成标记工作后，返回 DeepLabCut 的主窗口，然后点击 **`Check Labels`**（检查标签）。
+- **审查标记的文件夹：** 系统将在你的 `labeled-data` 文件夹内，为你标记的每一组数据创建新文件夹。这些文件夹包含带有你添加的关键点覆盖在原始帧上的图像。
 
 ![Checking Labels in DeepLabCut](https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1717779615252-6BNW661XB2ULH85RTAD3/evaluation-example.png?format=500w)
 
-Take the time to go through each folder. Accurate labels are key. If there are mistakes, the model might learn incorrectly and mislabel your videos later on. It's all about setting the right foundation for accurate analysis.
-
+花时间检查每个文件夹。准确的标签是关键。如果存在错误，模型可能会学习到错误的信息，从而在后续视频中错误地标记目标。这都是为了给准确的分析打下正确的基础。

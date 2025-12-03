@@ -1,72 +1,72 @@
-# QUICK GUIDE to single Animal Training:
-**The main steps to take you from project creation to analyzed videos:**
+# 单个动物行为训练快速指南
+**核心步骤：从项目创建到视频分析的主要流程：**
 
-Open ipython in the terminal:
+在终端中打开 ipython：
 ```
 ipython
 ```
 
-Import DeepLabCut:
+导入 DeepLabCut 库：
 ```
 import deeplabcut
 ```
 
-Create a new project:
+创建一个新项目：
 ```
 deeplabcut.create_new_project("project_name", "experimenter", ["path of video 1", "path of video2", ..])
 ```
-    
-Set a config_path variable for ease of use + go edit this file!:
+
+设置 `config_path` 变量以方便后续操作，并前往编辑此配置文件：
 ```
 config_path = "yourdirectory/project_name/config.yaml"
 ```
-        
-Extract frames:
+
+提取视频帧：
 ```
 deeplabcut.extract_frames(config_path)
 ```
 
-Label frames:
+标注视频帧：
 ``` 
 deeplabcut.label_frames(config_path)
 ```
-  
-Check labels [OPTIONAL]:
+
+检查标注（可选）：
 ```
 deeplabcut.check_labels(config_path)
 ```
-   
-Create training dataset:
+
+创建训练数据集：
 ```
 deeplabcut.create_training_dataset(config_path)
 ```
- 
-Train the network:
+
+训练网络模型：
 ```
 deeplabcut.train_network(config_path)
 ```
 
-Evaluate the trained network:
+评估已训练的网络模型：
 ```
 deeplabcut.evaluate_network(config_path)
 ```
 
- Video analysis:
+视频分析：
 ```
 deeplabcut.analyze_videos(config_path, ["path of video 1", "path of video2", ..])
 ```
 
-Filter predictions [OPTIONAL]:
+筛选预测结果（可选）：
 ```
 deeplabcut.filterpredictions(config_path, ["path of video 1", "path of video2", ..])
 ```
 
-Plot results (trajectories):
+绘制结果（轨迹图）：
 ```
 deeplabcut.plot_trajectories(config_path, ["path of video 1", "path of video2", ..], filtered=True)
 ```
 
-Create a video:
+创建带有标注的视频：
 ```
 deeplabcut.create_labeled_video(config_path, ["path of video 1", "path of video2", ..], filtered=True)
 ```

@@ -143,5 +143,95 @@
     "source_hash": "b71f25524f49d4a0e3dcbfacaad315bd61f04cd0",
     "last_translated_at": "2025-12-03T03:29:42.857Z",
     "translator_version": "1.0"
+  },
+  "docs/beginner-guides/beginners-guide.md": {
+    "source_hash": "c19d56410e157797d3b41d6216e15745695eabfc",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/beginner-guides/labeling.md": {
+    "source_hash": "f3a0ec10d31887246d13027c692f09f04f6c3dc8",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/beginner-guides/manage-project.md": {
+    "source_hash": "ff32aef0e2153ad8a9436a6284ba2fed4788b12c",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/beginner-guides/Training-Evaluation.md": {
+    "source_hash": "18ab3bf736cbbfb23f097adbd7cdd54be6f821c8",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/beginner-guides/video-analysis.md": {
+    "source_hash": "126c7bdf9a5311b2fa6a2583c4ab5a7f2ddb9b19",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/gui/napari_GUI.md": {
+    "source_hash": "4875b23237f68067ed5f9b10ea9c01eb6375c5e4",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/gui/PROJECT_GUI.md": {
+    "source_hash": "e0883c324eb0367b8c223a06726af74ed2b89187",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/pytorch/architectures.md": {
+    "source_hash": "c1742b8221fe66b8cb57d5972a20d71513f24ef6",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/pytorch/Benchmarking_shuffle_guide.md": {
+    "source_hash": "8e4554ce775d7930d2bb27e22bcb85e40b43e608",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/pytorch/pytorch_config.md": {
+    "source_hash": "8d75e3947e4d3552149a39c6f04d8f0baa4e38b0",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/pytorch/user_guide.md": {
+    "source_hash": "a30f7f6a7c9d82dfbc594fa5445620089ef28f50",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/quick-start/single_animal_quick_guide.md": {
+    "source_hash": "307ec6d11316438156fc167c46b78a4c7ef5d810",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/quick-start/tutorial_maDLC.md": {
+    "source_hash": "507ad559d8c8fbb2d4de602603c71f4c4d849852",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/BatchProcessing.md": {
+    "source_hash": "cd9dfef8a50505689e031424a7da5470e7005b0a",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/ClusteringNapari.md": {
+    "source_hash": "00a3b9f514d48c17c86977e9b8fab86b2350d030",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/DLCMethods.md": {
+    "source_hash": "74d5ec4c6565c6ccd15d101acfcbec9b0b5c72c0",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/installTips.md": {
+    "source_hash": "ab4565a8801a4fbf8bc11d7d6309cb912dbc179c",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/MegaDetectorDLCLive.md": {
+    "source_hash": "8af6f59d1bf91c55378a8ed786541160702371e2",
+    "last_translated_at": "2025-12-03T03:32:29.299Z",
+    "translator_version": "1.0"
   }
 }

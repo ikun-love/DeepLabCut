@@ -1,44 +1,43 @@
-# Setting up what keypoints to track
+# 设置要跟踪的关键点
+
 <img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1572296495650-Y4ZTJ2XP2Z9XF1AD74VW/ke17ZwdGBToddI8pDm48kMulEJPOrz9Y8HeI7oJuXxR7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z5QPOohDIaIeljMHgDF5CVlOqpeNLcJ80NK65_fV7S1UZiU3J6AN9rgO1lHw9nGbkYQrCLTag1XBHRgOrY8YAdXW07ycm2Trb21kYhaLJjddA/DLC_logo_blk-01.png?format=1000w" width="150" title="DLC-live" alt="DLC LIVE!" align="right" vspace = "50">
 
-**Edit the Configuration File**
+**编辑配置文件**
 
-After creating your DeepLabCut project, you'll go to the main GUI window, where you'll start managing your project from the Project Management Tab.
+创建 DeepLabCut（DLC）项目后，您需要进入主 GUI 窗口，并在“项目管理”（Project Management）选项卡中开始管理您的项目。
 
-**Accessing the Configuration File**
+**访问配置文件**
 
-- **Locate the Configuration File:** At the top of the main window, you'll find the file path to the configuration file.
-- **Edit the File:** Click on **`Edit config.yaml`**. This action allows you to:
-  - Define the bodyparts you wish to track.
-  - Outline the skeleton structure (optional!).
+- **定位配置文件：** 在主窗口的顶部，您会找到配置文件的文件路径。
+- **编辑文件：** 点击 **`Edit config.yaml`**。此操作允许您：
+  - 定义希望跟踪的身体部位（bodyparts）。
+  - 勾勒出骨架结构（可选操作！）。
 
-A **`Configuration Editor`** window will open, displaying all the configuration details. You'll need to modify some of these settings to align with your research requirements.
+此时会打开一个 **`Configuration Editor`**（配置编辑器）窗口，显示所有的配置细节。您需要修改其中一些设置，以符合您的研究需求。
 
-## Steps to Edit the Configuration
+## 编辑配置的步骤
 
-### 1. Defining Bodyparts
+### 1. 定义身体部位（Bodyparts）
 
-- **Locate the Bodyparts Section:** In the Configuration Editor, find the **`bodyparts`** category.
-- **Modify the List:** Click on the arrow next to **`bodyparts`** to expand the list. Here, you can:
-  - Update the list with the names of the bodyparts relevant to your study.
-  - Add more entries by right-clicking on a row number and selecting **`Insert`**.
-
+- **定位身体部位部分：** 在配置编辑器中，找到 **`bodyparts`** 类别。
+- **修改列表：** 点击 **`bodyparts`** 旁边的箭头以展开列表。在这里，您可以：
+  - 使用与您的研究相关的身体部位名称来更新列表。
+  - 通过右键单击行号并选择 **`Insert`**（插入）来添加更多条目。
 
 ![Editing Bodyparts in DeepLabCut's Config File](https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1717779624617-CIVZCM23U69NYK9BO3GY/bodyparts.png?format=500w)
 
+### 2. 定义骨架（Skeleton）
 
-### 2. Defining the Skeleton
-
-- **Navigate to the Skeleton Section:** Scroll down to the **`skeleton`** category.
-- **Adjust the Skeleton List:** Click on the arrow to expand this section. You can then:
-  - Update the pairs of bodyparts to define the skeleton structure of your model.
+- **导航到骨架部分：** 向下滚动到 **`skeleton`** 类别。
+- **调整骨架列表：** 点击箭头展开此部分。然后您可以：
+  - 更新身体部位的配对，以定义模型的骨架结构。
 
 ![Defining the Skeleton Structure in Config File](https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1717779598505-HQNECHIKSQ6XL033JX8M/skeleton.png?format=500w)
 
-> 💡 **Tip:** If you're new to DeepLabCut, spend some time visualizing how the chosen bodyparts can be connected effectively to form a coherent skeleton.
+> 💡 **提示：** 如果您是 DeepLabCut 的新手，建议花些时间思考如何有效地连接所选的身体部位，以形成一个连贯的骨架。
 
-### Saving Your Changes
+### 保存更改
 
-- **Save the Configuration:** Once you're satisfied with the modifications, click **`Save`**. This will store your changes and return you to the main GUI window.
+- **保存配置：** 对修改满意后，点击 **`Save`**（保存）。这将保存您的更改并返回主 GUI 窗口。
 
-## Next, head over the beginner guide for [Labeling your data](labeling)
+## 接下来，请转到初学者指南中的 [数据标注](labeling) 部分
