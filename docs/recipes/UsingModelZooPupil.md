@@ -1,81 +1,56 @@
-# Using ModelZoo models on your own datasets
+# 在您自己的数据集上使用 ModelZoo 模型
 
-<p style='text-align: justify;'>Animal behavior has to be analyzed with painstaking accuracy. Therefore, animal pose estimation has been
-an important tool to study animal behavior precisely.
+<p style='text-align: justify;'>动物行为必须以极其精确的方式进行分析。因此，动物姿态估计一直是精确研究动物行为的重要工具。
 
-Beside providing an open source toolbox for researchers to develop customized deep neural networks for markerless pose
-estimation, we at DeepLabCut also aim to build robust, generalizable models. Part of this effort is via the
-[DeeplabCut ModelZoo](http://modelzoo.deeplabcut.org/).
+除了为研究人员提供开源工具箱来开发用于无标记姿态估计的定制化深度神经网络外，DeepLabCut 还致力于构建稳健、可泛化的模型。这项工作的一部分是通过 [DeeplabCut ModelZoo](http://modelzoo.deeplabcut.org/) 来实现的。
 
-The Zoo hosts user-contributed and DLC-team developed models that are trained on specific animals and scenarios. You can
-analyze your videos directly with these models without training. The models have strong zero-shot performance on unseen
-out-of-domain data which can be further improved via pseudo-labeling. Please check the first
-[ModelZoo manuscript](https://arxiv.org/abs/2203.07436v1) for further details.
+ModelZoo 托管了用户贡献和 DLC 团队开发的、针对特定动物和场景训练好的模型。您无需训练即可直接使用这些模型分析您的视频。这些模型在未见过的**域外数据 (out-of-domain data)** 上表现出强大的零样本 (zero-shot) 性能，并且可以通过伪标签 (pseudo-labeling) 进一步改进。有关更多详细信息，请参阅第一个 [ModelZoo 论文](https://arxiv.org/abs/2203.07436v1)。
 
-This recipe aims to show a usecase of the **mouse_pupil_vclose** and is contributed by 2022 DLC AI Resident
-[Neslihan Wittek](https://github.com/neslihanedes) 💜.
+本指南旨在展示 **mouse_pupil_vclose** 模型的一个用例，由 2022 年 DLC AI 住院研究员 [Neslihan Wittek](https://github.com/neslihanedes) 💜 贡献。
 
-## `mouse_pupil_vclose` model
+## `mouse_pupil_vclose` 模型
 
-This model was contributed by Jim McBurney-Lin at University of California Riverside, USA.
-The model was trained on images of C57/B6J mice eyes, and also then augmented with mouse eye data from the Mathis Lab at
-EPFL.
-
+此模型由美国加州大学河滨分校的 Jim McBurney-Lin 贡献。该模型是在 C57/B6J 小鼠眼睛的图像上训练的，并且还通过 EPFL Mathis 实验室的小鼠眼睛数据进行了增强。
 
  <img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1661439618442-RAACYCYD4RWEND4X1UFU/pupil_one.png?format=500w" width="250" title="DLC" alt="DLC" align="left" vspace = "50">
 
   <img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1661439618750-97KC2HW8HH6VOJHLMO46/pupil_two.png?format=300w" width="250" title="DLC" alt="DLC" align="right" vspace = "50">
 
-| Landmark_Number  | Landmark_Name  | Description|
+| Landmark\_Number | Landmark\_Name | 说明 |
 | --- | --- | --- |
-| 1 | Lpupil  | Left aspect of pupil |
-| 2 | LDpupil | Left/dorsal aspect of pupil |
-| 3 | Dpupil  | Dorsal aspect of pupil |
-| 4 | DRpupil  | Dorsal/Right aspect of pupil |
-| 5 | Rpupil  | Right aspect of pupil |
-| 6 | RVpupil  | Right/ventral aspect of pupil |
-| 7 | Vpupil  | Ventral aspect of pupil |
-| 8 | VLpupil  | Ventral/left aspect of pupil |
+| 1 | Lpupil | 瞳孔的左侧部分 |
+| 2 | LDpupil | 瞳孔的左/背侧部分 |
+| 3 | Dpupil | 瞳孔的背侧部分 |
+| 4 | DRpupil | 瞳孔的背侧/右侧部分 |
+| 5 | Rpupil | 瞳孔的右侧部分 |
+| 6 | RVpupil | 瞳孔的右/腹侧部分 |
+| 7 | Vpupil | 瞳孔的腹侧部分 |
+| 8 | VLpupil | 瞳孔的腹侧/左侧部分 |
 
+由于我们希望评估模型在域外数据上的性能，我们将分析鸽子瞳孔。关于所谓的域外数据的更多讨论和工作，请参阅 [Mathis, Biasi 2020](https://paperswithcode.com/dataset/horse-10)。
 
-Since we would like to evaluate the models performance on out-of-domain data, we will analyze pigeon pupils. For more
-discussions and work on so-called out-of-domain data, see
-[Mathis, Biasi 2020](https://paperswithcode.com/dataset/horse-10).
+## 鸽子瞳孔
 
-## Pigeon Pupil
+眼球的瞳孔负责接纳和调节进入视网膜的光量，以实现图像感知。除了这一关键作用外，瞳孔还能反映大脑的状态。尽管马克斯·普朗克鸟类学研究所（Max Planck Institute for Ornithology in Seewiesen）的研究人员揭示了鸽子瞳孔的行为，但瞳孔的系统性行为在鸟类中尚未得到广泛研究。
 
-The eye pupil admits and regulates the amount of light entering the retina in order to enable image perception. Beside
-this curicial role, the pupil also reflects the state of the brain. The systemic behavior of the pupil has not been
-vastly studied in birds, although researchers from
-<a href="https://www.sciencedirect.com/science/article/pii/S0960982221013166?via%3Dihub" target="_blank">Max Planck Institute for Ornithology in Seewiesen</a>
-have shed light on pupil behaviors in pigeons.
+雄性鸽子在求偶行为中瞳孔会缩小。这与哺乳动物形成对比，哺乳动物在唤醒程度增加时瞳孔会散大。此外，鸽子在非快速眼动 (non-REM) 睡眠期间瞳孔会散大，而在快速眼动 (REM) 睡眠期间则会迅速收缩。研究这些差异及其背后的原因，可能有助于了解瞳孔行为的普遍规律。
 
-The pupils of male pigeons get smaller during courtship behavior. This is in contrast to mammals, for which the pupil
-size dilates in response to an increase in arousal. In addition, the pupil size of pigeons dilates during non-REM sleep,
-while they rapidly constrict during REM sleep. Examining these differences and the reason behind them, might be helpful
-to understand the pupillary behavior in general.
+鉴于这些发现，我们想展示 **mouse_pupil_vclose** 模型是否也能在鸽子瞳孔上提供准确的追踪性能。
 
-In light of these findings, we wanted to show whether the **mouse_pupil_vclose** model give us an accurate tracking
-performance for the pigeon pupil as well.
+### Jupyter & Google Colab 笔记本
 
-### Jupyter & Google Colab Notebook
+DeepLabCut 提供了一个 Google Colab 笔记本，用于使用 ModelZoo 中的预训练网络分析您的视频。**无需在本地安装 DeepLabCut！**
 
-DeepLabCut provides a Google Colab Notebook to analyze your video with a pretrained networks from the ModelZoo. No need
-for local installation of DeepLabCut!
+由于我们关注 **mouse_pupil_vclose** 模型在鸽子瞳孔数据上的准确性，我们将使用一个包含 7 段鸽子瞳孔记录的视频。
 
-Since we are interested in the accuracy of the **mouse_pupil_vclose** on pigeon pupil data, we will use a video which
-consists of 7 recordings of pigeon pupils.
-
-Check the
-[ModelZoo Colab page](https://github.com/DeepLabCut/DeepLabCut/blob/main/examples/COLAB/COLAB_DLC_ModelZoo.ipynb)
-and a video tutorial on how to use the ModelZoo on Google Colab.
+请查看 [ModelZoo Colab 页面](https://github.com/DeepLabCut/DeepLabCut/blob/main/examples/COLAB/COLAB_DLC_ModelZoo.ipynb) 以及有关如何在 Google Colab 上使用 ModelZoo 的视频教程。
 
 <div align="center">
-  <a href="https://www.youtube.com/watch?v=twHBa1ZvXM8" target= "_blank"><img src="http://img.youtube.com/vi/twHBa1ZvXM8/0.jpg" alt="IMAGE ALT TEXT"></a>
+  <a href="https://www.youtube.com/watch?v=twHBa1ZvXM8" target= "_blank"><img src="http://img.youtube.com/vi/twHBa1ZvXM8/0.jpg" alt="图像替代文本"></a>
 </div>
 
 ```{hint}
-You are happy with the model and want to go on analyzing further videos on your local machine or you want to refine the model for your specific usecase?
+您对模型感到满意，并希望在本地机器上继续分析更多视频，或者您想针对您的具体用例优化模型？
 ```html
 !zip -r /content/file.zip /content/pigeon_modelZoo-nessi-2022-08-22
 from google.colab import files
@@ -83,20 +58,18 @@ files.download("/content/file.zip")
 
 ```
 
-### Analyze Videos at Your Local Machine
+### 在本地机器上分析视频
 
-DeepLabCut host models from the [DeepLabCut ModelZoo Project](http://modelzoo.deeplabcut.org/).
+DeepLabCut 托管了来自 [DeepLabCut ModelZoo 项目](http://modelzoo.deeplabcut.org/) 的模型。
 
-The `create_pretrained_project` function will create a new project directory with the necessary sub-directories and a basic configuration file.
-It will also initialize your project with a pre-trained model from the DeepLabCut ModelZoo.
+`create_pretrained_project` 函数将创建一个新的项目目录，其中包含必要的子目录和一个基本的配置文件。它还将使用来自 DeepLabCut ModelZoo 的预训练模型来初始化您的项目。
 
-The rest of the code should be run within your DeepLabCut environment.
-Check [here](how-to-install) for the instructions for the DeepLabCut installation.
+其余代码应在您的 DeepLabCut 环境中运行。请查看[此处](how-to-install)获取 DeepLabCut 安装说明。
 
-To initialize a new project directory with a pre-trained model from the DeepLabCut ModelZoo, run the code below.
+要使用来自 DeepLabCut ModelZoo 的预训练模型初始化一个新的项目目录，请运行以下代码。
 
 ::::{warning}
-This method is currently implemented for Tensorflow only, Pytorch compatibility is coming soon.
+此方法目前仅对 Tensorflow 实现，Pytorch 兼容性即将推出。
 ::::
 
 ```python
@@ -119,27 +92,24 @@ deeplabcut.create_pretrained_project(
 ```
 
 ::::{important}
-Your videos should be cropped around the eye for better model accuracy! 👁🐭
+为了获得更好的模型准确性，您的视频应围绕眼睛进行裁剪！👁🐭
 ::::
 
-Excitingly, 6 out of the 7 pigeon pupils were tracked nicely:
+令人兴奋的是，7 个鸽子瞳孔中有 6 个被很好地追踪到了：
 
 <img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/44858d34-dca7-4bb5-a6e5-cd8078b50bec/Screen+Shot+2022-08-25+at+5.39.33+PM.png?format=1500w" width="500" title="DLC" alt="DLC" align="center" vspace = "50">
 
-When we further evaluate the model accuracy by checking the likelihood of tracked points, we see that the tracking is
-low confidience when the pigeons close their eyelid (which is of course expected, and can be leveraged to measure
-blinking 👁).
+当我们通过检查被追踪点的置信度来进一步评估模型准确性时，我们发现当鸽子闭上眼睑时（当然这是可以预期的，并且可以利用它来测量眨眼👁），追踪的置信度很低。
 
-<img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1661439615047-OVOOMU1Z5NJIWJ1HHNFD/likelihood.png?format=500w" width="600" title="DLC" alt="6 pigeion eyes tracked with deeplabcut" align="center" vspace = "50">
+<img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1661439615047-OVOOMU1Z5NJIWJ1HHNFD/likelihood.png?format=500w" width="600" title="DLC" alt="6只用deeplabcut追踪的鸽子眼睛" align="center" vspace = "50">
 
-But you also might encounter larger problems than small tracking glitches:
+但是你也可能遇到比小的追踪故障更大的问题：
 
-<img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1661439618037-4GNTZD476MJMQX19N0Z4/pigeon_7.png?format=500w" width="250" title="DLC" alt="1eye" align="center" vspace = "5">
+<img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1661439618037-4GNTZD476MJMQX19N0Z4/pigeon_7.png?format=500w" width="250" title="DLC" alt="1只眼睛" align="center" vspace = "5">
 
-To deal with this, you can extract poorly tracked outlier frames, refine them and feed the training data set with them for re-training.
-Be sure that you set the number of frames to label in the `config.yaml` file of your project folder.
-The more problems you encounter, the higher the number of frames you might want to label.
-You should also add the path of the video(s) into the `config.yaml` file, or run the following command to add the videos to your project:
+要解决这个问题，您可以提取追踪不佳的异常帧，对其进行精炼，然后将它们馈送到训练数据集中以重新训练。请确保在项目文件夹的 `config.yaml` 文件中设置要标记的帧数。您遇到的问题越多，可能希望标记的帧数就应该越高。
+
+您还应该将视频路径添加到 `config.yaml` 文件中，或者运行以下命令将视频添加到您的项目中：
 
 ```python
 deeplabcut.add_new_videos(
@@ -150,7 +120,7 @@ deeplabcut.add_new_videos(
     extract_frames=False
 )
 ```
-The `deeplabcut.extract_outlier_frames` function will check for outliers and ask your feedback on whether to extract these outliers frames.
+`deeplabcut.extract_outlier_frames` 函数将检查异常点，并询问您的反馈，是否应该提取这些异常帧。
 
 ```python
 deeplabcut.analyze_videos(
@@ -163,20 +133,16 @@ deeplabcut.extract_outlier_frames(
     automatic=True
 )
 ```
-The `deeplabcut.refine_labels` function starts the GUI which allows you to refine the outlier frames manually.
-You should load the outlier frames directory and corresponding `.h5` file from the previous model.
-It will ask you to define the `likelihood` threshold: labels under the threshold should be refined at this stage.
+`deeplabcut.refine_labels` 函数启动 GUI，允许您手动精炼异常帧。您应该加载前一个模型的异常帧目录和对应的 `.h5` 文件。它会要求您定义 `likelihood`(置信度) 阈值：低于该阈值的标签应在此阶段进行精炼。
 
-After refining, you should combine these data with your previous model's data set and create a new training data set.
+精炼后，您应该将这些数据与前一个模型的训练数据集中已有的数据合并，并创建新的训练数据集。
+
 ```python
 deeplabcut.refine_labels("/pathofproject/config.yaml")
 deeplabcut.merge_datasets("/pathofproject/config.yaml")
 deeplabcut.create_training_dataset("/pathofproject/config.yaml")
 ```
-Before starting the training of your model, there is one last step left: editing the `init_weights` parameter in your `pose_cfg.yaml` file.
-Go to your project and check the latest snapshot (e.g., `snapshot-610000`) of your model in `dlc-models/train` directory.
-Edit the value of the `init_weights` key in the `pose_cfg.yaml` file and start to re-train your model!
-
+在开始训练模型之前，还有最后一步：编辑 `pose_cfg.yaml` 文件中的 `init_weights` 参数。进入您的项目，并在 `dlc-models/train` 目录中查看模型的最新快照（例如 `snapshot-610000`）。编辑 `pose_cfg.yaml` 文件中 `init_weights` 键的值，然后开始重新训练您的模型！
 
 `init_weights: pathofyourproject\dlc-models\iteration-0\DLCFeb31-trainset95shuffle1\train\snapshot-610000`
 
@@ -184,8 +150,8 @@ Edit the value of the `init_weights` key in the `pose_cfg.yaml` file and start t
 deeplabcut.train_network("/pathofproject/config.yaml", shuffle=1, saveiters=25000)
 ```
 ```{hint}
-Check this video for model refining!
+请查看此视频了解如何精炼模型！
 <div align="center">
-  <a href="https://www.youtube.com/watch?v=bgfnz1wtlpo" target="_blank"><img src="http://img.youtube.com/vi/bgfnz1wtlpo/0.jpg" alt="IMAGE ALT TEXT"></a>
+  <a href="https://www.youtube.com/watch?v=bgfnz1wtlpo" target="_blank"><img src="http://img.youtube.com/vi/bgfnz1wtlpo/0.jpg" alt="图像替代文本"></a>
 </div>
 ```

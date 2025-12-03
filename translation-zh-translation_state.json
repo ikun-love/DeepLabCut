@@ -1,0 +1,147 @@
+{
+  "docs/recipes/flip_and_rotate.ipynb": {
+    "source_hash": "501b7969d9893681334d66214418bd7eaa46a75f",
+    "last_translated_at": "2025-12-03T03:29:42.856Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/io.md": {
+    "source_hash": "e97238628bd7ec01dd576d5dc43142d0b8a70dda",
+    "last_translated_at": "2025-12-03T03:29:42.856Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/nn.md": {
+    "source_hash": "9377c446ca9f1c9add2fb4ed17190300ed6e32bd",
+    "last_translated_at": "2025-12-03T03:29:42.856Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/OpenVINO.md": {
+    "source_hash": "78ea18e82f4376ef25b69e5d17907b3b1ecca989",
+    "last_translated_at": "2025-12-03T03:29:42.856Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/OtherData.md": {
+    "source_hash": "73343284b396111542a53533bc221209121d98b1",
+    "last_translated_at": "2025-12-03T03:29:42.856Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/pose_cfg_file_breakdown.md": {
+    "source_hash": "2f79ac28d3b43eb6560be0a434d17a99e04cccef",
+    "last_translated_at": "2025-12-03T03:29:42.856Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/post.md": {
+    "source_hash": "cbcb78c67396315b2be0213913c3ed78ada2c301",
+    "last_translated_at": "2025-12-03T03:29:42.856Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/publishing_notebooks_into_the_DLC_main_cookbook.md": {
+    "source_hash": "83dbb8c75e43e67b1a64b7717bbd7b96fee91955",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/TechHardware.md": {
+    "source_hash": "879fc67dfb03297fd874fcb4407824360d6e9aca",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/recipes/UsingModelZooPupil.md": {
+    "source_hash": "d73a1acbd71bc1ab71a6b32987d7b7214178ac77",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/benchmark.md": {
+    "source_hash": "612e307d0fa6fad9f01352503388c613987ce68d",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/citation.md": {
+    "source_hash": "c427b1e223d540fe19def915dc41704404d13fe1",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/convert_maDLC.md": {
+    "source_hash": "19dd017692ebe9c61579cc98d25fd781f74c4a2d",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/course.md": {
+    "source_hash": "ff25b8d6e4e5b3434aa7721f31612062d735ebd2",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/deeplabcutlive.md": {
+    "source_hash": "f1edbff3ccb7c903f7d4e240003187c94e5f3a83",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/docker.md": {
+    "source_hash": "473cded14e1e835856906c2f8622e973681ba1a3",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/Governance.md": {
+    "source_hash": "ff7477f28e4c95183e9db39bdc9180d37a666491",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/HelperFunctions.md": {
+    "source_hash": "e4a5aeebe8e39a20c33d973a8daa30e9bbe23af4",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/installation.md": {
+    "source_hash": "29c3e278486f8f6e2c0e8d11eacae99d14bc44c0",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/intro.md": {
+    "source_hash": "415e668dd552dfd04cffb0bbb20d8fcff520e61e",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/maDLC_UserGuide.md": {
+    "source_hash": "55324025703a31f7f4aec1e714372801db20ba58",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/MISSION_AND_VALUES.md": {
+    "source_hash": "c82c4b7a397f2da963dbd320d814dd472374746e",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/ModelZoo.md": {
+    "source_hash": "f5c150b6648502a38ad7bd4c59759cd176808592",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/Overviewof3D.md": {
+    "source_hash": "6a83d7575e914f2e34c60fe1dc7db6521fa17355",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/pytorch_dlc.md": {
+    "source_hash": "157a1c19af96017b6b5fccd5d90adc4717f9c7e0",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/README.md": {
+    "source_hash": "df606c21b6bba940b7303c8e45b9374f0ea917d3",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/roadmap.md": {
+    "source_hash": "b303754e37547328bb18043b8372b0a41a9c85ec",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/standardDeepLabCut_UserGuide.md": {
+    "source_hash": "f7e653e487c04bc56a7728c59b33d8406b32c8dc",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  },
+  "docs/UseOverviewGuide.md": {
+    "source_hash": "b71f25524f49d4a0e3dcbfacaad315bd61f04cd0",
+    "last_translated_at": "2025-12-03T03:29:42.857Z",
+    "translator_version": "1.0"
+  }
+}

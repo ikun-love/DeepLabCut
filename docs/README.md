@@ -1,3 +1,3 @@
-Please see https://deeplabcut.github.io/DeepLabCut for documentation on how to use this software. 
+请参阅 https://deeplabcut.github.io/DeepLabCut 以获取关于如何使用此软件的文档。
 
-This directory contains the source code for the docs.
+此目录包含文档的源代码。

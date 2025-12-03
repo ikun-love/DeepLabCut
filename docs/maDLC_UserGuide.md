@@ -1,60 +1,56 @@
+```rst
 (multi-animal-userguide)=
-# DeepLabCut for Multi-Animal Projects
+# DeepLabCut 多动物项目用户指南
 
-This document should serve as the user guide for maDLC,
-and it is here to support the scientific advances presented in [Lauer et al. 2022](https://doi.org/10.1038/s41592-022-01443-0).
+本文档旨在作为 maDLC（多动物 DeepLabCut）的用户指南，以支持 [Lauer 等人 2022 年](https://doi.org/10.1038/s41592-022-01443-0)发表的科学进展。
 
-Note, we strongly encourage you to use the [Project Manager GUI](project-manager-gui) when you first start using multi-animal mode. Each tab is customized for multi-animal when you create or load a multi-animal project. As long as you follow the recommendations within the GUI, you should be good to go!
+注意：当我们初次使用多动物模式时，我们强烈建议您使用 [项目管理器 GUI](project-manager-gui)。当您创建或加载一个多动物项目时，每个标签页都会针对多动物情况进行定制。只要您遵循 GUI 中的建议，您就可以顺利开始！
 
 ````{versionadded} 3.0.0
-PyTorch is now available as a deep learning engine for pose estimation models, along 
-with new model architectures! For more information about moving from TensorFlow to
-PyTorch (if you're already familiar with DeepLabCut & the TensorFlow engine), 
-check out [the PyTorch user guide](dlc3-user-guide). If you're just starting 
-out with DeepLabCut, we suggest you use the PyTorch backend.
+PyTorch 现在作为姿态估计模型的深度学习引擎可用，并带来了新的模型架构！有关从 TensorFlow 迁移到 PyTorch（如果您已经熟悉 DeepLabCut 和 TensorFlow 引擎）的更多信息，请查看 [PyTorch 用户指南](dlc3-user-guide)。如果您是 DeepLabCut 的新手，我们建议您使用 PyTorch 后端。
 ````
 
-## How to think about using maDLC:
+## 如何思考使用 maDLC：
 
-You should think of maDLC being **four** parts.
-- (1) Curate annotation data that allows you to learn a model to track the objects/animals of interest.
-- (2) Create a high-quality pose estimation model.
-- (3) Track in space and time, i.e., assemble bodyparts to detected objects/animals and link across time. This step performs assembly and tracking (comprising first local tracking and then tracklet stitching by global reasoning).
-- (4) Any and all post-processing you wish to do with the output data, either within DLC or outside of it.
+您应该将 maDLC 视为由**四个**部分组成：
+- (1) 策划标注数据，使您能够学习一个模型来跟踪感兴趣的目标/动物。
+- (2) 创建高质量的姿态估计模型。
+- (3) 在空间和时间上进行跟踪，即，将身体部位组装到检测到的对象/动物上，并在时间上进行链接。此步骤执行组装和跟踪（包括首先进行局部跟踪，然后通过全局推理进行轨迹片段的拼接）。
+- (4) 任何您希望对输出数据进行的后处理，无论是在 DLC 内部还是外部。
 
-Thus, you should always label, train, and evaluate the pose estimation performance first. If and when that performance is high, then you should go advance to the tracking step (and video analysis). There is a natural break point for this, as you will see below.
+因此，您应该始终首先标注、训练和评估姿态估计性能。如果且当该性能很高时，然后您才应该进入跟踪步骤（以及视频分析）。如下所示，这里有一个自然的断点。
 
 <img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1596370260800-SP2GWKDPJCOIR7LJ31VM/ke17ZwdGBToddI8pDm48kB4fL2ovSQh5dRlH2jCMtpoUqsxRUqqbr1mOJYKfIPR7LoDQ9mXPOjoJoqy81S2I8N_N4V1vUb5AoIIIbLZhVYxCRW4BPu10St3TBAUQYVKcSV94BuD0XUinmig_1P1RJNYVU597j3jgswapL4c_w92BJE9r6UgUperYhWQ2ubQ_/workflow.png?format=2500w" width="550" title="maDLC" alt="maDLC" align="center" vspace = "50">
 
-## Install:
+## 安装：
 
-**Quick start:** If you are using DeepLabCut on the cloud, or otherwise cannot use the GUIs and you should install with: `pip install 'deeplabcut'`; if you need GUI support, please use: `pip install 'deeplabcut[gui]'`. Check the [installation page](how-to-install) for more information, including GPU support.
+**快速入门：** 如果您在云端使用 DeepLabCut，或者无法使用 GUI 并且您应该使用以下方式安装：`pip install 'deeplabcut'`；如果您需要 GUI 支持，请使用：`pip install 'deeplabcut[gui]'`。请查看[安装页面](how-to-install)以获取更多信息，包括 GPU 支持。
 
-IF you want to use the bleeding edge version to make edits to the code, see [here on how to install it and test it](https://deeplabcut.github.io/DeepLabCut/docs/recipes/installTips.html#how-to-use-the-latest-updates-directly-from-github).
+如果您想使用最新的开发版本来编辑代码，请参阅[此处了解如何安装和测试它](https://deeplabcut.github.io/DeepLabCut/docs/recipes/installTips.html#how-to-use-the-latest-updates-directly-from-github)。
 
-## Get started in the terminal or Project GUI:
+## 在终端或项目 GUI 中入门：
 
-**GUI:** simply launch your conda env, and type `python -m deeplabcut` in the terminal.
-Then follow the tabs! It might be useful to read the following, however, so you understand what each command does.
+**GUI：** 只需启动您的 conda 环境，然后在终端中输入 `python -m deeplabcut`。
+然后遵循各个标签页的指示！但是，阅读以下内容可能会有所帮助，以便您了解每个命令的作用。
 
-**TERMINAL:** To begin, 🚨 (windows) navigate to anaconda prompt and right-click to "open as admin", or (unix/MacOS) simply launch "terminal" on your computer. We assume you have DeepLabCut installed (if not, [see installation instructions](how-to-install)). Next, launch your conda env (i.e., for example `conda activate DEEPLABCUT`).
+**终端：** 要开始，🚨 (Windows) 导航到 Anaconda 提示符并右键单击“以管理员身份打开”，或 (Unix/MacOS) 仅在计算机上启动“终端”。我们假设您已经安装了 DeepLabCut（如果没有，请参阅[安装说明](how-to-install)）。接下来，启动您的 conda 环境（例如 `conda activate DEEPLABCUT`）。
 
 ```{Hint}
-🚨 If you use Windows, please always open the terminal with administrator privileges! Right click, and "run as administrator".
+🚨 如果您使用 Windows，请始终以管理员权限打开终端！右键单击，然后选择“以管理员身份运行”。
 ```
- Please read more [here](https://deeplabcut.github.io/DeepLabCut/docs/docker.html), and in our Nature Protocols paper [here](https://www.nature.com/articles/s41596-019-0176-0). And, see our [troubleshooting wiki](https://github.com/DeepLabCut/DeepLabCut/wiki/Troubleshooting-Tips).
+请在此处阅读[更多信息](https://deeplabcut.github.io/DeepLabCut/docs/docker.html)，以及我们在 Nature Protocols 论文[此处](https://www.nature.com/articles/s41596-019-0176-0)提供的内容。另外，请参阅我们的[故障排除 Wiki](https://github.com/DeepLabCut/DeepLabCut/wiki/Troubleshooting-Tips)。
 
-Open an ``ipython`` session and import the package by typing in the terminal:
+打开一个 ``ipython`` 会话并在终端中输入以下内容导入包：
 ```python
 ipython
 import deeplabcut
 ```
 
 ```{TIP}
-for every function there is a associated help document that can be viewed by adding a **?** after the function name; i.e. ``deeplabcut.create_new_project?``. To exit this help screen, type ``:q``.
+对于每个函数，都有一个相关的帮助文档，可以通过在函数名后添加一个 **?** 来查看；例如 ``deeplabcut.create_new_project?``。要退出此帮助屏幕，请键入 ``:q``。
 ```
 
-### (A) Create a New Project
+### (A) 创建一个新项目
 
 ```python
 deeplabcut.create_new_project(
@@ -66,36 +62,25 @@ deeplabcut.create_new_project(
 )
 ```
 
-Tip: if you want to place the project folder somewhere specific, please also pass : ``working_directory = "FullPathOftheworkingDirectory"``
+提示：如果您想将项目文件夹放置在特定位置，请同时传递：``working_directory = "FullPathOftheworkingDirectory"``
 
-- Note, if you are a linux/macOS user the path should look like: ``["/home/username/yourFolder/video1.mp4"]``; if you are a Windows user, it should look like: ``[r"C:\username\yourFolder\video1.mp4"]``
-- Note, you can also put ``config_path = `` in front of the above line to create the path to the config.yaml that is used in the next step, i.e. ``config_path=deeplabcut.create_project(...)``)
-    - If you do not, we recommend setting a variable so this can be easily used! Once you run this step, the config_path is printed for you once you run this line, so set a variable for ease of use, i.e. something like:
+- 注意，如果您是 Linux/macOS 用户，路径应如下所示：``["/home/username/yourFolder/video1.mp4"]``；如果您是 Windows 用户，则应如下所示：``[r"C:\username\yourFolder\video1.mp4"]``
+- 注意，您也可以在上述行前加上 ``config_path=`` 来创建用于下一步骤的 config.yaml 路径，例如 ``config_path=deeplabcut.create_project(...)``)
+    - 如果您没有设置，我们建议设置一个变量以便轻松使用！运行此步骤后，当您运行该行时，config_path 会为您打印出来，因此请设置一个变量以方便使用，例如：
 ```python
 config_path = '/thefulloutputpath/config.yaml'
 ```
- - just be mindful of the formatting for Windows vs. Unix, see above.
+ - 请注意 Windows 与 Unix 的格式差异，见上文。
 
-This set of arguments will create a project directory with the name **Name of the project+name of the experimenter+date of creation of the project** in the **Working directory** and creates the symbolic links to videos in the **videos** directory. The project directory will have subdirectories: **dlc-models**, **dlc-models-pytorch**, **labeled-data**, **training-datasets**, and **videos**.  All the outputs generated during the course of a project will be stored in one of these subdirectories, thus allowing each project to be curated in separation from other projects. The purpose of the subdirectories is as follows:
+这组参数将在**工作目录**中创建一个名为 **项目名称+实验者姓名+项目创建日期** 的项目目录，并在 **videos** 目录中创建视频的符号链接。项目目录将包含子目录：**dlc-models**、**dlc-models-pytorch**、**labeled-data**、**training-datasets** 和 **videos**。在项目过程中生成的所有输出都将存储在这些子目录中的一个中，从而允许每个项目与其他项目分开管理。子目录的用途如下：
 
-**dlc-models** and **dlc-models-pytorch** have a similar structure: the first contains 
-files for the TensorFlow engine while the second contains files for the PyTorch engine.
-At the top level in these directories, there are
-directories referring to different iterations of labels refinement (see below): **iteration-0**, **iteration-1**, etc.
-The refinement iterations directories store shuffle directories, each shuffle directory stores model data related to a
-particular experiment: trained and tested on a particular training and testing sets, and with a particular model
-architecture. Each shuffle directory contains the subdirectories *test* and *train*, each of which holds the meta
-information with regard to the parameters of the feature detectors in configuration files. The configuration files are
-YAML files, a common human-readable data serialization language. These files can be opened and edited with standard text
-editors. The subdirectory *train* will store checkpoints (called snapshots) during training of the model. These
-snapshots allow the user to reload the trained model without re-training it, or to pick-up training from a particular
-saved checkpoint, in case the training was interrupted.
+**dlc-models** 和 **dlc-models-pytorch** 具有相似的结构：第一个包含 TensorFlow 引擎的文件，而第二个包含 PyTorch 引擎的文件。在这些目录的顶层，有指向不同标签细化迭代的目录（见下文）：**iteration-0**、**iteration-1** 等。细化迭代目录存储着 shuffle 目录，每个 shuffle 目录存储与特定实验相关的模型数据：在特定的训练和测试集上训练和测试，以及特定的模型架构。每个 shuffle 目录包含子目录 *test* 和 *train*，其中每个子目录都保存着关于特征检测器参数的元信息配置文件。配置文件是 YAML 文件，这是一种常见的人类可读数据序列化语言。这些文件可以用标准文本编辑器打开和编辑。子目录 *train* 将存储模型训练期间的检查点（称为快照）。这些快照允许用户重新加载训练好的模型而无需重新训练，或者在训练中断时从特定的保存检查点继续训练。
 
-**labeled-data:** This directory will store the frames used to create the training dataset. Frames from different videos are stored in separate subdirectories. Each frame has a filename related to the temporal index within the corresponding video, which allows the user to trace every frame back to its origin.
+**labeled-data:** 此目录将存储用于创建训练数据集的帧。来自不同视频的帧存储在单独的子目录中。每帧都有一个与对应视频中时间索引相关的文件名，这使用户能够将每帧追溯到其来源。
 
-**training-datasets:**  This directory will contain the training dataset used to train the network and metadata, which contains information about how the training dataset was created.
+**training-datasets:** 此目录将包含用于训练网络的数据集以及有关如何创建训练数据集的元数据。
 
-**videos:** Directory of video links or videos. When **copy\_videos** is set to ``False``, this directory contains symbolic links to the videos. If it is set to ``True`` then the videos will be copied to this directory. The default is ``False``. Additionally, if the user wants to add new videos to the project at any stage, the function **add\_new\_videos** can be used. This will update the list of videos in the project's configuration file. Note: you neither need to use this folder for videos, nor is it required for analyzing videos (they can be anywhere).
+**videos:** 视频链接或视频的目录。当 **copy\_videos** 设置为 ``False`` 时，此目录包含视频的符号链接。如果设置为 ``True``，则视频将被复制到此目录。默认为 ``False``。此外，如果用户想在任何阶段向项目中添加新视频，可以使用 **add\_new\_videos** 函数。这将更新项目配置文件中视频的列表。注意：您既不需要为此文件夹使用视频，也不需要它来分析视频（它们可以位于任何位置）。
 
 ```python
 deeplabcut.add_new_videos(
@@ -105,32 +90,31 @@ deeplabcut.add_new_videos(
 )
 ```
 
-*Please note, *Full path of the project configuration file* will be referenced as ``config_path`` throughout this protocol.
+\*请注意，*项目配置文件路径* 在本方案中将引用为 ``config_path``。
 
-You can also use annotated data from single-animal projects, by converting those files.
-There are docs for this: [convert single to multianimal annotation data](convert-maDLC)
+您也可以通过转换这些文件来使用单动物项目的标注数据。
+有相关的文档：[将单动物标注数据转换为多动物数据](convert-maDLC)
 
 ![Box 1 - Multi Animal Project Configuration File Glossary](images/box1-multi.png)
 
-### API Docs
-````{admonition} Click the button to see API Docs
+### API 文档
+````{admonition} 点击按钮查看 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.create_new_project.rst
 ```
 ````
 
-### (B) Configure the Project
+### (B) 配置项目
 
-Next, open the **config.yaml** file, which was created during  **create\_new\_project**.
-You can edit this file in any text editor. Familiarize yourself with the meaning of the
-parameters (Box 1). You can edit various parameters, in particular you **must add the list of *individuals* and *bodyparts* (or points of interest)**.
+接下来，打开在 **create\_new\_project** 期间创建的 **config.yaml** 文件。
+您可以使用任何文本编辑器编辑此文件。熟悉一下参数的含义（Box 1）。您可以编辑各种参数，特别是您**必须添加 *个体* 和 *身体部位*（或兴趣点）的列表**。
 
 <img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1588892210304-EW7WD46PYAU43WWZS4QZ/ke17ZwdGBToddI8pDm48kAXtGtTuS2U1SVcl-tYMBOAUqsxRUqqbr1mOJYKfIPR7LoDQ9mXPOjoJoqy81S2I8PaoYXhp6HxIwZIk7-Mi3Tsic-L2IOPH3Dwrhl-Ne3Z2YjE9w60pqfeJxDohDRZk1jXSVCSSfcEA7WmgMAGpjTehHAH51QaxKq4KdVMVBxpG/1nktc1kdgq2.jpg?format=1000w" width="175" title="colormaps" alt="DLC Utils" align="right" vspace = "50">
 
-You can also set the *colormap* here that is used for all downstream steps (can also be edited at anytime), like labeling GUIs, videos, etc. Here any [matplotlib colormaps](https://matplotlib.org/tutorials/colors/colormaps.html) will do!
+您还可以在此处设置用于所有下游步骤的*颜色映射*（也可随时编辑），例如标注 GUI、视频等。这里任何 [matplotlib 颜色映射](https://matplotlib.org/tutorials/colors/colormaps.html) 都可以使用！
 
-An easy way to programmatically edit the config file at any time is to use the function **edit\_config**, which takes the full path of the config file to edit and a dictionary of key–value pairs to overwrite.
+在任何时候以编程方式编辑配置文件的一种简单方法是使用 **edit\_config** 函数，该函数接受配置文件的完整路径以及要覆盖的键值对字典。
 
 ```python
 import deeplabcut
@@ -144,11 +128,11 @@ edits = {
 deeplabcut.auxiliaryfunctions.edit_config(config_path, edits)
 ```
 
-Please DO NOT have spaces in the names of bodyparts, uniquebodyparts, individuals, etc.
+请**不要**在身体部位、uniquebodyparts、个体等的名称中使用空格。
 
-**ATTENTION:** You need to edit the config.yaml file to **modify the following items** which specify the animal ID, bodyparts, and any unique labels. Note, we also highly recommend that you use **more bodyparts** that you might be interested in for your experiment, i.e., labeling along the spine/tail for 8 bodyparts would be better than four. This will help the performance.
+**注意：** 您需要编辑 config.yaml 文件以**修改以下项**，这些项指定动物 ID、身体部位和任何唯一的标签。请注意，我们还强烈建议您使用比您可能关心的**更多的身体部位**，即标注脊柱/尾巴沿线使用 8 个身体部位会比 4 个要好。这将有助于提高性能。
 
-Modifying the `config.yaml` is crucial:
+修改 `config.yaml` 至关重要：
 
 ```python
 individuals:
@@ -169,19 +153,19 @@ multianimalbodyparts:
 identity: True/False
 ```
 
-**Individuals:** are names of "individuals" in the annotation dataset. These should/can be generic (e.g. mouse1, mouse2, etc.). These individuals are comprised of the same bodyparts defined by `multianimalbodyparts`. For annotation in the GUI and training, it is important that all individuals in each frame are labeled. Thus, keep in mind that you need to set individuals to the maximum number in your labeled-data set, .i.e., if there is (even just one frame) with 17 animals then the list should be `- indv1` to `- indv17`. Note, once trained if you have a video with more or less animals, that is fine - you can have more or less animals during video analysis!
+**Individuals (个体):** 是标注数据集中“个体”的名称。这些可以是通用的（例如 mouse1、mouse2 等）。这些个体由 `multianimalbodyparts` 定义的相同身体部位组成。对于 GUI 中的标注和训练，重要的是每一帧中的所有个体都被标注。因此，请记住，您需要将个体数设置为标注数据集中出现的最大数量，即，如果（即使只有一帧）有 17 只动物，那么列表就应该是 `- indv1` 到 `- indv17`。请注意，一旦训练完成，如果您有更多或更少的动物的视频，那也没关系——在视频分析过程中可以有更多或更少的动物！
 
-**Identity:** If you can tell the animals apart, i.e.,  one might have a collar, or a black marker on the tail of a mouse, then you should label these individuals consistently (i.e., always label the mouse with the black marker as "indv1", etc). If you have this scenario, please set `identity: True` in your `config.yaml` file. If you have 4 black mice, and you truly cannot tell them apart, then leave this as `false`.
+**Identity (身份):** 如果您能分辨动物，例如，一只可能有项圈，或者老鼠尾巴上有黑色标记，那么您应该一致地标注这些个体（例如，总是将带有黑色标记的老鼠标注为“indv1”等）。如果您有 4 只黑老鼠，并且您确实无法分辨它们，那么请将其保留为 `false`。
 
-**Multianimalbodyparts:** are the bodyparts of each individual (in the above list).
+**Multianimalbodyparts (多动物身体部位):** 是每个个体所属的身体部位（在上面的列表中）。
 
-**Uniquebodyparts:** are points that you want to track, but that appear only once within each frame, i.e. they are "unique". Typically these are things like unique objects, landmarks, tools, etc. They can also be animals, e.g. in the case where one German shepherd is attending to many sheep the sheep bodyparts would be multianimalbodyparts, the shepherd parts would be uniquebodyparts and the individuals would be the list of sheep (e.g. Polly, Molly, Dolly, ...).
+**Uniquebodyparts (唯一身体部位):** 是您想要跟踪的点，但每个帧内只出现一次，即它们是“唯一的”。通常是像独特的物体、地标、工具等。它们也可以是动物，例如，当一只德国牧羊犬照看许多绵羊时，绵羊的身体部位将是 `multianimalbodyparts`，牧羊犬的部分将是 `uniquebodyparts`，而个体将是绵羊的列表（例如 Polly、Molly、Dolly，...）。
 
-### (C) Select Frames to Label
+### (C) 选择要标注的帧
 
-**CRITICAL:** A good training dataset should consist of a sufficient number of frames that capture the breadth of the behavior. This ideally implies to select the frames from different (behavioral) sessions, different lighting and different animals, if those vary substantially (to train an invariant, robust feature detector). Thus for creating a robust network that you can reuse in the laboratory, a good training dataset should reflect the diversity of the behavior with respect to postures, luminance conditions, background conditions, animal identities, etc. of the data that will be analyzed. For the simple lab behaviors comprising mouse reaching, open-field behavior and fly behavior, 100−200 frames gave good results [Mathis et al, 2018](https://www.nature.com/articles/s41593-018-0209-y). However, depending on the required accuracy, the nature of behavior, the video quality (e.g. motion blur, bad lighting) and the context, more or less frames might be necessary to create a good network. Ultimately, in order to scale up the analysis to large collections of videos with perhaps unexpected conditions, one can also refine the data set in an adaptive way (see refinement below). **For maDLC, be sure you have labeled frames with closely interacting animals!**
+**关键：** 良好的训练数据集应包含捕获行为广度的足够数量的帧。理想情况下，这意味着要从不同的（行为）会话、不同的光照和不同的动物中选择帧，如果这些变化很大（以便训练一个不变的、鲁棒的特征检测器）。因此，为了创建可重复用于实验室的鲁棒网络，良好的训练数据集应反映行为在姿势、亮度条件、背景条件、动物身份等方面的多样性，这些将用于分析数据。对于简单的实验室行为，如老鼠伸手、开放性行为和果蝇行为，100-200 帧即可获得良好的效果 [Mathis 等人, 2018](https://www.nature.com/articles/s41593-018-0209-y)。然而，根据所需的精度、行为的性质、视频质量（例如运动模糊、不良照明）和环境，可能需要更多或更少的帧来创建良好的网络。最终，为了将分析扩展到可能包含意外条件的**大量视频集合**，可以在自适应的基础上细化数据集（参见下文的细化）。**对于 maDLC，请确保您已标注了动物紧密互动的帧！**
 
-The function `extract_frames` extracts frames from all the videos in the project configuration file in order to create a training dataset. The extracted frames from all the videos are stored in a separate subdirectory named after the video file’s name under the ‘labeled-data’. This function also has various parameters that might be useful based on the user’s need.
+`extract_frames` 函数从项目配置文件中所有视频中提取帧，以创建训练数据集。从所有视频中提取的帧存储在项目“labeled-data”下以视频文件名命名的单独子目录中。此函数还有各种参数可能根据用户的需求有所帮助。
 
 ```python
 deeplabcut.extract_frames(
@@ -193,215 +177,127 @@ deeplabcut.extract_frames(
 )
 ```
 
-**CRITICAL POINT:** It is advisable to keep the frame size small, as large frames increase the training and
-inference time, or you might not have a large enough GPU for this.
-When running the function `extract_frames`, if the parameter crop=True, then you will be asked to draw a box within the GUI (and this is written to the config.yaml file).
+**关键点：** 建议保持帧尺寸较小，因为大帧会增加训练和推理时间，或者您可能没有足够大的 GPU 来处理。当运行 `extract_frames` 函数时，如果参数 `crop=True`，系统将询问您在 GUI 中绘制一个框（这会写入 config.yaml 文件）。
 
-`userfeedback` allows the user to check which videos they wish to extract frames from. In this way, if you added more videos to the config.yaml file it does not, by default, extract frames (again) from every video. If you wish to disable this question, set `userfeedback = True`.
+`userfeedback` 允许用户检查希望从中提取帧的视频。通过这种方式，如果您向 config.yaml 文件添加了更多视频，默认情况下它不会（再次）从每个视频中提取帧。如果您希望禁用此问题，请将 `userfeedback = True`。
 
-The provided function either selects frames from the videos in a randomly and temporally uniformly distributed
-way (uniform), by clustering based on visual appearance (k-means), or by manual selection. Random
-selection of frames works best for behaviors where the postures vary across the whole video. However, some behaviors
-might be sparse, as in the case of reaching where the reach and pull are very fast and the mouse is not moving much
-between trials (thus, we have the default set to True, as this is best for most use-cases we encounter). In such a case, the function that allows selecting frames based on k-means derived quantization would
-be useful. If the user chooses to use k-means as a method to cluster the frames, then this function downsamples the
-video and clusters the frames using k-means, where each frame is treated as a vector. Frames from different clusters
-are then selected. This procedure makes sure that the frames look different. However, on large and long videos, this
-code is slow due to computational complexity.
+提供的函数以随机和时间均匀分布的方式（uniform）选择视频中的帧，通过基于视觉外观的聚类（k-means），或者通过手动选择。对于姿势在整个视频中变化的行为，随机选择帧效果最好。然而，一些行为可能是稀疏的，例如在伸手够物时（reach），伸手和拉回的动作非常快，而在试验之间老鼠的移动并不多（因此，我们默认设置为 True，因为这对我们遇到的大多数用例都是最好的）。在这种情况下，允许基于 k-means 派生量化选择帧的函数会很有用。如果用户选择使用 k-means 作为聚类帧​​的方法，该函数将对视频进行下采样，并使用 k-means 对帧进行聚类，其中每帧都被视为一个向量。然后选择来自不同簇的帧。此过程确保了帧看起来不同。但是，对于大型和长时间的视频，由于计算复杂度，此代码运行缓慢。
 
-**CRITICAL POINT:** It is advisable to extract frames from a period of the video that contains interesting
-behaviors, and not extract the frames across the whole video. This can be achieved by using the start and stop
-parameters in the config.yaml file. Also, the user can change the number of frames to extract from each video using
-the numframes2extract in the config.yaml file.
+**关键点：** 建议从包含有趣行为的视频时间段中提取帧，而不是提取整个视频中的帧。这可以通过在 config.yaml 文件中使用 start 和 stop 参数来实现。此外，用户可以使用 config.yaml 文件中的 numframes2extract 参数更改从每个视频中提取的帧数。
 
 ```{TIP}
-For maDLC,  **be sure you have labeled frames with closely interacting animals**! 
-Therefore, manually selecting some frames is a good idea if interactions are not highly
-frequent in the video.
+对于 maDLC，**请确保您已标注了动物紧密互动的帧**！ 因此，手动选择一些帧是个好主意，如果互动在视频中不频繁的话。
 ```
 
-However, picking frames is highly dependent on the data and the behavior being studied.
-Therefore, it is hard to provide all purpose code that extracts frames to create a good
-training dataset for every behavior and animal. If the user feels specific frames are
-lacking, they can extract hand selected frames of interest using the interactive GUI
-provided along with the toolbox. This can be launched by using:
+然而，选择帧在很大程度上取决于所研究的数据和行为。因此，很难提供通用的代码来为每种行为和动物提取帧以创建良好的训练数据集。如果用户觉得缺少特定的帧，他们可以使用工具箱附带的交互式 GUI 使用感兴趣的手动选择的帧。可以通过使用以下命令启动它：
 
 ```python
 deeplabcut.extract_frames(config_path, 'manual')
 ```
 
-// FIXME(niels) - add a napari frame extractor description.
-The user can use the *Load Video* button to load one of the videos in the project
-configuration file, use the scroll bar to navigate across the video and *Grab a Frame*. 
-The user can also look at the extracted frames and e.g. delete frames (from the
-directory) that are too similar before reloading the set and then manually annotating
-them.
+// FIXME(niels) - 添加一个 napari 帧提取器描述。用户可以使用 *Load Video* 按钮加载项目配置文件中的一个视频，使用滚动条浏览视频并 *Grab a Frame*。用户还可以查看提取的帧，例如在重新加载集合之前删除过于相似的帧（来自目录），然后手动标注它们。
 
-````{admonition} Click the button to see API Docs
+````{admonition} 点击按钮查看 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.extract_frames.rst
 ```
 ````
 
-### (D) Label Frames
+### (D) 标注帧
 
 ```python
 deeplabcut.label_frames(config_path)
 ```
 
-The toolbox provides a function **label_frames** which helps the user to easily label
-all the extracted frames using an interactive graphical user interface (GUI). The user
-should have already named the bodyparts to label (points of interest) in the 
-project’s configuration file by providing a list. The following command invokes the 
-napari-deeplabcut labelling GUI.
+工具箱提供了一个 **label\_frames** 函数，它可以帮助用户使用交互式图形用户界面 (GUI) 轻松标注所有提取的帧。用户应该已经在项目的配置文件中通过提供一个列表来命名要标注（兴趣点）的身体部位。以下命令调用 napari-deeplabcut 标注 GUI。
 
-[🎥 DEMO](https://youtu.be/hsA9IB5r73E)
+[🎥 演示](https://youtu.be/hsA9IB5r73E)
 
-HOT KEYS IN THE Labeling GUI (also see "help" in GUI):
+标注 GUI 中的热键（另请参阅 GUI 中的“帮助”）：
 
 ```
-Ctrl + C: Copy labels from previous frame.
-Keyboard arrows: advance frames.
-Delete key: delete label.
+Ctrl + C: 从上一帧复制标签。
+键盘箭头键：推进帧。
+Delete 键：删除标签。
 ```
 
 ![hot keys](https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/192345a5-e411-4d56-b718-ef52f91e195e/Qwerty.png?format=2500w)
 
-**CRITICAL POINT:** It is advisable to **consistently label similar spots** (e.g., on a
-wrist that is very large, try to label the same location). In general, invisible or
-occluded points should not be labeled by the user, unless you want to teach the network
-to "guess" - this is possible, but could affect accuracy. If you don't want/or don't see
-a bodypart, they can simply be skipped by not applying the label anywhere on the frame.
+**关键点：** 建议**一致地标注相似的位置**（例如，在一个很大的手腕上，尝试标注相同的位置）。一般来说，**不应**由用户标注不可见或被遮挡的点，除非您想训练网络来“猜测”——这是可能的，但可能会影响准确性。如果您不想标注或看不到身体部位，只需不在帧上应用任何标签即可跳过它们。
 
-OPTIONAL: In the event of adding more labels to the existing labeled dataset, the user 
-needs to append the new labels to the bodyparts in the config.yaml file. Thereafter, the
-user can call the function **label_frames**. A box will pop up and ask the user if they
-wish to display all parts, or only add in the new labels. Saving the labels after all
-the images are labelled will append the new labels to the existing labeled dataset.
+可选：在向现有标注数据集添加更多标签的情况下，用户需要在 config.yaml 文件中将新标签追加到身体部位列表中。之后，用户可以调用 **label\_frames** 函数。将弹出一个框，询问用户是希望显示所有部分，还是只添加新标签。在所有图像都标注后保存标签将把新标签追加到现有的标注数据集中。
 
-**maDeepLabCut CRITICAL POINT:** For multi-animal labeling, unless you can tell apart
-the animals, you do not need to worry about the "ID" of each animal. For example: if you
-have a white and black mouse label the white mouse as animal 1, and black as animal 2
-across all frames. If two black mice, then the ID label 1 or 2 can switch between 
-frames - no need for you to try to identify them (but always label consistently within a
-frame). If you have 2 black mice but one always has an optical fiber (for example), then
-DO label them consistently as animal1 and animal_fiber (for example). The point of 
-multi-animal DLC is to train models that can first group the correct bodyparts to
-individuals, then associate those points in a given video to a specific individual,
-which then also uses temporal information to link across the video frames.
+**maDeepLabCut 关键点：** 对于多动物标注，除非您能分辨动物，否则您无需担心每只动物的“ID”。例如：如果您有一只白鼠和一只黑鼠，请在所有帧中将白鼠标注为动物 1，将黑鼠标注为动物 2。如果有两只黑鼠，那么 ID 标签 1 或 2 可以在帧之间切换——您不需要尝试识别它们（但始终在一个帧内保持一致地标注）。如果您有 2 只黑鼠，但其中一只总是带有光纤（例如），那么**应该**将它们一致地标注为 animal1 和 animal\_fiber（例如）。多动物 DLC 的要点是训练能够首先将正确的身体部位分组到个体中，然后在给定视频中将这些点与特定个体关联起来，这进而利用时间信息将它们链接到视频帧中。
 
-Note, we also highly recommend that you use more bodyparts that you might otherwise have
-(see the example below).
+请注意，我们还强烈建议您使用比您可能拥有的更多的身体部位（见下面的示例）。
 
-For more information, checkout the [napari-deeplabcut docs](napari-gui) for 
-more information about the labelling workflow.
+有关更多信息，请查看 [napari-deeplabcut 文档](napari-gui) 以获取有关标注工作流程的更多信息。
 
-### (E) Check Annotated Frames
+### (E) 检查标注的帧
 
-Checking if the labels were created and stored correctly is beneficial for training, since labeling
-is one of the most critical parts for creating the training dataset. The DeepLabCut toolbox provides a function
-`check_labels` to do so. It is used as follows:
+检查标签是否已正确创建和存储对训练有益，因为标注是创建训练数据集最关键的部分之一。DeepLabCut 工具箱提供了一个 `check_labels` 函数来做到这一点。其用法如下：
 
 ```python
 deeplabcut.check_labels(config_path, visualizeindividuals=True/False)
  ```
 
-**maDeepLabCut:** you can check and plot colors per individual or per body part, just set the flag `visualizeindividuals=True/False`. Note, you can run this twice in both states to see both images.
+**maDeepLabCut：** 您可以检查并为每个个体或每个身体部位绘制颜色，只需设置标志 `visualizeindividuals=True/False`。请注意，您可以以两种状态运行此两次，以查看两个图像。
 
 <p align="center">
 <img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1586203062876-D9ZL5Q7NZ464FUQN95NA/ke17ZwdGBToddI8pDm48kKmw982fUOZVIQXHUCR1F55Zw-zPPgdn4jUwVcJE1ZvWQUxwkmyExglNqGp0IvTJZUJFbgE-7XRK3dMEBRBhUpx7krGdD6VO1HGZR3BdeCbrijc_yIxzfnirMo-szZRSL5-VIQGAVcQr6HuuQP1evvE/img1068_individuals.png?format=750w" width="50%">
 </p>
 
-For each video directory in labeled-data this function creates a subdirectory with **labeled** as a suffix. Those directories contain the frames plotted with the annotated body parts. The user can double check if the body parts are labeled correctly. If they are not correct, the user can reload the frames (i.e. `deeplabcut.label_frames`), move them around, and click save again.
+对于 labeled-data 中每个视频目录，此函数将创建一个带有 **labeled** 后缀的子目录。这些目录包含用标注的身体部位绘制的帧。用户可以仔细检查身体部位是否已正确标注。如果它们不正确，用户可以重新加载帧（即 `deeplabcut.label_frames`），移动它们，然后再次单击保存。
 
-````{admonition} Click the button to see API Docs
+````{admonition} 点击按钮查看 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.check_labels.rst
 ```
 ````
 
-### (F) Create Training Dataset
+### (F) 创建训练数据集
 
-At this point, you'll need to select your neural network type.
+此时，您需要选择您的神经网络类型。
 
-For the **PyTorch engine**, please see [the PyTorch Model Architectures](
-dlc3-architectures) for options.
+对于 **PyTorch 引擎**，请参阅 [PyTorch 模型架构](dlc3-architectures) 查看选项。
 
-For the **TensorFlow engine**, please see Lauer et al. 2021 for options. Multi-animal
-models will use `imgaug`, ADAM optimization, our new DLCRNet, and batch training. We
-suggest keeping these defaults at this time. At this step, the ImageNet pre-trained
-networks (i.e. ResNet-50) weights will be downloaded. If they do not download (you will
-see this downloading in the terminal, then you may not have permission to do so (
-something we have seen with some Windows users - see the **[
-WIKI troubleshooting for more help!](
-https://github.com/DeepLabCut/DeepLabCut/wiki/Troubleshooting-Tips)**).
+对于 **TensorFlow 引擎**，请参阅 Lauer 等人 2021 年的选项。多动物模型将使用 `imgaug`、ADAM 优化、我们新的 DLCRNet 和批次训练。我们建议此时保留这些默认设置。在此步骤中，将下载 ImageNet 预训练网络的（例如 ResNet-50）权重。如果它们没有下载（您会在终端中看到下载过程），那么您可能没有权限执行此操作（这是我们看到某些 Windows 用户遇到的问题——请参阅**[
+WIKI 故障排除以获取更多帮助！](
+https://github.com/DeepLabCut/DeepLabCut/wiki/Troubleshooting-Tips)**）。
 
-Then run:
+然后运行：
 
 ```python
 deeplabcut.create_training_dataset(config_path)
 ```
 
-- The set of arguments in the function will shuffle the combined labeled dataset and split it to create train and test
-sets. The subdirectory with suffix ``iteration#`` under the directory **training-datasets** stores the dataset and meta
-information, where the ``#`` is the value of ``iteration`` variable stored in the project’s configuration file (this number
-keeps track of how often the dataset was refined).
+- 函数中的参数集将对合并的标注数据集进行混洗，并将其拆分以创建训练集和测试集。**training-datasets** 目录下带有 ``iteration#`` 后缀的子目录存储数据集和元信息，其中 ``#`` 是项目配置文件中存储的 ``iteration`` 变量的值（此编号记录了数据集被细化的次数）。
 
-- OPTIONAL: If the user wishes to benchmark the performance of the DeepLabCut, they can create multiple
-training datasets by specifying an integer value to the `num_shuffles`; see the docstring for more details.
+- 可选：如果用户希望对 DeepLabCut 的性能进行基准测试，他们可以通过向 `num_shuffles` 指定一个整数值来创建多个训练数据集；有关更多详细信息，请参阅文档字符串。
 
-- Each iteration of the creation of a training dataset will create several files, which
-is used by the feature detectors, and a ``.pickle`` file that contains the meta
-information about the training dataset. This also creates two subdirectories within
-**dlc-models-pytorch** (**dlc-models** for the TensorFlow engine) called ``test`` and
-``train``, and these each have a configuration file called pose_cfg.yaml. Specifically,
-the user can edit the **pytorch_config.yaml** (**pose_cfg.yaml** for TensorFlow engine)
-within the **train** subdirectory before starting the training. These configuration
-files contain meta information with regard to the parameters of the feature detectors.
-Key parameters are listed in Box 2.
+- 每次创建训练数据集的迭代都会创建几个文件，供特征检测器使用，以及一个包含训练数据集元信息的 ``.pickle`` 文件。这也将在 **dlc-models-pytorch**（TensorFlow 引擎为 **dlc-models**）中创建两个子目录，称为 ``test`` 和 ``train``，它们各自包含一个名为 pose\_cfg.yaml 的配置文件。具体来说，用户可以在开始训练之前编辑 **train** 子目录中（TensorFlow 引擎为 **pose\_cfg.yaml**）的 **pytorch\_config.yaml** 文件。这些配置文件包含有关特征检测器参数的元信息。关键参数在 Box 2 中列出。
 
-**DATA AUGMENTATION:** At this stage you can also decide what type of augmentation to
-use. Once you've called `create_training_dataset`, you can edit the 
-[**pytorch_config.yaml**](dlc3-pytorch-config) file that was created (or for the
-TensorFlow engine, the [**pose_cfg.yaml**](
-https://github.com/DeepLabCut/DeepLabCut/blob/master/deeplabcut/pose_cfg.yaml) file).
+**数据增强 (DATA AUGMENTATION)：** 在此阶段，您还可以决定使用哪种类型的增强。调用 `create_training_dataset` 后，您可以编辑创建的 [**pytorch\_config.yaml**](dlc3-pytorch-config) 文件（或者 TensorFlow 引擎的 [**pose\_cfg.yaml**](
+https://github.com/DeepLabCut/DeepLabCut/blob/master/deeplabcut/pose_cfg.yaml) 文件）。
 
-- PyTorch Engine: [Albumentations](https://albumentations.ai/docs/) is used for data
-augmentation. Look at the [**pytorch_config.yaml**](dlc3-pytorch-config) for more 
-information about image augmentation options.
-- TensorFlow Engine: The default augmentation works well for most tasks (as shown on
-www.deeplabcut.org), but there are many options, more data augmentation, intermediate
-supervision, etc. Only `imgaug` augmentation is available for multi-animal projects.
+- PyTorch 引擎：[Albumentations](https://albumentations.ai/docs/) 用于数据增强。有关图像增强选项的更多信息，请查看 [**pytorch\_config.yaml**](dlc3-pytorch-config)。
+- TensorFlow 引擎：默认增强适用于大多数任务（如在 www.deeplabcut.org 上所示），但有许多选项，更多数据增强、中间监督等。仅 `imgaug` 增强可用于多动物项目。
 
 [A Primer on Motion Capture with Deep Learning: Principles, Pitfalls, and Perspectives](
-https://www.cell.com/neuron/pdf/S0896-6273(20)30717-0.pdf), details the advantage of
-augmentation for a worked example (see Fig 8). TL;DR: use imgaug and use the symmetries
-of your data!
+https://www.cell.com/neuron/pdf/S0896-6273(20)30717-0.pdf) 详细介绍了增强对于一个已办实例（见图 8）的优势。简而言之：使用 imgaug 并利用数据的对称性！
 
-Importantly, image cropping as previously done with `deeplabcut.cropimagesandlabels` in multi-animal projects
-is now part of the augmentation pipeline. In other words, image crops are no longer stored in labeled-data/..._cropped
-folders. Crop size still defaults to (400, 400); if your images are very large (e.g. 2k, 4k pixels), consider increasing the crop size, but be aware unless you have a strong GPU (24 GB memory or more), you will hit memory errors. You can lower the batch size, but this may affect performance.
+重要的是，如前通过 `deeplabcut.cropimagesandlabels` 在多动物项目中完成的图像裁剪现在是增强管道的一部分。换句话说，图像裁剪不再存储在 labeled-data/...\_cropped 文件夹中。裁剪大小仍默认为 (400, 400)；如果您的图像非常大（例如 2k、4k 像素），请考虑增加裁剪大小，但请注意，除非您有强大的 GPU（24 GB 内存或更多），否则可能会遇到内存错误。您可以减小批次大小，但这可能会影响性能。
 
-In addition, one can specify a crop sampling strategy: crop centers can either be taken at random over the image (`uniform`) or the annotated keypoints (`keypoints`); with a focus on regions of the scene with high body part density (`density`); last, combining `uniform` and `density` for a `hybrid` balanced strategy (this is the default strategy). Note that both parameters can be easily edited prior to training in the **pose_cfg.yaml** configuration file.
-As a reminder, cropping images into smaller patches is a form of data augmentation that simultaneously
-allows the use of batch processing even on small GPUs that could not otherwise accommodate larger images + larger batchsizes (this usually increases performance and decreasing training time).
+此外，您可以指定一种裁剪采样策略：裁剪中心可以随机取自图像（`uniform`）或注定关键点（`keypoints`）；专注于具有高身体部位密度的场景区域（`density`）；最后，结合 `uniform` 和 `density` 形成一个 `hybrid` 平衡策略（这是默认策略）。请注意，这两个参数都可以在训练前在 **pose\_cfg.yaml** 配置文件中轻松编辑。提醒一下，将图像裁剪成更小的块是一种数据增强形式，它同时允许在无法容纳较大图像+较大批次大小的小 GPU 上使用批处理（这通常会提高性能并减少训练时间）。
 
-**MODEL COMPARISON**: You can also test several models by creating the same train/test
-split for different networks.
-You can easily do this in the Project Manager GUI (by selecting the "Use an existing 
-data split" option), which also lets you compare PyTorch and TensorFlow models.
+**模型比较 (MODEL COMPARISON)：** 您还可以通过为不同网络创建相同的训练/测试分割来测试多个模型。您可以在项目管理器 GUI 中轻松完成此操作（通过选择“使用现有数据分割”选项），该选项还允许您比较 PyTorch 和 TensorFlow 模型。
 
 ````{versionadded} 3.0.0
-You can now create new shuffles using the same train/test split as 
-existing shuffles with `create_training_dataset_from_existing_split`. This allows you to
-compare model performance (between different architectures or when using different
-training hyper-parameters) as the shuffles were trained on the same data, and evaluated
-on the same test data!
+您现在可以使用 `create_training_dataset_from_existing_split` 使用与现有 shuffle 相同的训练/测试分割来创建新的 shuffle。这允许您比较模型性能（在不同架构之间或使用不同训练超参数时），因为 shuffle 是在相同数据上训练和在相同测试数据上评估的！
 
-Example usage - creating 3 new shuffles (with indices 10, 11 and 12) for a ResNet 50
-pose estimation model, using the same data split as was used for shuffle 0:
+示例用法——为 ResNet 50 姿态估计模型创建 3 个新的 shuffle（索引为 10、11 和 12），使用与 shuffle 0 相同的数据分割：
 
 ```python
 deeplabcut.create_training_dataset_from_existing_split(
@@ -413,45 +309,41 @@ deeplabcut.create_training_dataset_from_existing_split(
 ```
 ````
 
-````{admonition} Click the button to see API Docs for deeplabcut.create_training_dataset
+````{admonition} 点击按钮查看 deeplabcut.create_training_dataset 的 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.create_training_dataset.rst
 ```
 ````
 
-````{admonition} Click the button to see API Docs for deeplabcut.create_training_model_comparison
+````{admonition} 点击按钮查看 deeplabcut.create_training_model_comparison 的 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.create_training_model_comparison.rst
 ```
 ````
 
-````{admonition} Click the button to see API Docs for deeplabcut.create_training_dataset_from_existing_split
+````{admonition} 点击按钮查看 deeplabcut.create_training_dataset_from_existing_split 的 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.create_training_dataset_from_existing_split.rst
 ```
 ````
 
-### (G) Train The Network
+### (G) 训练网络
 
 ```python
 deeplabcut.train_network(config_path, shuffle=1)
 ```
 
-The set of arguments in the function starts training the network for the dataset created
-for one specific shuffle. Note that you can change training parameters in the 
-[**pytorch_config.yaml**](dlc3-pytorch-config) file (or **pose_cfg.yaml** for TensorFlow
-models) of the model that you want to train (before you start training).
+函数中的参数集启动网络训练，针对为一个特定 shuffle 创建的数据集。请注意，您可以在要训练的模型的 [**pytorch\_config.yaml**](dlc3-pytorch-config) 文件（或 TensorFlow 模型的 **pose\_cfg.yaml**）中更改训练参数（在开始训练之前）。
 
-At user specified iterations during training checkpoints are stored in the subdirectory 
-*train* under the respective iteration & shuffle directory.
+在用户指定的迭代期间，检查点存储在相应迭代和 shuffle 目录下的 *train* 子目录中。
 
-````{admonition} Tips on training models with the PyTorch Engine
+````{admonition} 关于使用 PyTorch 引擎训练模型的技巧
 :class: dropdown
 
-Example parameters that one can call:
+可调用的示例参数：
 
 ```python
 deeplabcut.train_network(
@@ -466,35 +358,23 @@ deeplabcut.train_network(
 )
 ```
 
-Pytorch models in DeepLabCut 3.0 are trained for a set number of epochs, instead of a
-maximum number of iterations (which is what was used for TensorFlow models). An epoch
-is a single pass through the training dataset, which means your model has seen each
-training image exactly once. So if you have 64 training images for your network, an
-epoch is 64 iterations with batch size 1 (or 32 iterations with batch size 2, 16 with
-batch size 4, etc.).
+DeepLabCut 3.0 中的 Pytorch 模型是为固定数量的 epochs 训练的，而不是像 TensorFlow 模型那样使用最大迭代次数。一个 epoch 是对训练数据集的单次遍历，这意味着您的模型正好看到了一次每张训练图像。因此，如果您有 64 张用于网络的训练图像，一个 epoch 是 64 次迭代，批次大小为 1（或者批次大小为 2 时为 32 次迭代，批次大小为 4 时为 16 次迭代，依此类推）。
 
-By default, the pretrained networks are not in the DeepLabCut toolbox (as they can be 
-more than 100MB), but they get downloaded automatically before you train.
+默认情况下，预训练网络不在 DeepLabCut 工具箱中（因为它们可能超过 100MB），但在您训练之前会自动下载。
 
-If the user wishes to restart the training at a specific checkpoint they can specify the
-full path of the checkpoint to the variable ``resume_training_from`` in the [
-**pytorch_config.yaml**](
-dlc3-pytorch-config) file (checkout the "Restarting Training at a Specific Checkpoint"
-section of the docs) under the *train* subdirectory.
+如果用户希望从特定检查点重新开始训练，可以在 *train* 子目录下的 [
+**pytorch\_config.yaml**](
+dlc3-pytorch-config) 文件中 ``resume_training_from`` 变量中指定检查点的完整路径（查看文档的“在特定检查点重新开始训练”部分）。
 
-**CRITICAL POINT:** It is recommended to train the networks **until the loss plateaus** 
-(depending on the dataset, model architecture and training hyper-parameters this happens
-after 100 to 250 epochs of training).
+**关键点：** 建议**训练网络直到损失平稳**（根据数据集、模型架构和训练超参数，这发生在 100 到 250 个 epoch 训练之后）。
 
-The variables ``display_iters`` and ``save_epochs`` in the [**pytorch_config.yaml**](
-dlc3-pytorch-config) file allows the user to alter how often the loss is displayed
-and how often the weights are stored. We suggest saving every 5 to 25 epochs.
+[**pytorch\_config.yaml**](dlc3-pytorch-config) 文件中的变量 ``display_iters`` 和 ``save_epochs`` 允许用户更改损失显示的频率和权重存储的频率。我们建议每 5 到 25 个 epoch 保存一次。
 ````
 
-````{admonition} Tips on training models with the TensorFlow Engine 
+````{admonition} 关于使用 TensorFlow 引擎训练模型的技巧
 :class: dropdown
 
-Example parameters that one can call:
+可调用的示例参数：
 
 ```python
 deeplabcut.train_network(
@@ -511,194 +391,118 @@ deeplabcut.train_network(
 )
 ```
 
-By default, the pretrained networks are not in the DeepLabCut toolbox (as they are 
-around 100MB each), but they get downloaded before you train. However, if not previously
-downloaded from the TensorFlow model weights, it will be downloaded and stored in a
-subdirectory *pre-trained* under the subdirectory *models* in 
-*Pose_Estimation_Tensorflow*. At user specified iterations during training checkpoints
-are stored in the subdirectory *train* under the respective iteration directory.
+默认情况下，预训练网络不在 DeepLabCut 工具箱中（因为它们大约 100MB/个），但在您训练之前会下载它们。但是，如果尚未从 TensorFlow 模型权重下载，它将被下载并存储在 *Pose\_Estimation\_Tensorflow* 的 *models* 子目录下的 *pre-trained* 子目录中。在用户指定的迭代期间，检查点存储在相应迭代目录下的 *train* 子目录中。
 
-If the user wishes to restart the training at a specific checkpoint they can specify the
-full path of the checkpoint to the variable ``init_weights`` in the **pose_cfg.yaml**
-file under the *train* subdirectory (see Box 2).
+如果用户希望从特定检查点重新开始训练，他们可以在 *train* 子目录下的 **pose\_cfg.yaml** 文件中将检查点的完整路径指定给 ``init_weights`` 变量（参见 Box 2）。
 
-**CRITICAL POINT:** It is recommended to train the networks for thousands of iterations
-until the loss plateaus (typically around **500,000**) if you use batch size 1, and
-**50-100K** if you use batchsize 8 (the default).
+**关键点：** 建议网络训练数千次迭代，直到损失平稳（通常是**500,000**次迭代，如果使用批次大小 1，以及使用默认批次大小 8 时为 **50-100K**）。
 
-If you use **maDeepLabCut** the recommended training iterations is **20K-100K** 
-(it automatically stops at 200K!), as we use Adam and batchsize 8; if you have to reduce
- the batchsize for memory reasons then the number of iterations needs to be increased.
+如果您使用的是 **maDeepLabCut**，推荐的训练迭代次数是 **20K-100K**（它会自动在 200K 停止！），因为我们使用 Adam 和批次大小 8；如果您因为内存原因必须减小批次大小，则需要增加迭代次数。
 
-The variables ``display_iters`` and ``save_iters`` in the **pose_cfg.yaml** file allows
-the user to alter how often the loss is displayed and how often the weights are stored.
+**pose\_cfg.yaml** 文件中的变量 ``display_iters`` 和 ``save_iters`` 允许用户更改损失显示的频率和权重存储的频率。
 
-**maDeepLabCut CRITICAL POINT:** For multi-animal projects we are using not only
-different and new output layers, but also new data augmentation, optimization, learning
-rates, and batch training defaults. Thus, please use a lower ``save_iters`` and
-``maxiters``. I.e. we suggest saving every 10K-15K iterations, and only training until
-50K-100K iterations. We recommend you look closely at the loss to not overfit on your
-data. The bonus, training time is much less!!!
+**maDeepLabCut 关键点：** 对于多动物项目，我们不仅使用不同和新的输出层，还使用新的数据增强、优化、学习率和批次训练默认值。因此，请使用较低的 ``save_iters`` 和 ``maxiters``。即，我们建议每 10K-15K 次迭代保存一次，并且只训练到 50K-100K 次迭代。我们建议密切关注损失，以避免过度拟合您的数据。好处是训练时间大大减少！！！
 ````
 
-````{admonition} Click the button to see API Docs for train_network
+````{admonition} 点击按钮查看 train_network 的 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.train_network.rst
 ```
 ````
 
-### (H) Evaluate the Trained Network
+### (H) 评估训练好的网络
 
-It is important to evaluate the performance of the trained network. This performance is 
-measured by computing two metrics:
+评估训练好的网络的性能非常重要。此性能通过计算两个指标来衡量：
 
-- **Average root mean square error** (RMSE) between the manual labels and the ones
-predicted by your trained DeepLabCut model. The RMSE is proportional to the mean average
-Euclidean error (MAE) between the manual labels and the ones predicted by DeepLabCut. 
-The MAE is displayed for all pairs and only likely pairs (>p-cutoff). This helps to
-exclude, for example, occluded body parts. One of the strengths of DeepLabCut is that
-due to the probabilistic output of the scoremap, it can, if sufficiently trained, also 
-reliably report if a body part is visible in a given frame. (see discussions of finger
-tips in reaching and the Drosophila legs during 3D behavior in [Mathis et al, 2018]).
-- **Mean Average Precision** (mAP) and **Mean Average Recall** (mAR) for the individuals
-predicted by your trained DeepLabCut model. This metric describes the precision of your
-model, based on a considered definition of what a correct detection of an individual is.
-It isn't as useful for single-animal models, as RMSE does a great job of evaluating your
-model in that case.
+- **平均均方根误差 (RMSE)**：介于手动标签和由您的训练好的 DeepLabCut 模型预测的标签之间的值。RMSE 与手动标签和 DeepLabCut 预测之间的平均欧几里得误差 (MAE) 成正比。MAE 会针对所有配对以及仅可能的配对（>p-cutoff）显示。这有助于排除（例如）被遮挡的身体部位。DeepLabCut 的一个优点是，由于其评分图谱的概率性输出，如果经过充分训练，它还可以可靠地报告给定帧中身体部位是否可见。（参见 Mathis 等人, 2018 年关于伸手动作中指尖和果蝇腿在 3D 行为中的讨论）。
+- **平均精度 (mAP)** 和 **平均召回率 (mAR)**：用于由您的训练好的 DeepLabCut 模型预测的个体。该指标描述了模型的精度，基于关于正确检测个体所需的考虑定义。对于单动物模型来说，它不如 RMSE 在该情况下评估模型那样有用。
 
-```{admonition} A more detailed description of mAP and mAR
+```{admonition} 关于 mAP 和 mAR 的更详细描述
 :class: dropdown
 
-For multi-animal pose estimation, multiple predictions can be made for each image.
-We want to get some idea of the proportion of correct predictions among all predictions
-that are made.
-However, the notion of "correct prediction" for pose estimation is not straightforward:
-is a prediction correct if all predicted keypoints are within 5 pixels of the ground
-truth? Within 2 pixels of the ground truth? What if all pixels but one match the ground
-truth perfectly, but the wrong prediction is 50 pixels away? Mean average precision (
-and mean average recall) estimate the precision/recall of your models by setting 
-different "thresholds of correctness" and averaging results. How "correct" a
-prediction is can be evaluated through [object-keypoint similarity](
-https://cocodataset.org/#keypoints-eval).
+对于多动物姿态估计，可以对每个图像做出多个预测。我们想了解所做预测中有多少是正确的比例。
+然而，姿态估计的“正确预测”的概念并不简单：如果所有预测的关键点都在距离地面实况 5 像素内，则预测是正确的吗？距离地面实况 2 像素内？如果所有像素都与地面实况完美匹配，但错误的预测偏离 50 像素该怎么办？平均精度（
+和平均召回率）通过设置不同的“正确性阈值”并平均结果来估计模型的精度/召回率。可以通过[物体关键点相似度](https://cocodataset.org/#keypoints-eval)来评估预测的“正确”程度，而不是使用交并比 (IoU)。
 
-A good resource to get a deeper understanding of mAP is the [Stanford CS230 course](
-https://cs230.stanford.edu/section/8/#object-detection-iou-ap-and-map). While it 
-describes mAP for object detection (where bounding boxes are predicted instead of 
-keypoints), the same metric can be computed for pose estimation, where similarity 
-between predictions and ground truth is computed through [object-keypoint similarity](
-https://cocodataset.org/#keypoints-eval) instead of intersection-over-union (IoU). 
+斯坦福 CS230 课程 [此处](https://cs230.stanford.edu/section/8/#object-detection-iou-ap-and-map) 是深入了解 mAP 的好资源。虽然它描述了用于对象检测的 mAP（预测*边界框*而不是关键点），但相同的指标可以计算姿态估计，其中预测与地面实况之间的相似性是通过[对象-关键点相似度](https://cocodataset.org/#keypoints-eval)而不是交并比 (IoU) 计算的。
 ```
 
-It's also important to visually inspect predictions on individual frames to assess the
-performance of your model. You can do this by setting `plotting=True` when you call
-`evaluate_network`. The evaluation results are computed by typing:
+通过在调用 `evaluate_network` 时设置 `plotting=True`，可以直观检查单个帧上的预测以评估模型的性能：
 
 ```python
 deeplabcut.evaluate_network(config_path, Shuffles=[1], plotting=True)
 ```
 
-🎥 [VIDEO TUTORIAL AVAILABLE!](https://www.youtube.com/watch?v=bgfnz1wtlpo)
+🎥 [提供视频教程！](https://www.youtube.com/watch?v=bgfnz1wtlpo)
 
-Setting ``plotting`` to True plots all the testing and training frames with the manual and predicted labels; these will
-be colored by body part type by default. They can alternatively be colored by individual by passing `plotting="individual"`.
-The user should visually check the labeled test (and training) images that are created in the ‘evaluation-results’ directory.
-Ideally, DeepLabCut labeled unseen (test images) according to the user’s required accuracy, and the average train
-and test errors are comparable (good generalization). What (numerically) comprises an acceptable MAE depends on
-many factors (including the size of the tracked body parts, the labeling variability, etc.). Note that the test error can
-also be larger than the training error due to human variability (in labeling, see Figure 2 in Mathis et al, Nature Neuroscience 2018).
+设置 ``plotting=True`` 会绘制所有测试和训练帧以及手动和预测的标签；默认情况下，这些将按身体部位类型着色。它们也可以通过传递 `plotting="individual"` 按个体着色。用户应该目视检查在‘evaluation-results’目录中创建的标注的测试（和训练）图像。理想情况下，DeepLabCut 会根据用户要求的精度对未见过的（测试图像）进行标注，并且平均训练和测试误差是可比较的（良好的泛化）。（数值上）构成可接受的 MAE 取决于许多因素（包括跟踪的身体部位的大小、标注的可变性等）。请注意，测试误差也可能大于训练误差，因为存在人为变异性（在标注中，参见 Mathis 等人，2018 年 Nature Neuroscience 第 2 期图 2）。
 
-**Optional parameters:**
+**可选参数：**
 
-- `Shuffles: list, optional` - List of integers specifying the shuffle indices of the training dataset.
-The default is [1]
+- `Shuffles: list, optional` - 指定训练数据集的 shuffle 索引的整数列表。默认为 [1]
 
-- `plotting: bool | str, optional` - Plots the predictions on the train and test images. The default is `False`;
-if provided it must be either `True`, `False`, `"bodypart"`, or `"individual"`.
+- `plotting: bool | str, optional` - 在训练和测试图像上绘制预测。默认为 `False`；如果提供，则必须是 `True`、`False`、`"bodypart"` 或 `"individual"`。
 
-- `show_errors: bool, optional` - Display train and test errors. The default is `True`
+- `show_errors: bool, optional` - 显示训练和测试误差。默认为 `True`
 
-- `comparisonbodyparts: list of bodyparts, Default is all` - The average error will be computed for those body parts
-only (Has to be a subset of the body parts).
+- `comparisonbodyparts: list of bodyparts, Default is all` - 将仅对这些身体部位计算平均误差（必须是身体部位的子集）。
 
-- `gputouse: int, optional` - Natural number indicating the number of your GPU (see number in nvidia-smi). If you do not
-have a GPU, put None. See: https://nvidia.custhelp.com/app/answers/detail/a_id/3751/~/useful-nvidia-smi-queries
+- `gputouse: int, optional` - 表示您的 GPU 编号的自然数（参见 nvidia-smi 中的数字）。如果您没有 GPU，则设置为 None。参见：https://nvidia.custhelp.com/app/answers/detail/a_id/3751/~/useful-nvidia-smi-queries
 
 - `pcutoff: float | list[float] | dict[str, float], optional`
-(Only applicable when using the PyTorch engine. For TensorFlow, set `pcutoff` in the `config.yaml` file.)
-Specifies the cutoff value(s) used to compute evaluation metrics.
-  - If `None` (default), the cutoff will be loaded from the project configuration.
-  - To apply a single cutoff value to all bodyparts, provide a `float`.
-  - To specify different cutoffs per bodypart, provide either:
-    - A `list[float]`: one value per bodypart, with an additional value for each unique bodypart if applicable.
-    - A `dict[str, float]`: where keys are bodypart names and values are the corresponding cutoff values.
-If a bodypart is not included in the provided dictionary, a default `pcutoff` of `0.6` will be used for that bodypart.
+（仅在使用 PyTorch 引擎时适用。对于 TensorFlow，请在 `config.yaml` 文件中设置 `pcutoff`。）
+指定用于计算评估指标的截止值。
+  - 如果为 `None`（默认值），则从项目配置中加载截止值。
+  - 要将单个截止值应用于所有身体部位，请提供一个 `float`。
+  - 要为每个身体部位指定不同的截止值，请提供以下之一：
+    - 一个 `list[float]`：每个身体部位一个值，如果适用，为每个唯一身体部位提供一个额外的值。
+    - 一个 `dict[str, float]`：键是身体部位名称，值是相应的截止值。
+如果提供的字典中未包含某个身体部位，则该身体部位的默认 `pcutoff` 设为 `0.6`。
 
-The plots can be customized by editing the **config.yaml** file (i.e., the colormap, scale, marker size (dotsize), and
-transparency of labels (alpha-value) can be modified). By default each body part is plotted in a different color
-(governed by the colormap) and the plot labels indicate their source. Note that by default the human labels are
-plotted as plus (‘+’), DeepLabCut’s predictions either as ‘.’ (for confident predictions with likelihood > `pcutoff`) and
-’x’ for (likelihood <= `pcutoff`).
+可以通过编辑 **config.yaml** 文件来自定义绘图（即可以修改颜色映射、刻度、标记大小（dotsize）和标签透明度（alpha-value））。默认情况下，每个身体部位都以不同的颜色绘制（由颜色映射控制），绘图标签指示其来源。请注意，默认情况下，人类标签绘制为加号（‘+’），DeepLabCut 的预测要么绘制为“.”（对于似然度 > `pcutoff` 的自信预测），要么绘制为 ‘x’（对于似然度 <= `pcutoff`）。
 
-The evaluation results for each shuffle of the training dataset are stored in a unique
-subdirectory in a newly created directory ‘evaluation-results-pytorch’ (or 
-‘evaluation-results’ for TensorFlow models) in the project directory.
-The user can visually inspect if the distance between the labeled and the predicted body
-parts are acceptable. In the event of benchmarking with different shuffles of same training
-dataset, the user can provide multiple shuffle indices to evaluate the corresponding 
-network. If the generalization is not sufficient, the user might want to:
+每个 shuffle 的评估结果都存储在项目目录中新创建的目录 ‘evaluation-results-pytorch’（对于 TensorFlow 模型为 ‘evaluation-results’）中的一个唯一子目录中。用户可以目视检查标注的和预测的身体部位之间的距离是否可接受。在针对同一训练数据集的不同 shuffle 进行基准测试的情况下，用户可以提供多个 shuffle 索引来评估相应的网络。如果泛化不足，用户可能希望：
 
-• check if the labels were imported correctly; i.e., invisible points are not labeled
-and the points of interest are labeled accurately
+• 检查标签是否已正确导入；即，未标注不可见点，并且兴趣点已准确标注
 
-• make sure that the loss has already converged
+• 确保损失已经收敛
 
-• consider labeling additional images and make another iteration of the training data set
+• 考虑标注更多图像并创建另一轮训练数据
 
-````{admonition} Click the button to see API Docs for evaluate_network
+````{admonition} 点击按钮查看 evaluate_network 的 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.evaluate_network.rst
 ```
 ````
 
-**maDeepLabCut: (or on normal projects!)**
+**maDeepLabCut：（或在普通项目上！）**
 
-In multi-animal projects, model evaluation is crucial as this is when
-the data-driven selection of the optimal skeleton is carried out. Skipping that step
-causes video analysis to use the redundant skeleton by default, which is not only slow
-but does not guarantee best performance.
+在多动物项目中，模型评估至关重要，因为这是数据驱动地选择*最佳骨架*的步骤。跳过此步骤会导致视频分析默认使用冗余骨架，这不仅速度慢，而且不能保证最佳性能。
 
-You should also plot the scoremaps, locref layers, and PAFs to assess performance:
+您还应该绘制评分图谱、locref 层和 PAFs 以评估性能：
 
 ```python
 deeplabcut.extract_save_all_maps(config_path, shuffle=shuffle, Indices=[0, 5])
 ```
 
-You can drop "Indices" to run this on all training/testing images (this is very slow!)
+您可以删除 "Indices" 以对所有训练/测试图像运行此操作（这非常慢！）
 
-### (I) Analyze new Videos
+### (I) 分析新视频
 
 ````{versionadded} 3.0.0
-With the addition of conditional top-down models in DeepLabCut 3.0, it's now possible to
-track individuals directly **during video analysis**. If you choose to train any model
-with a name that starts with `ctd_`, you'll be able to call `deeplabcut.analyze_videos`
-with `ctd_tracking=True`. To learn more about tracking with CTD, see the [
+随着 DeepLabCut 3.0 中条件式自上而下模型的加入，现在可以在**视频分析期间**直接跟踪个体。如果您选择训练任何以 `ctd_` 开头的模型，您将能够使用 `ctd_tracking=True` 调用 `deeplabcut.analyze_videos`。要了解有关使用 CTD 进行跟踪的更多信息，请参阅 [
 `COLAB_BUCTD_and_CTD_tracking`](
-https://github.com/DeepLabCut/DeepLabCut/blob/main/examples/COLAB/COLAB_BUCTD_and_CTD_tracking.ipynb)
-COLAB notebook.
+https://github.com/DeepLabCut/DeepLabCut/blob/main/examples/COLAB/COLAB_BUCTD_and_CTD_tracking.ipynb) COLAB 笔记本。
 ````
 
-**-------------------- DECISION POINT -------------------**
+**-------------------- 决策点 -------------------**
 
-**ATTENTION!**
-**Pose estimation and tracking should be thought of as separate steps.** If you do not 
-have good pose estimation evaluation metrics at this point, stop, check original labels,
-add more data, etc --> don't move forward with this model. If you think you have a good
-model, please test the "raw" pose estimation performance on a video to validate
-performance:
+**注意！**
+**姿态估计和跟踪应被视为独立的步骤。** 如果此时没有良好的姿态估计评估指标，请停止，检查原始标签，添加更多数据等-->不要使用此模型继续前进。如果您认为自己有一个好的模型，请测试“原始”姿态估计性能在一个视频上以验证性能：
 
-Please run:
+请运行：
 
 ```python
 videos_to_analyze = ['/fullpath/project/videos/testVideo.mp4']
@@ -706,77 +510,49 @@ scorername = deeplabcut.analyze_videos(config_path, videos_to_analyze, videotype
 deeplabcut.create_video_with_all_detections(config_path, videos_to_analyze, videotype='.mp4')
 ```
 
-Please note that you do **not** get the .h5/csv file you might be used to getting (this
-comes after tracking). You will get a `pickle` file that is used in
-`create_video_with_all_detections`.
+请注意，您**不会**得到通常会得到的 .h5/csv 文件（该文件在跟踪之后出现）。您将得到一个用于 `create_video_with_all_detections` 的 `pickle` 文件。
 
-For models predicting part-affinity fields, another sanity check may be to 
-examine the distributions of edge affinity costs using `deeplabcut.utils.plot_edge_affinity_distributions`. Easily separable distributions
-indicate that the model has learned strong links to group keypoints into distinct
-individuals — likely a necessary feature for the assembly stage (note that the amount of
-overlap will also depend on the amount of interactions between your animals in the
-dataset). All TensorFlow multi-animal models use part-affinity fields and PyTorch models
-consisting of just a backbone name (e.g. `resnet_50`, `resnet_101`) use part-affinity
-fields. If you're unsure whether your PyTorch model has a one, check 
-the **pytorch_config.yaml** for a `DLCRNetHead`.
+对于预测部位亲和场（part-affinity fields）的模型，另一个合理的检查是使用 `deeplabcut.utils.plot_edge_affinity_distributions` 检查边缘亲和力成本的分布。易于分离的分布表明模型已经学习了将关键点分组到不同个体中的强链接——这很可能是组件阶段所必需的特征（请注意，重叠的量也将取决于数据集中动物之间互动的多少）。所有 TensorFlow 多动物模型都使用部位亲和场，而仅由骨干名称（例如 `resnet_50`、`resnet_101`）组成的 PyTorch 模型也使用部位亲和场。如果您不确定您的 PyTorch 模型是否具有该字段，请检查 **pytorch\_config.yaml** 中是否有 `DLCRNetHead`。
 
-IF you have good clean out video, ending in `....full.mp4` (and the evaluation metrics
-look good, scoremaps look good, plotted evaluation images, and affinity distributions
-are far apart for most edges), then go forward!!!
+如果您的输出视频干净且良好，以 `....full.mp4` 结尾（并且评估指标看起来不错，评分图谱看起来不错，绘制的评估图像，并且大多数边缘的亲和力分布相差很大），那么请继续！！！
 
-If this does not look good, we recommend extracting and labeling more frames (even from more videos). Try to label close interactions of animals for best performance. Once you label more, you can create a new training set and train.
+如果情况不理想，我们建议提取和标注更多帧（甚至来自更多视频）。尽量标注动物的紧密互动以获得最佳性能。标记更多后，您可以创建新的训练集并进行训练。
 
-You can either:
-1. extract more frames manually from existing or new videos and label as when initially building the training data set, or
-2. let DeepLabCut find frames where keypoints were poorly detected and automatically extract those for you. All you need is
-to run:
+您可以选择：
+1. 从现有或新视频手动提取更多帧，并像最初构建训练数据集时一样进行标注；或者
+2. 让 DeepLabCut 找到关键点检测不佳的帧，并自动为您提取它们。您需要做的就是运行：
 
 ```python
 deeplabcut.find_outliers_in_raw_data(config_path, pickle_file, video_file)
 ```
 
-where pickle_file is the `_full.pickle` one obtains after video analysis.
-Flagged frames will be added to your collection of images in the corresponding labeled-data folders for you to label.
+其中 pickle\_file 是视频分析后得到的 `_full.pickle` 文件。标记的帧将被添加到相应 labeled-data 文件夹中图像的集合中供您标注。
 
+### 动物组装和跨帧跟踪
 
-### Animal Assembly and Tracking across frames
-
-After pose estimation, now you perform assembly and tracking.
+姿态估计之后，现在执行组装和跟踪。
 
 ````{versionadded} v2.2.0
-*NEW* in 2.2 is a novel data-driven way to set the optimal skeleton and assembly
-metrics, so this no longer requires user input. The metrics, in case you do want to edit
-them, can be found in the `inference_cfg.yaml` file.
+*新功能* v2.2 中有一个新颖的数据驱动方法来设置最佳骨架和组装指标，因此这不再需要用户输入。如果您确实想编辑指标，它们可以在 `inference_cfg.yaml` 文件中找到。
 ````
 
-### Optimized Animal Assembly + Video Analysis:
-Please note that **novel videos DO NOT need to be added to the config.yaml file**. You
-can simply have a folder elsewhere on your computer and pass the video folder (then it
-will analyze all videos of the specified type (i.e. ``videotype='.mp4'``), or pass the
-path to the **folder** or exact video(s) you wish to analyze:
+### 优化动物组装 + 视频分析：
+请注意，**对于新视频，不需要将它们添加到 config.yaml 文件中**。您可以简单地在计算机的别处放置一个文件夹，然后传递视频文件夹（然后它将分析所有具有指定类型（即 ``videotype='.mp4'``）的视频），或者传递**文件夹**或您希望分析的精确视频的路径：
 
 ```python
 deeplabcut.analyze_videos(config_path, ['/fullpath/project/videos/'], videotype='.mp4', auto_track=True)
 ```
 
-### IF auto_track = True:
+### 如果 auto\_track = True：
 
 ```{versionadded} v2.2.0.3
-A new argument `auto_track=True`, was added to `deeplabcut.analyze_videos` chaining pose
-estimation, tracking, and stitching in a single function call with defaults we found to
-work well. Thus, you'll now get the `.h5` file you might be used to getting in standard
-DLC. If `auto_track=False`, one must run `convert_detections2tracklets` and
-`stitch_tracklets` manually (see below), granting more control over the last steps of
-the workflow (ideal for advanced users).
+向 `deeplabcut.analyze_videos` 添加了一个新参数 `auto_track=True`，将姿态估计、跟踪和拼接链接成一个函数调用，带有我们发现效果良好的默认设置。因此，您现在将获得标准 DLC 中可能习惯获得的 `.h5` 文件。如果 `auto_track=False`，则必须手动运行 `convert_detections2tracklets` 和
+`stitch_tracklets`（见下文），从而可以对工作流程的最后一步进行更多控制（非常适合高级用户）。
 ```
 
-### IF auto_track = False:
+### 如果 auto\_track = False：
 
-You can validate the tracking parameters. Namely, you can iteratively change the
-parameters, run `convert_detections2tracklets` then load them in the GUI 
-(`refine_tracklets`) if you want to look at the performance. If you want to edit these,
-you will need to open the `inference_cfg.yaml` file (or click button in GUI). The
-options are:
+您可以验证跟踪参数。特别是，您可以迭代更改参数，运行 `convert_detections2tracklets`，然后在 GUI 中加载它们（`refine_tracklets`），如果您想查看性能。如果您想编辑这些参数，您需要打开 `inference_cfg.yaml` 文件（或单击 GUI 中的按钮）。选项如下：
 
 ```python
 # Tracking:
@@ -790,29 +566,25 @@ max_age: 100
 min_hits: 3
 ```
 
-  - **IMPORTANT POINT FOR SUPERVISED IDENTITY TRACKING**
+  - **关于监督身份跟踪的重要说明**
 
-    If the network has been trained to learn the animals' identities (i.e., you set `identity=True` in config.yaml before training) this information can be leveraged both during: (i) animal assembly, where body parts are grouped based on the animal they are predicted to belong to (affinity between pairs of keypoints is no longer considered in that case); and (ii) animal tracking, where identity only can be utilized in place of motion trackers to form tracklets.
+    如果网络已被训练为学习动物的身份（即您在训练前在 config.yaml 中设置了 `identity=True`），则此信息可在以下两方面得到利用：（i）动物组装，其中身体部位根据它们被预测属于的动物进行分组（在这种情况下不再考虑关键点对之间的亲和力）；以及（ii）动物跟踪，其中身份可以替代运动追踪器来形成轨迹片段。
 
-To use this ID information, simply pass:
+要使用此 ID 信息，只需传递：
 ```python
 deeplabcut.convert_detections2tracklets(..., identity_only=True)
 ```
 
-- **Note:** If only one individual is to be assembled and tracked, assembly and tracking are skipped, and detections are treated as in single-animal projects; i.e., it is the keypoints with highest confidence that are kept and accumulated over frames to form a single, long tracklet. No action is required from users, this is done automatically.
+- **注意：** 如果只组装和跟踪一个个体，则跳过组装和跟踪，并将检测视为单动物项目中的情况；即，保留并累积最高置信度的关键点以形成一个长轨迹片段。用户无需采取任何操作，这是自动完成的。
 
 
-**Animal assembly and tracking quality** can be assessed via `deeplabcut.utils.make_labeled_video.create_video_from_pickled_tracks`. This function provides an additional diagnostic tool before moving on to refining tracklets.
+可以通过 `deeplabcut.utils.make_labeled_video.create_video_from_pickled_tracks` 评估动物组装和跟踪质量。此函数在移动到细化轨迹片段之前，提供了额外的诊断工具。
 
 
-If animal assemblies do not look pretty, an alternative to the outlier search described above is to pass the
-`_assemblies.pickle` to `find_outliers_in_raw_data` in place of the `_full.pickle`.
-This will focus the outlier search on unusual assemblies (i.e., animal skeletons that were oddly reconstructed). This may be a bit more sensitive with crowded scenes or frames where animals interact closely.
-Note though that at that stage it is likely preferable anyway to carry on with the remaining steps, and extract outliers
-from the final h5 file as was customary in single animal projects.
+如果动物组装看起来不理想，与上述异常值搜索不同的一种替代方法是将 `_assemblies.pickle` 传递给 `find_outliers_in_raw_data`，以替换 `_full.pickle`。这将使异常值搜索集中在不寻常的组装上（即，以奇怪的方式重建的动物骨架）。这在拥挤的场景或动物紧密互动的帧中可能更敏感。请注意，到那时，最好还是继续完成剩余的步骤，并从最终的 h5 文件中提取异常值，就像单动物项目中习惯的那样。
 
 
-**Next, tracklets are stitched to form complete tracks with:
+**接下来，使用以下方法将轨迹片段拼接到完整的轨道中：
 
 ```python
 deeplabcut.stitch_tracklets(
@@ -824,156 +596,151 @@ deeplabcut.stitch_tracklets(
 )
 ```
 
-Note that the base signature of the function is identical to `analyze_videos` and `convert_detections2tracklets`.
-If the number of tracks to reconstruct is different from the number of individuals
-originally defined in the config.yaml, `n_tracks` (i.e., the number of animals you have in your video)
-can be directly specified as follows:
+请注意，函数的基线签名与 `analyze_videos` 和 `convert_detections2tracklets` 相同。如果需要重建的轨道数量与 config.yaml 中最初定义的个体数量不同，则可以直接指定 `n_tracks`（即视频中的动物数量），如下所示：
 
 ```python
 deeplabcut.stitch_tracklets(..., n_tracks=n)
 ```
 
-In such cases, file columns will default to dummy animal names (ind1, ind2, ..., up to indn).
+在这种情况下，文件列将默认为虚拟动物名称（ind1、ind2，...，最多到 indn）。
 
-### API Docs
+### API 文档
 
-````{admonition} Click the button to see API Docs for analyze_videos
+````{admonition} 点击按钮查看 analyze_videos 的 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.analyze_videos.rst
 ```
 ````
 
-````{admonition} Click the button to see API Docs for convert_detections2tracklets
+````{admonition} 点击按钮查看 convert_detections2tracklets 的 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.convert_detections2tracklets.rst
 ```
 ````
 
-````{admonition} Click the button to see API Docs for stitch_tracklets
+````{admonition} 点击按钮查看 stitch_tracklets 的 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.stitch_tracklets.rst
 ```
 ````
 
-### Using Unsupervised Identity Tracking:
+### 使用无监督身份跟踪：
 
-In Lauer et al. 2022 we introduced a new method to do unsupervised reID of animals.
-Here, you can use the tracklets to learn the identity of animals to enhance your
-tracking performance. To use the code:
+在 Lauer 等人 2022 年的论文中，我们引入了一种新的方法来进行动物的无监督重新识别（reID）。在这里，您可以使用轨迹片段来学习动物的身份，以提高您的跟踪性能。要使用代码：
 
 ```python
 deeplabcut.transformer_reID(config, videos_to_analyze, n_tracks=None, videotype="mp4")
 ```
 
-Note you should pass the n_tracks (number of animals) you expect to see in the video.
+请注意，您应该传递您期望在视频中看到的动物数量 `n_tracks`。
 
-### Refine Tracklets:
+### 细化轨迹片段：
 
-You can also optionally **refine the tracklets**. You can fix both "major" ID swaps, i.e. perhaps when animals cross, and you can micro-refine the individual body points. You will load the `...trackertype.pickle` or `.h5'` file that was created above, and then you can launch a GUI to interactively refine the data. This also has several options, so please check out the docstring. Upon saving the refined tracks you get an `.h5` file (akin to what you might be used to from standard DLC. You can also load (1) filter this to take care of small jitters, and (2) load this `.h5` this to refine (again) in case you find another issue, etc!
+您还可以选择**细化轨迹片段**。您可以修复“主要”ID 交换（即当动物交叉时）以及微调个体身上的关键点。您将加载上面创建的 `...trackertype.pickle` 或 `.h5` 文件，然后您可以启动一个 GUI 来交互式地细化数据。这也有几个选项，所以请查看文档字符串。保存细化后的轨道后，您将获得一个 `.h5` 文件（类似于标准 DLC 中可能习惯使用的文件）。您还可以加载 (1) 以消除小的抖动，和 (2) 再次加载此 `.h5` 以进行进一步细化（如果发现其他问题），等等！
 
 ```python
 deeplabcut.refine_tracklets(config_path, pickle_or_h5_file, videofile_path, max_gap=0, min_swap_len=2, min_tracklet_len=2, trail_len=50)
 ```
 
-If you use the GUI (or otherwise), here are some settings to consider:
+如果您使用 GUI（或其他方式），请考虑以下设置：
 
 <img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1619628014395-BQ09VLLTKCLQQGRB5T9A/ke17ZwdGBToddI8pDm48kLMj_XrWI9gi4tVeBdgcB8p7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0lt53wR20brczws2A6XSGt3kSTbW7uM0ncVKHWPvgHR4kN5Ka1TcK96ljy4ji9jPkQ/TrackletGUI.png?format=1000w" width="950" title="maDLCtrack" alt="maDLC" align="center" vspace = "50">
 
-*note, setting `max_gap=0` can be used to fill in all frames across the video; otherwise, 1-n is the # of frames you want to fill in, i.e. maybe you want to fill in short gaps of 5 frames, but 15 frames indicates another issue, etc. You can test this in the GUI very easy by editing the value and then re-launch pop-up GUI.
+\*注意，设置 `max_gap=0` 可用于填充视频中的所有帧；否则，1-n 是您想要填充的帧数，即您可能想填充 5 帧的短间隙，但 15 帧表示其他问题，依此类推。您可以通过编辑该值并在 GUI 中重新启动弹出窗口来非常轻松地在 GUI 中测试此项。
 
-If you fill in gaps, they will be associated to an ultra low probability, 0.01, so you are aware this is not the networks best estimate, this is the human-override! Thus, if you create a video, you need to set your pcutoff to 0 if you want to see these filled in frames.
+如果您填补了间隙，它们将被关联到一个极低的概率，0.01，因此您会知道这不是网络的最佳估计，这是人工覆盖！因此，如果您创建视频，则需要将 pcutoff 设置为 0 才能“看到”填补的片段。
 
-[Read more here!](functionDetails.md#madeeplabcut-critical-point---assemble--refine-tracklets)
+[在此处阅读更多信息！](functionDetails.md#madeeplabcut-critical-point---assemble--refine-tracklets)
 
-Short demo:
+简短演示：
  <p align="center">
 <img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/1588690928000-90ZMRIM8SN6QE20ZOMNX/ke17ZwdGBToddI8pDm48kJ1oJoOIxBAgRD2ClXVCmKFZw-zPPgdn4jUwVcJE1ZvWQUxwkmyExglNqGp0IvTJZUJFbgE-7XRK3dMEBRBhUpxBw7VlGKDQO2xTcc51Yv6DahHgScLwHgvMZoEtbzk_9vMJY_JknNFgVzVQ2g0FD_s/refineDEMO.gif?format=750w" width="70%">
 </p>
 
-### (J) Filter Pose Data
+### (J) 过滤姿态数据
 
-Firstly, Here are some tips for scaling up your video analysis, including looping over many folders for batch processing: https://github.com/DeepLabCut/DeepLabCut/wiki/Batch-Processing-your-Analysis
+首先，这里有一些关于扩大视频分析规模的技巧，包括对许多文件夹进行循环以进行批量处理：https://github.com/DeepLabCut/DeepLabCut/wiki/Batch-Processing-your-Analysis
 
-You can also filter the predicted bodyparts by:
+您也可以过滤预测的身体部位：
 ```python
 deeplabcut.filterpredictions(config_path,['/fullpath/project/videos/reachingvideo1.avi'])
 ```
-Note, this creates a file with the ending filtered.h5 that you can use for further analysis. This filtering step has many parameters, so please see the full docstring by typing: ``deeplabcut.filterpredictions?``
+注意，这会创建一个以 filtered.h5 结尾的文件，可用于进一步分析。此过滤步骤有许多参数，因此请参阅键入时的完整文档字符串：``deeplabcut.filterpredictions?``
 
-````{admonition} Click the button to see API Docs
+````{admonition} 点击按钮查看 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.filterpredictions.rst
 ```
 ````
 
-### (K) Plot Trajectories , (L) Create Labeled Videos
+### (K) 绘制轨迹，(L) 创建标注视频
 
-- **NOTE :bulb::mega::** Before you create a video, you should set what threshold to use for plotting. This is set in the `config.yaml` file as `pcutoff` - if you have a well trained network, this should be high, i.e. set it to `0.8` or higher! IF YOU FILLED IN GAPS, you need to set this to `0` to "see" the filled in parts.
+- **注意 :bulb::mega::** 在创建视频之前，您应该设置用于绘图的阈值。这在 `config.yaml` 文件中设置为 `pcutoff`——如果您有一个训练良好的网络，这个值应该很高，例如设置为 `0.8` 或更高！如果您**已填充间隙**，则需要将其设置为 `0` 才能“看到”填充的部分。
 
 
-- You can also determine a good `pcutoff` value by looking at the likelihood plot created during `plot_trajectories`:
+- 您还可以通过查看 `plot_trajectories` 期间创建的似然度图来确定一个好的 `pcutoff` 值：
 
-Plot the outputs:
+绘制输出：
 ```python
   deeplabcut.plot_trajectories(config_path,['/fullpath/project/videos/reachingvideo1.avi'],filtered = True)
 ```
 
-Create videos:
+创建视频：
 ```python
   deeplabcut.create_labeled_video(config_path, [videos], videotype='avi', shuffle=1, trainingsetindex=0, filtered=False, fastmode=True, save_frames=False, keypoints_only=False, Frames2plot=None, displayedbodyparts='all', displayedindividuals='all', codec='mp4v', outputframerate=None, destfolder=None, draw_skeleton=False, trailpoints=0, displaycropped=False, color_by='bodypart', track_method='')
 ```
-- **NOTE :bulb::mega::** You have a lot of options in terms of video plotting (quality, display type, etc). We recommend checking the docstring!
+- **注意 :bulb::mega::** 您在视频绘图方面有很多选项（质量、显示类型等）。我们建议查看文档字符串！
 
-(more details [here](functionDetails.md#i-video-analysis-and-plotting-results))
+（更多详情 [此处](functionDetails.md#i-video-analysis-and-plotting-results)）
 
-````{admonition} Click the button to see API Docs for plot_trajectories
+````{admonition} 点击按钮查看 plot_trajectories 的 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.plot_trajectories.rst
 ```
 ````
 
-````{admonition} Click the button to see API Docs for create_labeled_video
+````{admonition} 点击按钮查看 create_labeled_video 的 API 文档
 :class: dropdown
 ```{eval-rst}
 .. include:: ./api/deeplabcut.create_labeled_video.rst
 ```
 ````
 
-### HELP:
+### 帮助：
 
-In ipython/Jupyter notebook:
+在 ipython/Jupyter Notebook 中：
 
 ```
 deeplabcut.nameofthefunction?
 ```
 
-In python or pythonw:
+在 python 或 pythonw 中：
 
 ```
 help(deeplabcut.nameofthefunction)
 ```
 
-## Tips for "daily" use:
+## “日常”使用提示：
 
 <p align="center">
 <img src= https://static1.squarespace.com/static/57f6d51c9f74566f55ecf271/t/5ccc5abe0d9297405a428522/1556896461304/howtouseDLC-01.png?format=1000w width="80%">
  </p>
 
-You can always exit an conda environment and easily jump back into a project by simply:
+您始终可以退出 conda 环境，只需通过以下方式轻松返回项目：
 
-Linux/MacOS formatting example:
+Linux/MacOS 格式示例：
 ```
 source activate yourdeeplabcutEnvName
 ipython or pythonw
 import deeplabcut
 config_path ='/home/yourprojectfolder/config.yaml'
 ```
-Windows formatting example:
+Windows 格式示例：
 ```
 activate yourdeeplabcutEnvName
 ipython
@@ -981,20 +748,21 @@ import deeplabcut
 config_path = r'C:\home\yourprojectfolder\config.yaml'
 ```
 
-Now, you can run any of the functions described in this documentation.
+现在，您可以运行本文档中描述的任何函数。
 
-# Getting help with maDLC:
+# 获取 maDLC 的帮助：
 
-- If you have a detailed question about how to use the code, or you hit errors that are not "bugs" but you want code assistance, please post on the [![Image.sc forum](https://img.shields.io/badge/dynamic/json.svg?label=forum&amp;url=https%3A%2F%2Fforum.image.sc%2Ftags%2Fdeeplabcut.json&amp;query=%24.topic_list.tags.0.topic_count&amp;colorB=brightgreen&amp;&amp;suffix=%20topics&amp;logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAABPklEQVR42m3SyyqFURTA8Y2BER0TDyExZ+aSPIKUlPIITFzKeQWXwhBlQrmFgUzMMFLKZeguBu5y+//17dP3nc5vuPdee6299gohUYYaDGOyyACq4JmQVoFujOMR77hNfOAGM+hBOQqB9TjHD36xhAa04RCuuXeKOvwHVWIKL9jCK2bRiV284QgL8MwEjAneeo9VNOEaBhzALGtoRy02cIcWhE34jj5YxgW+E5Z4iTPkMYpPLCNY3hdOYEfNbKYdmNngZ1jyEzw7h7AIb3fRTQ95OAZ6yQpGYHMMtOTgouktYwxuXsHgWLLl+4x++Kx1FJrjLTagA77bTPvYgw1rRqY56e+w7GNYsqX6JfPwi7aR+Y5SA+BXtKIRfkfJAYgj14tpOF6+I46c4/cAM3UhM3JxyKsxiOIhH0IO6SH/A1Kb1WBeUjbkAAAAAElFTkSuQmCC)](https://forum.image.sc/tags/deeplabcut)
+- 如果您有关于如何使用代码的详细问题，或者遇到了不是“错误”但需要代码帮助的问题，请在 [![Image.sc forum](https://img.shields.io/badge/dynamic/json.svg?label=forum&amp;url=https%3A%2F%2Fforum.image.sc%2Ftags%2Fdeeplabcut.json&amp;query=%24.topic_list.tags.0.topic_count&amp;colorB=brightgreen&amp;&amp;suffix=%20topics&amp;logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAABPklEQVR42m3SyyqFURTA8Y2BER0TDyExZ+aSPIKUlPIITFzKeQWXwhBlQrmFgUzMMFLKZeguBu5y+//17dP3nc5vuPdee6299gohUYYaDGOyyACq4JmQVoFujOMR77hNfOAGM+hBOQqB9TjHD36xhAa04RCuuXeKOvwHVWIKL9jCK2bRiV284QgL8MwEjAneeo9VNOEaBhzALGtoRy02cIcWhE34jj5YxgW+E5Z4iTPkMYpPLCNY3hdOYEfNbKYdmNngZ1jyEzw7h7AIb3fRTQ95OAZ6yQpGYHMMtOTgouktYwxuXsHgWLLl+4x++Kx1FJrjLTagA77bTPvYgw1rRqY56e+w7GNYsqX6JfPwi7aR+Y5SA+BXtKIRfkfJAYgj14tpOF6+I46c4/cAM3UhM3JxyKsxiOIhH0IO6SH/A1Kb1WBeUjbkAAAAAElFTkSuQmCC)](https://forum.image.sc/tags/deeplabcut) 上发帖
 
-- If you have a quick, short question that fits a "chat" format:
+- 如果您有一个简短的问题，适合“聊天”格式：
 [![Gitter](https://badges.gitter.im/DeepLabCut/community.svg)](https://gitter.im/DeepLabCut/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-- If you want to share some results, or see others:
+- 如果您想分享一些结果，或看到别人的：
 [![Twitter Follow](https://img.shields.io/twitter/follow/DeepLabCut.svg?label=DeepLabCut&style=social)](https://twitter.com/DeepLabCut)
 
-- If you have a code bug report, please create an issue and show the minimal code to reproduce the error: https://github.com/DeepLabCut/DeepLabCut/issues
+- 如果你有代码错误报告，请创建一个 issue 并展示最小代码以重现错误：https://github.com/DeepLabCut/DeepLabCut/issues
 
-- if you are looking for resources to increase your understanding of the software and general guidelines, we have an open source, free course: http://DLCcourse.deeplabcut.org.
+- 如果您正在寻找资源来增加您对软件的理解和一般指南，我们有一个开源的免费课程：http://DLCcourse.deeplabcut.org。
 
-**Please note:** what we cannot do is provided support or help designing your experiments and data analysis. The number of requests for this is too great to sustain in our inbox. We are happy to answer such questions in the forum as a community, in a scalable way. We hope and believe we have given enough tools and resources to get started and to accelerate your research program, and this is backed by the >700 citations using DLC, 2 clinical trials by others, and countless applications. Thus, we believe this code works, is accessible, and with limited programming knowledge can be used. Please read our [Missions & Values statement](mission-and-values) to learn more about what we DO hope to provide you.
+**请注意：** 我们不能提供实验设计和数据分析的帮助或支持。这方面的请求太多，无法在我们的收件箱中持续提供。我们很高兴在论坛上以社区化的、可扩展的方式回答此类问题。我们希望并相信我们已经提供了足够的工具和资源来入门并加速您的研究项目，这一点得到了使用 DLC 的 >700 次引用、其他人的 2 项临床试验以及无数次应用的支持。因此，我们相信此代码有效、易于访问，并且只需有限的编程知识即可使用。请阅读我们的 [使命与价值观声明](mission-and-values) 以了解我们希望为您提供什么的更多信息。
+```

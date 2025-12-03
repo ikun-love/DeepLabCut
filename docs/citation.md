@@ -1,22 +1,21 @@
-# How to Cite DeepLabCut
+# 如何引用 DeepLabCut
 
-Thank you for using DeepLabCut! Here are our recommendations for citing and documenting your use of DeepLabCut in your Methods section:
+感谢您使用 DeepLabCut！以下是我们关于在“方法（Methods）”部分引用和说明使用 DeepLabCut 的建议：
 
+如果您使用了我们的代码或数据，我们恳请您引用 **Mathis 等人, 2018** [https://www.nature.com/articles/s41593-018-0209-y](https://www.nature.com/articles/s41593-018-0209-y)。如果使用 Python 包（DeepLabCut2.x+ 版本），请同时引用 **Nath, Mathis 等人, 2019** [https://doi.org/10.1038/s41596-019-0176-0](https://doi.org/10.1038/s41596-019-0176-0)。
 
-If you use this code or data we kindly ask that you please [cite Mathis et al, 2018](https://www.nature.com/articles/s41593-018-0209-y)
-and, if you use the Python package (DeepLabCut2.x+) please also cite [Nath, Mathis et al, 2019](https://doi.org/10.1038/s41596-019-0176-0).
-If you utilize the MobileNetV2s or EfficientNets please cite [Mathis, Biasi et al. 2021](https://openaccess.thecvf.com/content/WACV2021/papers/Mathis_Pretraining_Boosts_Out-of-Domain_Robustness_for_Pose_Estimation_WACV_2021_paper.pdf).
-If you use multi-animal versions 2.2beta+ or 2.2rc1+, please cite [Lauer et al. 2022](https://www.nature.com/articles/s41592-022-01443-0).
-If you use our SuperAnimal models, please cite [Ye et al. 2024](https://www.nature.com/articles/s41467-024-48792-2).
+如果您使用了 MobileNetV2s 或 EfficientNets 模型，请引用 **Mathis, Biasi 等人, 2021** [https://openaccess.thecvf.com/content/WACV2021/papers/Mathis_Pretraining_Boosts_Out-of-Domain_Robustness_for_Pose_Estimation_WACV_2021_paper.pdf](https://openaccess.thecvf.com/content/WACV2021/papers/Mathis_Pretraining_Boosts_Out-of-Domain_Robustness_for_Pose_Estimation_WACV_2021_paper.pdf)。
+如果您使用的是多动物版本 2.2beta+ 或 2.2rc1+，请引用 **Lauer 等人, 2022** [https://www.nature.com/articles/s41592-022-01443-0](https://www.nature.com/articles/s41592-022-01443-0)。
+如果您使用的是我们的 SuperAnimal 模型，请引用 **Ye 等人, 2024** [https://www.nature.com/articles/s41467-024-48792-2](https://www.nature.com/articles/s41467-024-48792-2)。
 
-DOIs (#ProTip, for helping you find citations for software, check out [CiteAs.org](http://citeas.org/)!):
+DOI 号（#专家提示：为了方便您查找软件引用，请查看 [CiteAs.org](http://citeas.org/)！）：
 
-- Mathis et al 2018: [10.1038/s41593-018-0209-y](https://doi.org/10.1038/s41593-018-0209-y)
-- Nath, Mathis et al 2019: [10.1038/s41596-019-0176-0](https://doi.org/10.1038/s41596-019-0176-0)
-- Lauer et al 2022: [10.1038/s41592-022-01443-0](https://doi.org/10.1038/s41592-022-01443-0)
-- Ye et al 2024: [10.1038/s41467-024-48792-2](https://www.nature.com/articles/s41467-024-48792-2)
+- Mathis 等人 2018: [10.1038/s41593-018-0209-y](https://doi.org/10.1038/s41593-018-0209-y)
+- Nath, Mathis 等人 2019: [10.1038/s41596-019-0176-0](https://doi.org/10.1038/s41596-019-0176-0)
+- Lauer 等人 2022: [10.1038/s41592-022-01443-0](https://doi.org/10.1038/s41592-022-01443-0)
+- Ye 等人 2024: [10.1038/s41467-024-48792-2](https://www.nature.com/articles/s41467-024-48792-2)
 
-## Formatted citations:
+## 格式化引用：
 
     @article{Mathisetal2018,
         title = {DeepLabCut: markerless pose estimation of user-defined body parts with deep learning},
@@ -56,7 +55,7 @@ DOIs (#ProTip, for helping you find citations for software, check out [CiteAs.or
         volume={15}}
 
 
-### Review & Educational articles:
+### 综述与教育性文章：
 
     @article{Mathis2020DeepLT,
         title={Deep learning tools for the measurement of animal behavior in neuroscience},
@@ -74,7 +73,7 @@ DOIs (#ProTip, for helping you find citations for software, check out [CiteAs.or
         volume={108},
         pages={44-65}}
 
-### Other open-access pre-prints related to our work on DeepLabCut:
+### 其他与 DeepLabCut 相关的开放获取预印本：
 
     @article{MathisWarren2018speed,
         author = {Mathis, Alexander and Warren, Richard A.},
@@ -88,9 +87,9 @@ DOIs (#ProTip, for helping you find citations for software, check out [CiteAs.or
 
 
 
-## Methods Suggestion:
+## 方法论建议：
 
-For body part tracking we used DeepLabCut (version 2.X.X)* [Mathis et al, 2018, Nath et al, 2019, Lauer et al. 2022]. Specifically, we labeled X number of frames taken from X videos/animals (then X% was used for training (default is 95%). We used a X-based neural network (i.e. X = ResNet-50, ResNet-101, MobileNetV2-0.35, MobileNetV2-0.5, MobileNetV2-0.75, MobileNetV2-1***) with default parameters* for X number of training iterations. We validated with X number of shuffles, and found the test error was: X pixels, train: X pixels (image size was X by X). We then used a p-cutoff of X (i.e. 0.9) to condition the X,Y coordinates for future analysis. This network was then used to analyze videos from similar experimental settings. 
+**对于身体部位追踪，我们使用了 DeepLabCut (版本 2.X.X)* [Mathis 等人, 2018, Nath 等人, 2019, Lauer 等人. 2022]。具体来说，我们标记了从 x 个视频/动物中提取的 x 帧（然后使用 x% 进行训练，默认值为 95%）。我们使用了一个基于 x 的神经网络（即 x = ResNet-50, ResNet-101, MobileNetV2-0.35, MobileNetV2-0.5, MobileNetV2-0.75, MobileNetV2-1***），使用默认参数*进行了 x 次训练迭代。我们使用 x 次洗牌（shuffles）进行了验证，发现测试误差为：x 像素，训练误差：x 像素（图像大小为 x 乘 x）。然后我们使用 p-cutoff 为 x（即 0.9）来对 X,Y 坐标进行条件筛选，以供后续分析。然后将该网络应用于分析具有相似实验设置的视频。
 
 > Mathis, A. et al. Deeplabcut: markerless pose estimation
 > of user-defined body parts with deep learning. Nature
@@ -100,15 +99,15 @@ For body part tracking we used DeepLabCut (version 2.X.X)* [Mathis et al, 2018, 
 > estimation across species and behaviors. Nature Protocols
 > 14, 2152–2176 (2019).
 
-*If any defaults were changed in *`pose_config.yaml`*, mention them here. 
+*如果在 *`pose_config.yaml`* 中更改了任何默认设置，请在此处提及。
 
-i.e. common things one might change: 
-* the loader (options are `default`, `imgaug`, `tensorpack`, `deterministic`). 
-* the `post_dist_threshold` (default is 17 and determines training resolution).
-* optimizer: do you use the default `SGD` or `ADAM`? 
+i.e. 人们可能更改的一些常见设置：
+* loader（选项有 `default`, `imgaug`, `tensorpack`, `deterministic`）。
+* `post_dist_threshold`（默认为 17，它决定了训练分辨率）。
+* 优化器：您使用的是默认的 `SGD` 还是 `ADAM`？
 
-*** here, you could add additional citations. 
-If you use ResNets, consider citing Insafutdinov et al 2016 & He et al 2016. If you use the MobileNetV2s consider citing Mathis et al 2019, and Sandler et al, 2018.
+*** 在此处，您可以添加额外的引用。
+如果您使用 ResNets，建议引用 Insafutdinov 等人 2016 & He 等人 2016。如果您使用 MobileNetV2s，请考虑引用 Mathis 等人 2019，以及 Sandler 等人, 2018。
 
 
 > Mathis, A. et al. Pretraining boosts out-of-domain robustness for pose estimation
@@ -131,8 +130,8 @@ If you use ResNets, consider citing Insafutdinov et al 2016 & He et al 2016. If 
 > 770–778 (2016). URL https://arxiv.org/abs/
 > 1512.03385.
 
-## Graphics 
+## 图形
 
-We also have the network graphic freely available on SciDraw.io if you'd like to use it! https://scidraw.io/drawing/290
+如果您想使用我们的网络图，它也可以在 SciDraw.io 上免费获取！ [https://scidraw.io/drawing/290](https://scidraw.io/drawing/290)
 
-You are welcome to use our logo in your works as well.
+欢迎您在您的工作中也使用我们的徽标。

@@ -1,1 +1,1 @@
-Please see the main [READ ME!](https://deeplabcut.github.io/DeepLabCut/README.html)
+请参阅主要的 [README 文档！](https://deeplabcut.github.io/DeepLabCut/README.html)

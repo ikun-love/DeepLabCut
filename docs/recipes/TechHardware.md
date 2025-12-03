@@ -1,42 +1,32 @@
-# Technical (Hardware) Considerations
+# 技术（硬件）方面的注意事项
 
-## Quick summary:
-[On our install page](tech-considerations-during-install)
-we highlight that for GPU computing through standard installation you need a NVIDIA GPU, with at least 8 GB of memory. If you have an Intel or AMD GPU, and are on windows, there is an alternative method of installation available which is shown on the [installation tips page](installation-tips) under "How to install Deeplabcut for Intel and AMD GPUs".
-Note, some info is repeated here, and will be updated as systems and hardware changes.
+## 快速摘要：
+在我们的安装页面 [tech-considerations-during-install] 中，我们强调使用标准安装进行 GPU 计算时，需要一块具有**至少 8 GB 内存**的 NVIDIA GPU。如果您使用的是 Intel 或 AMD GPU 并且在 Windows 系统上，可以选择替代的安装方法，该方法在 [installation tips 页面](installation-tips) 的“如何为 Intel 和 AMD GPU 安装 Deeplabcut”部分中有所说明。
+请注意，此处会重复一些信息，这些信息将随着系统和硬件的更新而进行维护。
 
-### Computer:
+### 计算机：
 
-For reference, we use e.g. Dell workstations (79xx series) with **Ubuntu 16.04 LTS, 18.04 LTS, or 20.04 LTS** and run a Docker container that has TensorFlow, etc. installed (https://github.com/DeepLabCut/Docker4DeepLabCut2.0).
+作为参考，我们使用的示例是 Dell 工作站（79xx 系列），搭载 **Ubuntu 16.04 LTS、18.04 LTS 或 20.04 LTS**，并运行一个已安装了 TensorFlow 等软件的 Docker 容器（参考：https://github.com/DeepLabCut/Docker4DeepLabCut2.0）。
 
-### Computer Hardware:
+### 计算机硬件：
 
-Ideally, you will use a strong GPU with *at least* 8GB memory such as the [NVIDIA GeForce 1080 Ti,  2080 Ti, or 3090](https://www.nvidia.com/en-us/shop/geforce/?page=1&limit=9&locale=en-us).  A GPU is not strictly necessary, but on a CPU the (training and evaluation) code is considerably slower (10x) for ResNets, but MobileNets and EfficientNets are slightly faster. Still, a GPU will give you a massive speed boost. You might also consider using cloud computing services like [Google cloud/amazon web services](https://github.com/DeepLabCut/DeepLabCut/issues/47) or Google Colaboratory.
+理想情况下，您应该使用性能强大的 GPU，其显存*至少*为 8GB，例如 [NVIDIA GeForce 1080 Ti、2080 Ti 或 3090](https://www.nvidia.com/en-us/shop/geforce/?page=1&limit=9&locale=en-us)。虽然 GPU 不是必需的，但在使用 CPU 时，ResNets 模型的（训练和评估）代码会**慢得多**（慢约 10 倍），而 MobileNets 和 EfficientNets 则稍快一些。不过，GPU 仍能为您带来巨大的速度提升。您也可以考虑使用云服务，例如 [Google Cloud/Amazon Web Services](https://github.com/DeepLabCut/DeepLabCut/issues/47) 或 Google Colaboratory。
 
-### Camera Hardware:
+### 摄像机硬件：
 
-The software is very robust to track data from any camera (cell phone cameras, grayscale, color; captured under infrared light, different manufacturers, etc.). See demos on our [website](https://www.mousemotorlab.org/deeplabcut/).
+该软件对于跟踪来自任何摄像机（手机摄像头、灰度、彩色；在红外光下拍摄、不同制造商等）的数据都非常健壮。请参阅我们在 [网站](https://www.mousemotorlab.org/deeplabcut/) 上的演示。
 
-### Software:
+### 软件：
 
-**Operating System:** Linux (Ubuntu), MacOS* (Mojave), or Windows 10. However, the authors strongly recommend Ubuntu! *MacOS does not support NVIDIA GPUs (easily), so we only suggest this option for CPU use or a case where the user wants to label data, refine data, etc and then push the project to a cloud resource for GPU computing steps, or use MobileNets.
+**操作系统：** Linux (Ubuntu)、MacOS* (Mojave) 或 Windows 10。但是，作者强烈推荐使用 Ubuntu！*MacOS 不（容易）支持 NVIDIA GPU，因此我们仅建议在以下情况使用此选项：纯粹进行 CPU 使用，或者用户希望标记数据、精炼数据等，然后将项目推送到云资源上进行 GPU 计算步骤，或者使用 MobileNets。
 
-**Anaconda/Python3:** Anaconda: a free and open source distribution of the Python programming language (download from https://www.anaconda.com/). DeepLabCut is written in Python 3 (https://www.python.org/) and not compatible with Python 2.
+**Anaconda/Python3：** Anaconda：一个免费和开源的 Python 编程语言发行版（可从 https://www.anaconda.com/ 下载）。DeepLabCut 使用 Python 3 编写（https://www.python.org/），与 Python 2 不兼容。
 
-**For the TensorFlow Engine:** You will need [TensorFlow](https://www.tensorflow.org/).
-We used version 1.0 in the paper, later versions also work with the provided code (we
-tested **TensorFlow versions 1.0 to 1.15, and 2.0 to 2.12 (2.10 for Windows)**; we
-recommend TF2.12 for MacOS/Ubuntu and 2.10 for Windows) for Python 3.10 with GPU
-support.
+**TensorFlow 引擎：** 您需要 [TensorFlow](https://www.tensorflow.org/)。
+我们在论文中使用了 1.0 版本，后续版本也可以与提供的代码一起使用（我们测试了**TensorFlow 版本 1.0 到 1.15，以及 2.0 到 2.12（Windows 上为 2.10）**；对于支持 GPU 的 Python 3.10，我们推荐使用 TF2.12 适用于 MacOS/Ubuntu，推荐使用 2.10 适用于 Windows）。
 
-To note, is it possible to run DeepLabCut on your CPU, but it will be VERY slow (see: 
-[Mathis & Warren](https://www.biorxiv.org/content/early/2018/10/30/457242)). However, this is the preferred path if you want to test
-DeepLabCut on your own computer/data before purchasing a GPU, with the added benefit of
-a straightforward installation! Otherwise, use our COLAB notebooks for GPU access for
-testing.
+需要注意的是，虽然可以在 CPU 上运行 DeepLabCut，但它会**非常慢**（参见：[Mathis & Warren](https://www.biorxiv.org/content/early/2018/10/30/457242)）。然而，如果您想在购买 GPU 之前在自己的计算机/数据上测试 DeepLabCut，这是一个更理想的选择，同时安装过程也更直接！否则，请使用我们的 COLAB 笔记本以获得 GPU 测试访问权限。
 
-Docker: We highly recommend advanced users use the supplied [Docker container](
-docker-containers).
+Docker：我们强烈建议高级用户使用提供的 [Docker 容器](docker-containers)。
 
-NOTE: [Currently GPU support in Docker Desktop is only available on Windows with the 
-WSL2 backend.](https://docs.docker.com/desktop/features/gpu/)
+注意：[目前 Docker Desktop 中对 GPU 的支持仅在 Windows 且使用 WSL2 后端时可用。](https://docs.docker.com/desktop/features/gpu/)

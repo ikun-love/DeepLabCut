@@ -1,15 +1,16 @@
-# Intel OpenVINO backend
+# Intel OpenVINO 后端
 
 ::::{warning}
-This feature is currently implemented for TensorFlow-based models only.
+此功能目前仅针对基于 TensorFlow 的模型实现。
 ::::
 
-DeepLabCut provides an option to run deep learning model with [OpenVINO](https://github.com/openvinotoolkit/openvino) backend.
-To enable OpenVINO in your pipeline, use `use_openvino` flag of `analyze_videos` method with one of string values
-indicating device:
-* ```"CPU"``` - Use CPU. This is a default value.
-* ```"GPU"``` - Use GPU (requires OpenCL to be installed). First launch might take some time for kernels initialization.
-* ```"MULTI:CPU,GPU"``` - Use CPU and GPU simultaneously. In most cases this option provides the best efficiency.
+DeepLabCut 提供了一个选项，可以使用 [OpenVINO](https://github.com/openvinotoolkit/openvino) 后端运行深度学习模型。
+
+要在您的流程中启用 OpenVINO，请在 `analyze_videos` 方法中使用 `use_openvino` 标志，并提供一个表示设备的字符串值：
+
+* ```"CPU"``` - 使用 CPU。这是默认值。
+* ```"GPU"``` - 使用 GPU（需要安装 OpenCL）。首次启动可能需要一些时间进行内核初始化。
+* ```"MULTI:CPU,GPU"``` - 同时使用 CPU 和 GPU。在大多数情况下，此选项能提供最佳的效率。
 
 ```python
 def analyze_videos(
@@ -18,7 +19,7 @@ def analyze_videos(
 )
 ```
 
-OpenVINO is an optional dependency. You can install it with DeepLabCut by the following command:
+OpenVINO 是一个可选依赖项。您可以使用以下命令在安装 DeepLabCut 时一起安装它：
 
 ```bash
 pip install deeplabcut[openvino]

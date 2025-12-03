@@ -1,76 +1,47 @@
 (mission-and-values)=
-# Mission and Values of DeepLabCut
+# DeepLabCut 的使命与价值观
 
-This document is meant to help guide decisions about the future of `DeepLabCut`, be it in terms of
-whether to accept new functionality, changes to the styling of the code or graphical user interfaces (GUI),
-or whether to take on new dependencies, when to break into other repos, among other things. It serves as a point of
-reference for core developers actively working on the project, and an introduction for
-newcomers who want to learn a little more about where the project is going and what the team's
-values are. You can also learn more about how the project is managed by looking at our
-[governance model](governance-model).
+本文档旨在指导关于 `DeepLabCut` 未来发展的决策，无论是关于是否接纳新功能、代码或图形用户界面 (GUI) 的样式更改，还是关于采纳新依赖项、决定何时拆分到其他仓库等问题。它为当前积极参与项目开发的核心开发者提供参考点，同时也为希望进一步了解项目发展方向和团队价值观的新成员提供入门介绍。您还可以通过查看我们的[治理模型](governance-model)来了解更多有关项目管理方式的信息。
 
-## Our founding principles
+## 我们的创立原则
 
-The founding DeepLabCut team came together around a shared vision for building the first open-source animal pose
-estimation framework that is:
+DeepLabCut 创始团队围绕一个共同愿景走到一起，即构建第一个开源的动物姿态估计框架，该框架应具备以下特点：
 
-- user defined pose estimation - i.e. species or object agnostic.
-- access to SOTA deep learning models that can be swiftly re-trained for customized applications
-- fast (GPU-powered)
-- scalable (project focused for ease of portability and sharability)
+- 用户自定义的姿态估计能力——即不受特定物种或对象限制。
+- 能够快速为定制化应用重新训练的、先进的深度学习模型的可访问性。
+- 快速（由 GPU 驱动）。
+- 可扩展（项目结构侧重于易于移植和共享）。
 
+随着项目的成长，我们将这些最初的原则演变成了我们下面描述的使命宣言和价值观集合。
 
-As the project has grown we've turned these original principles into the mission statement and set of values that we
-described below.
+## 我们的使命
 
-## Our mission
+DeepLabCut 旨在成为**“Python 领域的动物姿态软件包”**，并**“为人们在日常工作中提供使用基于深度学习的姿态估计的能力”**，而无需他们具备深度学习框架的编程知识。我们希望通过以下方式实现这一目标：
 
-DeepLabCut aims to be **the animal pose software package for Python** and to **provide access to deep learning-based
-pose estimation for people to use in their daily work** without the need to be able to program in a deep learning
-framework. We hope to accomplish this by:
+- **易于使用和安装**。我们谨慎对待引入新的依赖项，有时会将其设置为可选依赖项，并致力于支持跨平台兼容的完整（Python）打包安装。
 
-- being **easy to use and install**. We are careful in taking on new dependencies, sometimes making them optional, and
-aim support a fully (Python) packaged installation that works cross-platform.
+- **提供良好的文档**，附带**全面的教程和示例**。我们 API 中的所有函数都包含详细的文档字符串（docstrings），用以阐明预期的输入和输出；同时，我们维护一个独立的[教程和信息网站](http://deeplabcut.org)。
 
-- being **well-documented** with **comprehensive tutorials and examples**. All functions in our API have thorough
-docstrings clarifying expected inputs and outputs, and we maintain a separate
-[tutorials and information website](http://deeplabcut.org).
+- **提供对所有关键功能的 GUI 访问**，以便没有编程经验的人也可以使用 DeepLabCut。
 
-- providing **GUI access** to all critical functionality so DeepLabCut can be used by people without coding experience.
+- **交互性强**且**高性能**，以支持大型数据处理流程。
 
-- being **interactive** and **highly performant** in order to support large data pipelines.
+- **提供一致且稳定的 API**，以便插件开发者可以在 DeepLabCut 之上进行构建而无需担心其代码频繁中断，同时也方便高级用户在需要时构建复杂的 Python 工作流程。
 
-- providing a **consistent and stable API** to enable plugin developers to build on top of DeepLabCut without their
-code constantly breaking and to enable advanced users to build out sophisticated Python workflows, if needed.
+- **确保正确性**。我们致力于实现代码和 GUI 的完全测试覆盖率，所有代码在被纳入仓库之前都必须经过核心开发者的审查。
 
-- **ensuring correctness**. We strive for complete test coverage of both the code and GUI, with all code reviewed by a
-core developer before being included in the repository.
+## 我们的价值观
 
-## Our values
+- 我们是**包容的**。我们欢迎首次做出贡献的新成员，并致力于将我们最有奉献精神的贡献者培养成[核心开发者](https://github.com/orgs/DeepLabCut/teams/core-developers)。我们有一个[行为准则](https://github.com/DeepLabCut/DeepLabCut/blob/main/CODE_OF_CONDUCT.md)，旨在让 DeepLabCut 成为一个为所有人提供友好环境的地方。
 
-- We are **inclusive**. We welcome newcomers who are making their first contribution and strive to grow our most
-dedicated contributors into [core developers](https://github.com/orgs/DeepLabCut/teams/core-developers).
-We have a [Code of Conduct](https://github.com/DeepLabCut/DeepLabCut/blob/main/CODE_OF_CONDUCT.md) to make DeepLabCut
-a welcoming place for all.
+- 我们**关注社区**。我们会在我们的[议题跟踪器](https://github.com/DeepLabCut/DeepLabCut/issues)上对功能请求和提案做出回应。
 
-- We are **community-engaged**. We respond to feature requests and proposals on our
-- [issue tracker](https://github.com/DeepLabCut/DeepLabCut/issues).
+- 我们主要服务于**科学应用**，而非“面向消费者或商业”的姿态估计工具。这通常意味着优先支持核心功能，并拒绝那些科学价值不大但“花哨”的功能实现。
 
-- We serve **scientific applications** primarily, over “consumer or commercial” pose estimation tools. This often means
-prioritizing core functionality support, and rejecting implementations of “flashy” features that have little
-scientific value.
+- 我们在科学领域内**保持领域无关性**。那些高度特定于某个科学领域的实例如属于插件，而那些跨越多个领域且可能被广泛使用的功能应保留在 DeepLabCut 内部。
 
-- We are **domain agnostic** within the sciences. Functionality that is highly specific to particular scientific
-domains belongs in plugins, whereas functionality that cuts across many domains and is likely to be widely used belongs
-inside DeepLabCut.
+- 我们重视**教育和文档**。所有函数都应该有文档字符串，最好附带示例，主要功能应在我们的[教程](http://deeplabcut.org)中进行解释。核心开发者可以积极参与完成文档示例。
 
-- We value **education and documentation**. All functions should have docstrings, preferably with examples, and major
-functionality should be explained in our [tutorials](http://deeplabcut.org). Core developers can take an active role
-in finishing documentation examples.
+## 致谢
 
-
-## Acknowledgements
-
-We share a lot of our mission and values with [`napari`](https://napari.org/stable/community/mission_and_values.html)
-and [`scikit-image`](https://scikit-image.org/docs/stable/about/values.html) and acknowledge the influence of their
-mission and values statements on this document.
+我们的许多使命和价值观与 [`napari`](https://napari.org/stable/community/mission_and_values.html) 和 [`scikit-image`](https://scikit-image.org/docs/stable/about/values.html) 相似，并承认他们的使命和价值观声明对本文档产生的影响。

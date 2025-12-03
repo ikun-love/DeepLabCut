@@ -1,11 +1,10 @@
-# DeepLabCut benchmark
+# DeepLabCut 基准测试（Benchmark）
 
-For further information and the leaderboard, see [the official homepage](https://benchmark.deeplabcut.org/).
+有关更多信息和排行榜（Leaderboard），请参阅 [官方主页](https://benchmark.deeplabcut.org/)。
 
-## High Level API
+## 高级 API（High Level API）
 
-When implementing your own benchmarks, the most important functions are directly accessible
-under the ``deeplabcut.benchmark`` package.
+当您自己实现基准测试时，最重要的函数可以直接在 ``deeplabcut.benchmark`` 包下访问。
 
 ```{eval-rst}
 .. automodule:: deeplabcut.benchmark
@@ -13,12 +12,9 @@ under the ``deeplabcut.benchmark`` package.
    :show-inheritance:
 ```
 
-## Available benchmark definitions
+## 可用的基准测试定义
 
-See [the official benchmark page](https://benchmark.deeplabcut.org/datasets.html) for a full overview
-of the available datasets. A benchmark submission should contain a result for at least one of these
-benchmarks. For an example of how to implement a benchmark submission, refer to the baselines in the
-[DeepLabCut benchmark repo](https://github.com/DeepLabCut/benchmark/tree/main/benchmark/baselines).
+有关可用数据集的完整概述，请参阅 [官方基准测试页面](https://benchmark.deeplabcut.org/datasets.html)。基准测试提交（Submission）应包含至少其中一个基准测试的结果。有关如何实现基准测试提交的示例，请参阅 [DeepLabCut 基准测试代码仓库](https://github.com/DeepLabCut/benchmark/tree/main/benchmark/baselines) 中的基线（baselines）部分。
 
 ```{eval-rst}
 .. automodule:: deeplabcut.benchmark.benchmarks
@@ -26,7 +22,7 @@ benchmarks. For an example of how to implement a benchmark submission, refer to 
    :show-inheritance:
 ```
 
-## Metric calculation
+## 指标计算（Metric calculation）
 
 ```{eval-rst}
 .. automodule:: deeplabcut.benchmark.metrics

@@ -1,83 +1,74 @@
 (how-to-install)=
-# How To Install DeepLabCut
+# DeepLabCut 安装指南
 
-- **DeepLabCut can be run on Windows, Linux, or MacOS as long as you have Python 3.10 installed**
-  - (see also [technical considerations](tech-considerations-during-install) and if you run into issues also check out the [Installation Tips](https://deeplabcut.github.io/DeepLabCut/docs/recipes/installTips.html) page).
-- 🚧 Please note, there are several modes of installation:
-  -  please decide to either use a [**conda environment**](https://deeplabcut.github.io/DeepLabCut/docs/installation.html#conda-the-installation-process-is-as-easy-as-this-figure) based installation (**recommended**),
-  -  or the supplied [**Docker container**](docker-containers) (recommended for Ubuntu advanced users).
-- 🚀 Please note, you will get the best performance with using a **GPU**!
-  - Please see the section on [GPU support](https://deeplabcut.github.io/DeepLabCut/docs/installation.html#gpu-support) to install your GPU driver and CUDA.
+- **只要您安装了 Python 3.10，DeepLabCut 就可以在 Windows、Linux 或 MacOS 上运行**
+  - （另请参阅 [技术注意事项](tech-considerations-during-install) 和安装遇到问题时，请查看 [安装技巧](https://deeplabcut.github.io/DeepLabCut/docs/recipes/installTips.html) 页面）。
+- 🚧 请注意，有几种安装模式：
+  - 请决定使用基于 [**conda 环境**](https://deeplabcut.github.io/DeepLabCut/docs/installation.html#conda-the-installation-process-is-as-easy-as-this-figure) 的安装（**推荐**），
+  - 或使用提供的 [**Docker 容器**](docker-containers)（推荐给 Ubuntu 高级用户）。
+- 🚀 请注意，使用 **GPU** 将获得最佳性能！
+  - 请参阅 [GPU 支持](https://deeplabcut.github.io/DeepLabCut/docs/installation.html#gpu-support) 部分以安装您的 GPU 驱动程序和 CUDA。
 
-```{Hint} Familiar with python packages and conda? Quick Install Guide:
+```{Hint} 熟悉 python 包和 conda 吗？快速安装指南：
 
-This assumes you have `conda`/`mamba` installed and this will install DeepLabCut in a fresh
-environment. If you have an NVIDIA GPU, install PyTorch according to [their instructions
-](https://pytorch.org/get-started/locally/) (with your desired CUDA version) - you just
-need your GPU drivers installed.
+这假设您已经安装了 `conda`/`mamba`，并且这将在一个全新的环境中安装 DeepLabCut。如果您有 NVIDIA GPU，请按照[他们的说明](https://pytorch.org/get-started/locally/)（使用您想要的 CUDA 版本）安装 PyTorch——您只需要安装好 GPU 驱动程序即可。
 
 ```bash
 conda create -n DEEPLABCUT python=3.12
 conda activate DEEPLABCUT
 conda install -c conda-forge pytables==3.8.0
 
-# install PyTorch with your desired CUDA version (or for CPU only) - check [their
-](https://pytorch.org/get-started/locally/) website:
-# GPU version of pytorch for CUDA 11.3
+# 使用您想要的 CUDA 版本安装 PyTorch（或仅用于 CPU） - 查看[他们的](https://pytorch.org/get-started/locally/)网站：
+# 用于 CUDA 11.3 的 GPU 版本 PyTorch
 conda install pytorch cudatoolkit=11.3 -c pytorch
 
 
-# install the latest version of DeepLabCut
+# 安装最新版本的 DeepLabCut
 pip install --pre deeplabcut
-# or if you want to use the GUI
+# 如果你想使用 GUI
 pip install --pre deeplabcut[gui]
 
-# ONLY IF YOU HAVE A CUDA GPU - check that PyTorch can access your GPU; this
-# should print `True`
+# **仅当您有 CUDA GPU 时** - 检查 PyTorch 是否可以访问您的 GPU；这应该打印 `True`
 python -c "import torch; print(torch.cuda.is_available())"
 ```
 
-- Why do we install [pytables](https://www.pytables.org/usersguide/installation.html) with
-`conda` and not `pip`? Because it requires some libraries that not all users will have
-installed, and conda will ensure that they are installed as well.
+- 为什么我们使用 `conda` 而不是 `pip` 来安装 [pytables](https://www.pytables.org/usersguide/installation.html)？ 因为它需要一些并非所有用户都已安装的库，而 conda 会确保这些库也已安装。
 
-- If you're familiar with the command line and want TensorFlow support, look [below](
-deeplabcut-with-tf-install) for a fresh installation that has worked for us (on Linux)
-and makes it possible to use the GPU with both PyTorch and TensorFlow.
+- 如果您熟悉命令行并希望获得 TensorFlow 支持，请查看[下方](deeplabcut-with-tf-install)的全新安装说明，这对我们（在 Linux 上）有效，并且可以使 GPU 同时用于 PyTorch 和 TensorFlow。
 
 
-## CONDA: The installation process is as easy as this figure! -->
+## CONDA：安装过程就像这张图一样简单！ -->
 
  <img src="https://images.squarespace-cdn.com/content/v1/57f6d51c9f74566f55ecf271/71e5d954-75a0-4534-9fa6-7ecc4bf1b76d/installDLC.png?format=1500w" width="250" title="DLC" alt="DLC" align="right" vspace = "50">
 
-### 🚨 Before you start with our conda file, do you have a GPU?
-````{admonition} 🚨 Click here for more information!
+### 🚨 在使用我们的 conda 文件之前，您有 GPU 吗？
+````{admonition} 🚨 点击此处获取更多信息！
 :class: dropdown
-- We recommend having a GPU if possible!
-- You **need to decide if you want to use a CPU or GPU for your models**: (Note, you can also use the CPU-only for project management and labeling the data! Then, for example, use Google Colaboratory GPUs for free (read more [here](https://github.com/DeepLabCut/DeepLabCut/tree/master/examples#demo-4-deeplabcut-training-and-analysis-on-google-colaboratory-with-googles-gpus) and there are a lot of helper videos on [our YouTube channel!](https://www.youtube.com/playlist?list=PLjpMSEOb9vRFwwgIkLLN1NmJxFprkO_zi)).
+- 如果可能，我们建议使用 GPU！
+- 您**需要决定是使用 CPU 还是 GPU 来处理您的模型**：（注意，您也可以仅使用 CPU 进行项目管理和数据标注！然后，例如，免费使用 Google Colaboratory GPU（在此[处](https://github.com/DeepLabCut/DeepLabCut/tree/master/examples#demo-4-deeplabcut-training-and-analysis-on-google-colaboratory-with-googles-gpus)阅读更多信息，并且在[我们的 YouTube 频道](https://www.youtube.com/playlist?list=PLjpMSEOb9vRFwwgIkLLN1NmJxFprkO_zi)上有很多辅助视频）。
 
-  - **CPU?** Great, jump to the next section below!
+  - **CPU？** 很好，请跳到下面的下一部分！
 
-  - **NVIDIA GPU?**  If you want to use your own GPU (i.e., a GPU is in your workstation), then you need to be sure you have a CUDA compatible GPU, CUDA, and cuDNN installed. Please note, which CUDA you install depends on what version of PyTorch you want to use. So, please check "GPU Support" below carefully. **Note, DeepLabCut is up to date with the latest CUDA and PyTorch!**
+  - **NVIDIA GPU？** 如果您想使用自己的 GPU（即工作站中有 GPU），那么您需要确保安装了兼容 CUDA 的 GPU、CUDA 和 cuDNN。请注意，您安装哪个 CUDA 版本取决于您想使用哪个 PyTorch 版本。因此，请仔细查看下面的“GPU 支持”。**注意，DeepLabCut 紧跟最新的 CUDA 和 PyTorch！**
   
-  - **Apple M-chip GPU?** Be sure to install miniconda3, and your GPU will be used by default.
+  - **Apple M 芯片 GPU？** 确保安装 miniconda3，系统将默认使用您的 GPU。
 ````
 
-### Step 1: Install Python via Anaconda
+### 步骤 1：通过 Anaconda 安装 Python
 
-### Install [anaconda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html#), or use miniconda3 for MacOS users (see below)
+### 安装 [anaconda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html#)，或为 MacOS 用户使用 miniconda3（见下文）
 
-- Anaconda is an easy way to install Python and additional packages across various operating systems. With Anaconda you create all the dependencies in an [environment](https://conda.io/docs/user-guide/tasks/manage-environments.html) on your machine.
+- Anaconda 是在各种操作系统上安装 Python 和其他软件包的便捷方法。使用 Anaconda，您可以在计算机上的一个[环境](https://conda.io/docs/user-guide/tasks/manage-environments.html)中创建所有依赖项。
 
 ```{Hint}
-Download anaconda for your operating system: [anaconda.com/download/
+下载适用于您操作系统的 anaconda：[anaconda.com/download/
 ](https://www.anaconda.com/download/)
 ```
 
-- IF you use a M1 or M2 chip in your MacBook with v12.5+ (typically 2020 or newer machines), we recommend **miniconda3,** which operates with the same principles as anaconda. This is straight forward and explained in detail here: https://docs.conda.io/projects/conda/en/latest/user-guide/install/macos.html. But in short, open the program "terminal" and copy/paste and run the code that is supplied below.
+- 如果您在 MacBook 上使用 M1 或 M2 芯片，并安装了 v12.5+（通常是 2020 年或更新的设备），我们推荐使用 **miniconda3**，它的原理与 anaconda 相同。这非常直接，并且在 [https://docs.conda.io/projects/conda/en/latest/user-guide/install/macos.html](https://docs.conda.io/projects/conda/en/latest/user-guide/install/macos.html) 中有详细说明。简而言之，打开“终端”程序，复制/粘贴并运行下面提供的代码。
 
-### 💡 miniconda for Mac
-````{admonition} Click the button to see code for miniconda for Mac
+### 💡 Mac 用户的 miniconda
+````{admonition} 点击按钮查看 Mac 版 miniconda 的代码
 :class: dropdown
 wget https://repo.anaconda.com/miniconda/Miniconda3-py310_4.12.0-MacOSX-arm64.sh -O ~/miniconda.sh
 bash ~/miniconda.sh -b -p $HOME/miniconda
@@ -85,74 +76,66 @@ source ~/miniconda/bin/activate
 conda init zsh
 ````
 
-### Step 2: Build an Env using our Conda file!
+### 步骤 2：使用我们的 Conda 文件构建一个环境！
 
-You simply need to have this `.yaml` file anywhere locally on your computer. So, let's download it!
+您只需将此 `.yaml` 文件保存在本地计算机的任何位置即可。所以，让我们下载它！
 
 ```{Hint}
-Windows users: Be sure you have `git` installed along with anaconda: https://gitforwindows.org/
+Windows 用户：请确保您已安装 `git` 以及 anaconda：https://gitforwindows.org/
 ```
 
-- TO DIRECTLY DOWNLOAD THE CONDA FILE conda:
+- **直接下载 CONDA 文件的方法：**
 
-  - click ➡️ for [CONDA FILE](https://github.com/DeepLabCut/DeepLabCut/blob/main/conda-environments/DEEPLABCUT.yaml#:~:text=Raw%20file%20content-,Download,-%E2%8C%98) and then click the "..." and select Download
+  - 点击 ➡️ [CONDA 文件](https://github.com/DeepLabCut/DeepLabCut/blob/main/conda-environments/DEEPLABCUT.yaml#:~:text=Raw%20file%20content-,Download,-%E2%8C%98)，然后点击“...”并选择“下载”
     <img width="274" alt="Screen Shot 2023-09-13 at 10 33 32 PM" src="https://github.com/DeepLabCut/DeepLabCut/assets/28102185/ec4295a5-e85c-4ce7-8c16-e6517a2cfa22">
 
--  **Now, in Terminal (or Anaconda Command Prompt for Windows users)**, if you clicked to download, go to your downloads folder.
+- **现在，在终端（或 Windows 用户的 Anaconda 命令提示符）中，如果点击了下载，请转到您的下载文件夹。**
 
 ```{Hint}
-Windows users: Be sure to open the program terminal/cmd/anaconda prompt with a RIGHT-click, "open as admin"
+Windows 用户：请确保使用**右键单击**、“以管理员身份运行”打开终端/cmd/anaconda 提示符
 ```
 
 ```{Hint}
 :class: dropdown
-If you cloned the repo onto your Desktop, the command may look like:
+如果您将仓库克隆到了桌面上，该命令可能如下所示：
 ``cd C:\Users\YourUserName\Desktop\DeepLabCut\conda-environments``
-You can (on Windows) hold SHIFT and right-click > Copy as path, or (on Mac) right-click and while in the menu press the OPTION key to reveal Copy as Pathname.
+在 (Windows) 中，您可以按住 SHIFT 并右键单击 > 复制为路径；在 (Mac) 中，右键单击并在菜单中按住 OPTION 键以显示“复制为路径名”。
 ```
-Be sure you are in the folder that has the `.yaml` file, then run:
+确保您位于包含 `.yaml` 文件的文件夹中，然后运行：
 
 ``conda env create -f DEEPLABCUT.yaml``
 
 
-- You can now use this environment from anywhere on your computer (i.e., no need to go back into the conda- folder). Just enter your environment by running:
-     - Ubuntu/MacOS: ``source/conda activate nameoftheenv`` (i.e. on your Mac: ``conda activate DEEPLABCUT``)
-     - Windows: ``activate nameoftheenv`` (i.e. ``activate DEEPLABCUT``)
+- 现在您可以在计算机上的任何位置使用此环境（即无需返回 conda- 文件夹）。只需运行以下命令进入您的环境：
+     - Ubuntu/MacOS: ``source/conda activate nameoftheenv``（例如在 Mac 上：``conda activate DEEPLABCUT``）
+     - Windows: ``activate nameoftheenv``（即 ``activate DEEPLABCUT``）
 
-Now you should see (`nameofenv`) on the left of your terminal screen, i.e. ``(DEEPLABCUT) YourName-MacBook...``
-NOTE: no need to run pip install deeplabcut, as it is already installed!!! :)
+现在，您应该在终端屏幕左侧看到 (`nameofenv`)，例如 ``(DEEPLABCUT) YourName-MacBook...``
+注意：无需运行 `pip install deeplabcut`，因为它已安装！！！ :)
 
 (deeplabcut-with-tf-install)=
-### 💡 Notice: PyTorch and TensorFlow Support within DeepLabCut
+### 💡 注意：DeepLabCut 中的 PyTorch 和 TensorFlow 支持
 
-````{admonition} DeepLabCut TensorFlow Support
+````{admonition} DeepLabCut TensorFlow 支持
 :class: dropdown
-As of June 2024 we have a PyTorch Engine backend and we will be depreciating the 
-TensorFlow backend by the end of 2024. Currently, if you want to use TensorFlow, you 
-need to run `pip install deeplabcut[tf]` in order to install the correct version of 
-TensorFlow in your conda env. Please note, we will be providing bug fixes, but we will 
-not be supporting new TensorFlow versions beyond 2.10 (Windows), and 2.12 for other OS.
+截至 2024 年 6 月，我们有一个 PyTorch 引擎后端，我们将在 2024 年底弃用 TensorFlow 后端。目前，如果您想使用 TensorFlow，您需要在 conda 环境中运行 `pip install deeplabcut[tf]` 来安装正确版本的 TensorFlow。请注意，我们将提供错误修复，但对于超过 2.10 (Windows) 和其他操作系统 2.12 版本的 TensorFlow，我们将不再支持新版本。
 
-Installing TensorFlow and getting it to have access to the GPU can be a bit tricky. 
-Check TensorFlow's [compatibility matrix](https://www.tensorflow.org/install/source#gpu)
-to know which version of CUDA and cuDNN you should install.
+安装 TensorFlow 并使其能够访问 GPU 有点棘手。请查看 TensorFlow 的[兼容性矩阵](https://www.tensorflow.org/install/source#gpu)以了解您应该安装哪个版本的 CUDA 和 cuDNN。
 
-We have found that installing DeepLabCut with the following commands works well for
-Linux users to install PyTorch 2.3.1, TensorFlow 2.12, CUDA 11.8 and cuDNN 8 in a Conda
-environment:
+我们发现在 Linux 用户中，使用以下命令安装 DeepLabCut 可以很好地在 Conda 环境中安装 PyTorch 2.3.1、TensorFlow 2.12、CUDA 11.8 和 cuDNN 8：
 
 ```bash
 conda create -n deeplabcut-with-tf "python=3.10"
 conda activate deeplabcut-with-tf
 
-# Install the desired TensorFlow version, built for CUDA 11.8 and cuDNN 8
+# 安装所需的 TensorFlow 版本，版本基于 CUDA 11.8 和 cuDNN 8
 pip install "tensorflow==2.12" "tensorpack>=0.11" "tf_slim>=1.1.0"
 
-# Install PyTorch with a version using CUDA 11.8 and cuDNN 8
+# 使用基于 CUDA 11.8 和 cuDNN 8 的版本安装 PyTorch
 pip install "torch==2.3.1" torchvision --index-url https://download.pytorch.org/whl/cu118
 
-# Create symbolic links to NVIDIA shared libraries for TensorFlow
-#   -> as described in their installation docs:
+# 为 TensorFlow 创建到 NVIDIA 共享库的符号链接
+# -> 如其安装文档中所述：
 #      https://www.tensorflow.org/install/pip#step-by-step_instructions
 
 pushd $(dirname $(python -c 'print(__import__("tensorflow").__file__)'))
@@ -163,130 +146,97 @@ pip install  --pre deeplabcut
 ```
 ````
 
-**Great, that's it! DeepLabCut is installed!** 🎉💜
+**太棒了，就是这样！DeepLabCut 已安装！** 🎉💜
 
 
-### Step 3: Really, that's it! Let's run DeepLabCut
+### 步骤 3：真的，就是这样！让我们运行 DeepLabCut
 
-Head over to the [User Guide Overview](https://deeplabcut.github.io/DeepLabCut/docs/UseOverviewGuide.html) for information. 
+请前往[用户指南概述](https://deeplabcut.github.io/DeepLabCut/docs/UseOverviewGuide.html)了解相关信息。
 
-🎉 Launch DeepLabCut in your new env by running `python -m deeplabcut`
+🎉 在新环境中启动 DeepLabCut，方法是运行 `python -m deeplabcut`
 
-## Other ways to install DeepLabCut and additional tips
+## 安装 DeepLabCut 的其他方式和附加提示
 
-### Alternatively, you can git clone this repo and install from source!
-i.e., if the download did not work or you just want to have the source code handy!
+### 另一种方法是 git 克隆此仓库并从源安装！
+即，如果下载失败或您只是想方便地获取源代码！
 
-- **Windows/Linux/MacBooks:** git clone this repo (in the terminal/cmd program, while **in a folder** you wish to place DeepLabCut
-To git clone type: ``git clone https://github.com/DeepLabCut/DeepLabCut.git``). Note, this can be anywhere, even downloads is fine.)
-- Then follow the same steps as in Step 2 above, adjusting for the file now being in the downloaded folder.
+- **Windows/Linux/MacBooks:** 在终端/cmd 程序中，在您想要放置 DeepLabCut 的**文件夹中**克隆此仓库（输入：``git clone https://github.com/DeepLabCut/DeepLabCut.git``）。请注意，这可以在任何地方，甚至下载文件夹也可以。）
+- 然后按照步骤 2 中的相同步骤进行操作，但要根据文件现在位于下载的文件夹中进行调整。
 
-### PIP:
+### PIP：
 
-- Everything you need to build custom models within DeepLabCut (i.e., use our source code and our dependencies) can be installed with `pip install 'deeplabcut[gui]'` (for GUI support w/PyTorch) or without the gui: `pip install 'deeplabcut'`.
-- If you want to use the SuperAnimal models, then please use `pip install 'deeplabcut[gui,modelzoo]'`. 
+- 要在 DeepLabCut 中构建自定义模型所需的一切（即使用我们的源代码和我们的依赖项），可以通过 `pip install 'deeplabcut[gui]'`（用于带 PyTorch 的 GUI 支持）或不带 GUI 的方式安装：`pip install 'deeplabcut'`。
+- 如果您想使用 SuperAnimal 模型，请使用 `pip install 'deeplabcut[gui,modelzoo]'`。
 
-## DOCKER:
+## DOCKER：
 
-- We also have docker containers. Docker is the most reproducible way to use and deploy code. Please see our dedicated docker package and page [here](https://deeplabcut.github.io/DeepLabCut/docs/docker.html).
+- 我们也有 docker 容器。Docker 是使用和部署代码最可重现的方式。请参阅我们的专用 docker 包和页面 [此处](https://deeplabcut.github.io/DeepLabCut/docs/docker.html)。
 
-## Pro Tips:
+## 专业提示：
 
-More [installation ProTips](installation-tips) are also available.
+更多 [安装专业技巧](installation-tips) 也可供参考。
 
-If you ever want to update your DLC, just run `pip install --upgrade deeplabcut` once
-you are inside your env. If you want to use a specific release, then you need to specify
-the version you want, such as `pip install deeplabcut==3.0`. Once installed, you can
-check the version by running `import deeplabcut` `deeplabcut.__version__`. Don't be 
-afraid to update, DLC is backwards compatible with your 2.0+ projects and performance 
-continues to get better and new features are added nearly monthly.
+如果您想更新您的 DLC，一旦进入您的环境，只需运行 `pip install --upgrade deeplabcut`。如果您想使用特定的版本，则需要指定您想要的 [版本](https://deeplabcut.github.io/DeepLabCut/docs/installation.html#how-to-update-deeplabcut)，例如 `pip install deeplabcut==3.0`。安装后，您可以通过运行 `import deeplabcut` `deeplabcut.__version__` 来检查版本。不要害怕更新，DLC 与您的 2.0+ 项目向后兼容，并且性能每月都在提高并添加新功能。
 
-**All of the data you labelled in version 2.X is also compatible with version 3+ and the
-PyTorch engine**! There is no change in the workflow or the way labels are handled: the
-big changes happen under-the-hood! If you've been working with DeepLabCut 2.X and want
-to learn more about moving to the PyTorch engine, checkout our docs on [moving from 
-TensorFlow to PyTorch](dlc3-user-guide)
+**您在 2.X 版本中标记的所有数据也与 3+ 版本和 PyTorch 引擎兼容**！工作流程或标签处理方式没有变化：主要的更改发生在底层！如果您一直在使用 DeepLabCut 2.X 并想了解有关迁移到 PyTorch 引擎的更多信息，请查看我们关于[从 TensorFlow 迁移到 PyTorch](dlc3-user-guide) 的文档。
 
-Here are some conda environment management tips: [kapeli.com: Conda Cheat Sheet](
+有关 conda 环境管理技巧，请参阅：[kapeli.com: Conda 备忘单](
 https://kapeli.com/cheat_sheets/Conda.docset/Contents/Resources/Documents/index)
 
-**Pro Tip:** If you want to modify code and then test it, you can use our provided 
-testscripts. This would mean you need to be up-to-date with the latest GitHub-based code
-though! Please see [here](installation-tips) on how to get the latest GitHub code, and
-how to test your installation by following this video: 
-https://www.youtube.com/watch?v=IOWtKn3l33s.
+**专业提示：** 如果您想修改代码然后进行测试，您可以使用我们提供的测试脚本。这意味着您需要使用最新的基于 GitHub 的代码！请参阅[此处](installation-tips)了解如何获取最新的 GitHub 代码，以及如何通过观看此视频来测试您的安装：[https://www.youtube.com/watch?v=IOWtKn3l33s](https://www.youtube.com/watch?v=IOWtKn3l33s)。
 
-## Creating your own customized conda env (recommended route for Linux: Ubuntu, CentOS, Mint, etc.)
+## 创建您自己的定制 conda 环境（Linux 推荐的路线：Ubuntu, CentOS, Mint 等）
 
-*Note in a fresh ubuntu install, you will often have to run: ``sudo apt-get install gcc python3-dev`` to install the GNU Compiler Collection and the python developing environment.
+*注意：在全新的 Ubuntu 安装中，您通常需要运行：``sudo apt-get install gcc python3-dev`` 来安装 GNU 编译器集合和 python 开发环境。
 
-Some users might want to create their own customize env. -  Here is an example.
+有些用户可能希望创建自己的定制环境。- 这是一个示例。
 
-In the terminal type:
+在终端中输入：
 
 `conda create -n DLC python=3.10`
 
-**Current version:** The only thing you then need to add to the env is deeplabcut (
-`pip install deeplabcut`) or `pip install 'deeplabcut[gui]'` which has a napari based
-GUI.
+**当前版本：** 您之后需要添加到环境中的唯一一项是 deeplabcut（`pip install deeplabcut`）或 `pip install 'deeplabcut[gui]'`，它有一个基于 napari 的 GUI。
 
 
-## **GPU Support:**
+## **GPU 支持：**
 
-The ONLY thing you need to do **first** if you have an NVIDIA GPU and the matching NVIDIA CUDA+driver installed.
-- CUDA: https://developer.nvidia.com/cuda-downloads (just follow the prompts here!)
-- DRIVERS: https://www.nvidia.com/Download/index.aspx
+如果您有 NVIDIA GPU 和匹配的 NVIDIA CUDA+驱动程序，您**首先**需要做的**就是**这一件事。
+- CUDA：https://developer.nvidia.com/cuda-downloads（只需按照这里的提示操作！）
+- 驱动程序：https://www.nvidia.com/Download/index.aspx
 
-### The most common "new user" hurdle is installing and using your GPU, so don't get discouraged!
+### 新用户最常见的障碍是安装和使用 GPU，所以不要灰心！
 
-**CRITICAL:** If you have a GPU, you should FIRST **install an appropriate driver for 
-your specific GPU**, then you can use the supplied conda file. You'll need an NVIDIA GPU
-which is compatible with CUDA. To see a list of CUDA-enabled NVIDIA GPUs, please [see 
-their website](https://developer.nvidia.com/cuda-gpus).
+**关键：** 如果您有 GPU，您应该首先**安装适用于您特定 GPU 的相应驱动程序**，然后您才能使用提供的 conda 文件。您需要一个兼容 CUDA 的 NVIDIA GPU。要查看支持 CUDA 的 NVIDIA GPU 列表，请[访问他们的网站](https://developer.nvidia.com/cuda-gpus)。
 
-- Here we provide notes on how to install and check your GPU use with TensorFlow (which
-is used by DeepLabCut and already installed with the Anaconda files above). Thus, you do
-not need to independently install tensorflow.
+- 在这里，我们提供了有关如何安装和检查您的 GPU 如何与 TensorFlow 配合使用的说明（TensorFlow 被 DeepLabCut 使用，并且已与上述 Anaconda 文件一起安装）。因此，您无需单独安装 tensorflow。
 
-**FIRST**, install a driver for your GPU. Find DRIVER HERE: 
+**首先**，为您的 GPU 安装驱动程序。在以下位置查找驱动程序：
 https://www.nvidia.com/download/index.aspx
 
-- Check which driver is installed by typing this into the terminal: ``nvidia-smi``.
+- 通过在终端中输入以下内容来检查已安装的驱动程序：``nvidia-smi``。
 
-**SECOND**, install CUDA: https://developer.nvidia.com/ (Note that cuDNN, https://developer.nvidia.com/cudnn, is supplied inside the anaconda environment files, so you don't need to install it again).
+**其次**，安装 CUDA：https://developer.nvidia.com/（注意 cuDNN，[https://developer.nvidia.com/cudnn](https://developer.nvidia.com/cudnn)，包含在 anaconda 环境文件中，因此您无需再次安装它）。
 
-**THIRD:** Follow the steps above to get the `DEEPLABCUT` conda file and install it!
+**第三：** 按照上述步骤获取 `DEEPLABCUT` conda 文件并进行安装！
 
-### Notes:
+### 注意事项：
 
-- **As of version 3.0+ we moved to PyTorch. The Last supported version of TensorFlow is 
-2.10  (window users) and 2.12 for others (we have not tested beyond this).**
-- Please be mindful different versions of TensorFlow require different CUDA versions.
-- As the combination of TensorFlow and CUDA matters, we strongly encourage you to 
-**check your driver/cuDNN/CUDA/TensorFlow versions** [on this StackOverflow post](
-https://stackoverflow.com/questions/30820513/what-is-version-of-cuda-for-nvidia-304-125/30820690#30820690
-).
-- To check your GPU is working, in the terminal, run:
+- **从 3.0+ 版本开始，我们已迁移到 PyTorch。支持的最后一个 TensorFlow 版本是 2.10（Windows 用户）和其他系统上的 2.12（我们未测试超过此版本）。**
+- 请注意，不同版本的 TensorFlow 需要不同的 CUDA 版本。
+- 由于 TensorFlow 和 CUDA 的组合很重要，我们强烈建议您在[此 StackOverflow 帖子](https://stackoverflow.com/questions/30820513/what-is-version-of-cuda-for-nvidia-304-125/30820690#30820690)中**检查您的驱动程序/cuDNN/CUDA/TensorFlow 版本**。
+- 要检查您的 GPU 是否正常工作，请在终端中运行：
 
-`nvcc -V` to check your installed version(s).
+`nvcc -V` 以检查您已安装的版本。
 
-- The best practice is to then run the supplied `testscript_pytorch_single_animal.py` 
-(or `testscript.py` for the TensorFlow engine); this is inside the examples folder you
-acquired when you git cloned the repo. Here is more information/a short 
-[video on running the testscript](https://www.youtube.com/watch?v=IOWtKn3l33s).
-- Additionally, if you want to use the bleeding edge, with your git clone you also get
-the latest code. While inside the main DeepLabCut folder, you can run `./reinstall.sh`
-to be sure it's installed (more [here](installation-tips))
-- You can test that your GPU is being properly engaged with these additional [tips](
-https://www.tensorflow.org/programmers_guide/using_gpu).
-- Ubuntu users might find this [installation guide](
-https://deeplabcut.github.io/DeepLabCut/docs/recipes/installTips.html#installation-on-ubuntu-20-04-lts
-) for a fresh ubuntu install useful as well.
+- 最佳实践是运行提供的 `testscript_pytorch_single_animal.py`（或 TensorFlow 引擎的 `testscript.py`）；它位于您通过 git 克隆仓库时获得的 `examples` 文件夹中。这里有更多信息/一个关于运行测试脚本的简短[视频](https://www.youtube.com/watch?v=IOWtKn3l33s)。
+- 此外，如果您想使用最新的尖端代码，通过 git 克隆，您也获得了最新的代码。在主 DeepLabCut 文件夹中时，您可以运行 `./reinstall.sh` 以确保它已安装（更多信息见[此处](installation-tips)）
+- 您可以通过这些附加[提示](https://www.tensorflow.org/programmers_guide/using_gpu)检查您的 GPU 是否被正确使用。
+- Ubuntu 用户可能会发现此[安装指南](https://deeplabcut.github.io/DeepLabCut/docs/recipes/installTips.html#installation-on-ubuntu-20-04-lts)对全新的 Ubuntu 安装也很有帮助。
 
-## Troubleshooting:
+## 故障排除：
 
-TensorFlow:
-Here are some additional resources users have found helpful (posted without endorsement):
+TensorFlow：
+以下是一些用户认为有帮助的额外资源（未经认可发布）：
 
 - https://stackoverflow.com/questions/30820513/what-is-the-correct-version-of-cuda-for-my-nvidia-driver/30820690
 
@@ -303,37 +253,37 @@ Here are some additional resources users have found helpful (posted without endo
 - http://www.python36.com/install-tensorflow-gpu-windows/
 
 
-FFMPEG:
+FFMPEG：
 
-- A few Windows users report needing to install re-install ffmpeg (after windows updates) as described here: https://video.stackexchange.com/questions/20495/how-do-i-set-up-and-use-ffmpeg-in-windows (A potential error could occur when making new videos). On Ubuntu, the command is: `sudo apt install ffmpeg`
+- 一些 Windows 用户报告需要根据此处所述内容重新安装 ffmpeg（在 Windows 更新后）：https://video.stackexchange.com/questions/20495/how-do-i-set-up-and-use-ffmpeg-in-windows（创建新视频时可能会出现错误）。在 Ubuntu 上，命令是：`sudo apt install ffmpeg`
 
-DEEPLABCUT:
+DEEPLABCUT：
 
-- if you git clone or download this folder, and are inside of it then ``import deeplabcut`` will import the package from there rather than from the latest on PyPi!
+- 如果您 git 克隆或下载了此文件夹，并且位于其中，则 ``import deeplabcut`` 将从该位置而不是来自 PyPi 上的最新版本导入包！
 
 (system-wide-considerations-during-install)=
-## System-wide considerations:
+## 系统范围的注意事项：
 
-If you perform the system-wide installation, and the computer has other Python packages or TensorFlow versions installed that conflict, this will overwrite them. If you have a dedicated machine for DeepLabCut, this is fine. If there are other applications that require different versions of libraries, then one would potentially break those applications. The solution to this problem is to create a virtual environment, a self-contained directory that contains a Python installation for a particular version of Python, plus additional packages. One way to manage virtual environments is to use conda environments (for which you need Anaconda installed).
+如果您执行系统范围的安装，并且计算机已安装其他 Python 包或 TensorFlow 版本发生冲突，这将覆盖它们。如果您有一台专用于 DeepLabCut 的计算机，这没问题。如果其他应用程序需要不同版本的库，可能会破坏那些应用程序。解决此问题的方法是创建一个虚拟环境，即包含特定版本 Python 安装和其他附加包的自包含目录。管理虚拟环境的一种方法是使用 conda 环境（这需要安装 Anaconda）。
 
 (tech-considerations-during-install)=
-## Technical Considerations:
+## 技术注意事项：
 
-- Computer:
+- 计算机：
 
-     - For reference, we use e.g. Dell workstations (79xx series) with **Ubuntu 16.04 LTS, 18.04 LTS, 20.04 LTS, 22.04 LTS** and for versions prior to 2.2, we run a Docker container that has TensorFlow, etc. installed (https://github.com/DeepLabCut/Docker4DeepLabCut2.0). Now we use the new Docker containers supplied on this repo (linux support only), also available through [DockerHub](https://hub.docker.com/r/deeplabcut/deeplabcut) or the [`deeplabcut-docker`](https://pypi.org/project/deeplabcut-docker/) helper script.
+     - 供参考，我们使用例如 Dell 工作站（79xx 系列），配备 **Ubuntu 16.04 LTS, 18.04 LTS, 20.04 LTS, 22.04 LTS**；对于早于 2.2 的版本，我们运行一个安装了 TensorFlow 等的 Docker 容器（[https://github.com/DeepLabCut/Docker4DeepLabCut2.0](https://github.com/DeepLabCut/Docker4DeepLabCut2.0)）。现在我们使用此仓库中提供的新的 Docker 容器（仅限 Linux 支持），也可以通过 [DockerHub](https://hub.docker.com/r/deeplabcut/deeplabcut) 或 [`deeplabcut-docker`](https://pypi.org/project/deeplabcut-docker/) 辅助脚本获得。
 
-- Computer Hardware:
-     - Ideally, you will use a strong NVIDIA GPU with *at least* 8GB memory.  A GPU is not necessary, but on a CPU the (training and evaluation) code is considerably slower (10x) for ResNets, but MobileNets are faster (see WIKI). You might also consider using cloud computing services like [Google cloud/amazon web services](https://github.com/DeepLabCut/DeepLabCut/issues/47) or Google Colaboratory.
+- 计算机硬件：
+     - 理想情况下，您将使用具有*至少* 8GB 内存的强大 NVIDIA GPU。不需要 GPU，但在 CPU 上（训练和评估）代码对于 ResNets 来说要慢得多（慢 10 倍），但 MobileNets 较快（参见 WIKI）。您也可以考虑使用云服务，如 [Google cloud/Amazon Web Services](https://github.com/DeepLabCut/DeepLabCut/issues/47) 或 Google Colaboratory。
 
-- Camera Hardware:
-     - The software is very robust to track data from any camera (cell phone cameras, grayscale, color; captured under infrared light, different manufacturers, etc.). See demos on our [website](https://www.mousemotorlab.org/deeplabcut/).
+- 摄像头硬件：
+     - 该软件对来自任何摄像头的跟踪数据（手机摄像头、灰度、彩色；在红外光下拍摄、不同制造商等）非常稳健。请参阅[我们网站](https://www.mousemotorlab.org/deeplabcut/)上的演示。
 
-- Software:
-     - Operating System: Linux (Ubuntu), MacOS* (Mojave), or Windows 10. However, the authors strongly recommend Ubuntu! *MacOS does not support NVIDIA GPUs (easily), so we only suggest this option for CPU use or a case where the user wants to label data, refine data, etc and then push the project to a cloud resource for GPU computing steps, or use MobileNets.
-     - Anaconda/Python3: Anaconda: a free and open source distribution of the Python programming language (download from https://www.anaconda.com/). DeepLabCut is written in Python 3 (https://www.python.org/) and not compatible with Python 2.
+- 软件：
+     - 操作系统：Linux (Ubuntu)、MacOS* 或 Windows 10。但是，作者强烈建议使用 Ubuntu！*MacOS 不（容易）支持 NVIDIA GPU，因此我们仅建议将此选项用于 CPU 使用，或者用户希望标记数据、精炼数据等，然后将项目推送到云资源进行 GPU 计算步骤，或使用 MobileNets。
+     - Anaconda/Python3：Anaconda：Python 编程语言的免费和开源发行版（从 [https://www.anaconda.com/](https://www.anaconda.com/) 下载）。DeepLabCut 使用 Python 3 编写（[https://www.python.org/](https://www.python.org/)），与 Python 2 不兼容。
      - `pip install deeplabcut`
      - TensorFlow
-       - If you want to use a pre3.0 version, you will need [TensorFlow](https://www.tensorflow.org/) (we used version 1.0 in the Nature Neuroscience paper, later versions also work with the provided code (we tested **TensorFlow versions 1.0 to 1.15, and 2.0 to 2.10**; we recommend TF2.10 now) for Python 3.8, 3.9, 3.10 with GPU support.
-        - To note, is it possible to run DeepLabCut on your CPU, but it will be VERY slow (see: [Mathis & Warren](https://www.biorxiv.org/content/early/2018/10/30/457242)). However, this is the preferred path if you want to test DeepLabCut on your own computer/data before purchasing a GPU, with the added benefit of a straightforward installation! Otherwise, use our COLAB notebooks for GPU access for testing.
-     - Docker: We highly recommend advanced users use the supplied [Docker container](docker-containers)
+       - 如果您想使用预 3.0 的版本，您将需要 [TensorFlow](https://www.tensorflow.org/)（我们在 Nature Neuroscience 论文中使用了 1.0 版本，后续版本也与提供的代码兼容（我们测试了 **TensorFlow 版本 1.0 到 1.15，以及 2.0 到 2.10**；我们现在推荐 TF2.10）用于支持 GPU 的 Python 3.8、3.9、3.10。
+        - 请注意，可以在 CPU 上运行 DeepLabCut，但会**非常慢**（参见：[Mathis & Warren](https://www.biorxiv.org/content/early/2018/10/30/457242)）。然而，如果您想在购买 GPU 之前在自己的计算机/数据上测试 DeepLabCut，这是首选方式，并且安装过程简单！否则，请使用我们的 COLAB 笔记本电脑进行 GPU 访问以进行测试。
+     - Docker：我们强烈建议高级用户使用提供的 [Docker 容器](docker-containers)。

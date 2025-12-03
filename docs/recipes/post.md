@@ -1,11 +1,8 @@
-# Some data processing recipes!
+# 一些数据处理配方！
 
-## Flagging frames with abnormal bodypart distances
+## 标记身体部位距离异常的帧
 
-Beyond `deeplabcut.check_labels`, you may want to automatically detect
-labeled frames where the distance between two body parts exceeds a
-given threshold. For example, the frames where the head–tail length
-is greater than 100 pixels could be found as follows:
+除了使用 `deeplabcut.check_labels` 之外，您可能还想自动检测那些两个身体部位之间的距离超过给定阈值的已标记帧。例如，您可以按如下方式找到头部到尾部的距离超过 100 像素的帧：
 
 ```python
 import numpy as np
@@ -15,8 +12,7 @@ max_dist = 100
 df = pd.read_hdf('path_to_your_labeled_data_file')
 bpt1 = df.xs('head', level='bodyparts', axis=1).to_numpy()
 bpt2 = df.xs('tail', level='bodyparts', axis=1).to_numpy()
-# We calculate the vectors from a point to the other
-# and group them per frame and per animal.
+# 我们计算从一个点到另一个点的向量，并按帧和动物进行分组。
 try:
     diff = (bpt1 - bpt2).reshape((len(df), -1, 2))
 except ValueError:
