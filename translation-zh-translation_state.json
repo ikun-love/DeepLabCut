@@ -233,5 +233,90 @@
     "source_hash": "8af6f59d1bf91c55378a8ed786541160702371e2",
     "last_translated_at": "2025-12-03T03:32:29.299Z",
     "translator_version": "1.0"
+  },
+  "examples/COLAB/COLAB_3miceDemo.ipynb": {
+    "source_hash": "52ad292bbc8332845552ed484cdb7ece9df989d6",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/COLAB/COLAB_BUCTD_and_CTD_tracking.ipynb": {
+    "source_hash": "e7e123ca232f937a40e729ba07dd01c1bb9ce8ce",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/COLAB/COLAB_DEMO_mouse_openfield.ipynb": {
+    "source_hash": "a4d7543147f573d7cd01fa62cf866238826d068a",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/COLAB/COLAB_DEMO_SuperAnimal.ipynb": {
+    "source_hash": "f6efebe8b088fb7f41f9b1543fc5d73a37b59ba7",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/COLAB/COLAB_DLC_ModelZoo.ipynb": {
+    "source_hash": "1c312afd2294fd9ec1222545b45655d8a3236bb2",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/COLAB/COLAB_HumanPose_with_RTMPose.ipynb": {
+    "source_hash": "f3a13ac588d74961e8d39e4216e80e96dea502fe",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/COLAB/COLAB_transformer_reID.ipynb": {
+    "source_hash": "03f7df8a322da1c10324814863b8b8ec1a2fb561",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/COLAB/COLAB_YOURDATA_maDLC_TrainNetwork_VideoAnalysis.ipynb": {
+    "source_hash": "1f64136a18c48f0a7d99f2e48a3a7f48d5248d52",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/COLAB/COLAB_YOURDATA_SuperAnimal.ipynb": {
+    "source_hash": "c4d1fc575eefd5b81c0b5f8dd85ea876a24716dc",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/COLAB/COLAB_YOURDATA_TrainNetwork_VideoAnalysis.ipynb": {
+    "source_hash": "71e4e88045e56ef36178dc33dd4335cc901d51f6",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/JUPYTER/Demo_3D_DeepLabCut.ipynb": {
+    "source_hash": "42242b666489711f0ee7dd5d00202d67b66184fc",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/JUPYTER/Demo_labeledexample_MouseReaching.ipynb": {
+    "source_hash": "312e0a1505c8a3c150a82c67b16673d9dfe29f0b",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/JUPYTER/Demo_labeledexample_Openfield.ipynb": {
+    "source_hash": "d4458f11117ae424d16eae6507c3348247129d11",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/JUPYTER/Demo_napari.ipynb": {
+    "source_hash": "6ebbfd7a6ce210a9961d3daed194a95f7e7b7669",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/JUPYTER/Demo_yourowndata.ipynb": {
+    "source_hash": "0596204849c65f25acb60779d4f6725d41628763",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/JUPYTER/Docker_TrainNetwork_VideoAnalysis.ipynb": {
+    "source_hash": "d6699d623cc01b95ac7d26cf4975131cf70c7b3f",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
+  },
+  "examples/README.md": {
+    "source_hash": "ca87f2b7229150ebd31993e61d054dc733d5cddc",
+    "last_translated_at": "2025-12-03T03:57:55.721Z",
+    "translator_version": "1.0"
   }
 }
